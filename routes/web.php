@@ -54,6 +54,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Create Event
         Route::get('/create', [AdminDashboardController::class, 'create'])->name('create');
         Route::post('/store', [AdminDashboardController::class, 'store'])->name('store');
+        
+        // Edit, Update, Delete Event
+        Route::get('/event/{id}/edit', [AdminDashboardController::class, 'edit'])->name('event.edit');
+        Route::patch('/event/{id}', [AdminDashboardController::class, 'update'])->name('event.update');
+        Route::delete('/event/{id}', [AdminDashboardController::class, 'destroy'])->name('event.destroy');
+        
+        // Mark Event as Finished
+        Route::patch('/event/{id}/selesai', [AdminDashboardController::class, 'markAsFinished'])->name('event.selesai');
     });
 
     // Nanti kita bisa tambahkan grup untuk Panitia dan Kepala Dinas di sini
