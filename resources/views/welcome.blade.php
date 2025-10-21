@@ -4,10 +4,12 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Sistem Event & Lomba - Pemkot Banjarmasin</title>
+    <title>Pemkot Banjarmasin</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
+    <link rel="icon" href="{{ asset('image/LOGO-PEMKOT-BARU.png') }}" type="image/png">
+
 
     <!-- Favicon -->
     <link href="{{ asset('templatepeserta/img/favicon.ico') }}" rel="icon">

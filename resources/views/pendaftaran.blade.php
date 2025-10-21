@@ -3,10 +3,12 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Pendaftaran Event - Pemkot Banjarmasin</title>
+    <title>Pendaftaran</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Event Lomba Banjarmasin" name="keywords">
     <meta content="Pendaftaran Event Lomba" name="description">
+    <link rel="icon" href="{{ asset('image/LOGO-PEMKOT-BARU.png') }}" type="image/png">
+
 
     <link href="{{ asset('templatepeserta/img/favicon.ico') }}" rel="icon">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -143,18 +145,7 @@
                 },
             });
         });
-
-        @if(session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Pendaftaran Berhasil!',
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "{{ route('dashboard') }}";
-                }
-            });
-        @endif
+        
     </script>
 </body>
 </html>

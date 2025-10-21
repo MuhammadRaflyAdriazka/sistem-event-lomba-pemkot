@@ -4,10 +4,12 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Acara Saya - Pemkot Banjarmasin</title>
+    <title>Acara Saya</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Acara Saya" name="keywords">
     <meta content="Acara Saya" name="description">
+    <link rel="icon" href="{{ asset('image/LOGO-PEMKOT-BARU.png') }}" type="image/png">
+
 
     <!-- Favicon -->
     <link href="{{ asset('templatepeserta/img/favicon.ico') }}" rel="icon">
@@ -137,6 +139,17 @@
 
     <!-- Template Javascript -->
     <script src="{{ asset('templatepeserta/js/main.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
 </body>
 
 </html>
