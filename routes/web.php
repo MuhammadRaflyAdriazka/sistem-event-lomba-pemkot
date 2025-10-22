@@ -7,6 +7,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminProfileController;
+use App\Http\Controllers\AdminAcaraController;
+use App\Http\Controllers\PanitiaController;
+use App\Http\Controllers\PanitiaProfileController;
 
 // == HALAMAN PUBLIK (Tidak Perlu Login) ==
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -49,21 +52,32 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/kelola', [AdminDashboardController::class, 'kelola'])->name('kelola');
         
         // Daftar Event
-        Route::get('/event', [AdminDashboardController::class, 'eventList'])->name('event');
+        Route::get('/event', [AdminAcaraController::class, 'index'])->name('event');
         
         // Create Event
-        Route::get('/create', [AdminDashboardController::class, 'create'])->name('create');
-        Route::post('/store', [AdminDashboardController::class, 'store'])->name('store');
+        Route::get('/create', [AdminAcaraController::class, 'create'])->name('create');
+        Route::post('/store', [AdminAcaraController::class, 'store'])->name('store');
         
         // Edit, Update, Delete Event
-        Route::get('/event/{id}/edit', [AdminDashboardController::class, 'edit'])->name('event.edit');
-        Route::patch('/event/{id}', [AdminDashboardController::class, 'update'])->name('event.update');
-        Route::delete('/event/{id}', [AdminDashboardController::class, 'destroy'])->name('event.destroy');
+        Route::get('/event/{id}/edit', [AdminAcaraController::class, 'edit'])->name('event.edit');
+        Route::patch('/event/{id}', [AdminAcaraController::class, 'update'])->name('event.update');
+        Route::delete('/event/{id}', [AdminAcaraController::class, 'destroy'])->name('event.destroy');
         
         // Mark Event as Finished
-        Route::patch('/event/{id}/selesai', [AdminDashboardController::class, 'markAsFinished'])->name('event.selesai');
+        Route::patch('/event/{id}/selesai', [AdminAcaraController::class, 'markAsFinished'])->name('event.selesai');
     });
 
-    // Nanti kita bisa tambahkan grup untuk Panitia dan Kepala Dinas di sini
-    // Route::prefix('panitia')->middleware('role:panitia')->name('panitia.')->group(function () { ... });
+    // -- Rute Khusus Panitia --
+    Route::prefix('panitia')
+         ->name('panitia.')
+         ->group(function () {
+        
+        // Dashboard Panitia
+        Route::get('/dashboard', [PanitiaController::class, 'index'])->name('dashboard');
+        
+        // Profile Panitia
+        Route::get('/profile', [PanitiaProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [PanitiaProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [PanitiaProfileController::class, 'destroy'])->name('profile.destroy');
+    });
 });
