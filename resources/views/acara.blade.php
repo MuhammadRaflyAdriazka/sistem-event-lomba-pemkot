@@ -79,7 +79,7 @@
                                     <div class="col-md-8">
                                         <div class="card-body">
                                             <h5 class="card-title mb-3">{{ $pendaftaran->acara->judul }}</h5>
-                                            <p><i class="fa fa-calendar"></i> Tanggal Pelaksanaan: {{ $pendaftaran->acara->tanggal_acara->format('d F Y') }}</p>
+                                            <p><i class="fa fa-calendar"></i> Tanggal Pelaksanaan: {{ \Carbon\Carbon::parse($pendaftaran->acara->tanggal_acara)->locale('id')->isoFormat('D MMMM Y') }}</p>
                                             <p><i class="fa fa-map-marker-alt"></i> Lokasi: {{ $pendaftaran->acara->lokasi }}</p>
                                             <p><i class="fa fa-money-bill-wave"></i> Biaya: {{ $pendaftaran->acara->biaya }}</p>
                                             <p><i class="fa fa-clock"></i> Status Pendaftaran: 
@@ -93,7 +93,7 @@
                                                     <span class="badge bg-info text-white">{{ ucfirst($pendaftaran->status) }}</span>
                                                 @endif
                                             </p>
-                                            <p><i class="fa fa-calendar-plus"></i> Tanggal Daftar: {{ $pendaftaran->created_at->format('d F Y, H:i') }}</p>
+                                            <p><i class="fa fa-calendar-plus"></i> Tanggal Daftar: {{ \Carbon\Carbon::parse($pendaftaran->created_at)->locale('id')->isoFormat('D MMMM Y, HH:mm') }}</p>
                                             <div class="mt-3">
                                                 <a href="{{ route('acara.show', $pendaftaran->acara->id) }}" class="btn btn-outline-primary">Lihat Detail</a>
                                                 <a href="{{ route('acara.show', $pendaftaran->acara->id) }}" class="btn btn-outline-primary">Lihat Pengumuman</a>

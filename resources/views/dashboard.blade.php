@@ -91,7 +91,7 @@
                         </div>
                         <div class="card-body p-4">
                             <h1 class="card-title mb-3">{{ $acara->judul }}</h1>
-                            <p><i class="fa fa-calendar"></i> {{ $acara->tanggal_acara->format('d F Y') }}</p>
+                            <p><i class="fa fa-calendar"></i> {{ \Carbon\Carbon::parse($acara->tanggal_acara)->locale('id')->isoFormat('D MMMM Y') }}</p>
                             <p><i class="fa fa-map-marker-alt"></i> Lokasi: {{ $acara->lokasi }}</p>
                             
                             <h5 class="mt-4">Sistem Pendaftaran</h5>
@@ -107,7 +107,7 @@
                             <p>{{ Str::limit($acara->persyaratan, 120, '...') }}</p>
                             
                             <h5 class="mt-4">Periode Registrasi</h5>
-                            <p>{{ $acara->tanggal_mulai_daftar->format('d F') }} – {{ $acara->tanggal_akhir_daftar->format('d F Y') }}</p>
+                            <p>{{ \Carbon\Carbon::parse($acara->tanggal_mulai_daftar)->locale('id')->isoFormat('D MMMM') }} – {{ \Carbon\Carbon::parse($acara->tanggal_akhir_daftar)->locale('id')->isoFormat('D MMMM Y') }}</p>
                             
                             <h5 class="mt-4">Hadiah</h5>
                             <p>{{ Str::limit($acara->hadiah, 100, '...') }}</p>

@@ -95,10 +95,10 @@
                                 <div style="font-size: 14px; color: #333; white-space: pre-line; padding-left: 15px;">{{ $acara->persyaratan }}</div>
                                 
                                 <h5 class="mt-4 text-uppercase" style="color: #333; font-size: 14px; font-weight: bold;">Tanggal Pendaftaran</h5>
-                                <p style="font-size: 14px; color: #333; padding-left: 15px;">• {{ $acara->tanggal_mulai_daftar->format('d F') }} - {{ $acara->tanggal_akhir_daftar->format('d F Y') }}</p>
+                                <p style="font-size: 14px; color: #333; padding-left: 15px;">• {{ \Carbon\Carbon::parse($acara->tanggal_mulai_daftar)->locale('id')->isoFormat('D MMMM') }} - {{ \Carbon\Carbon::parse($acara->tanggal_akhir_daftar)->locale('id')->isoFormat('D MMMM Y') }}</p>
                                 
                                 <h5 class="mt-4 text-uppercase" style="color: #333; font-size: 14px; font-weight: bold;">Tanggal Pelaksanaan</h5>
-                                <p style="font-size: 14px; color: #333; padding-left: 15px;">• {{ $acara->tanggal_acara->format('d F Y') }}</p>
+                                <p style="font-size: 14px; color: #333; padding-left: 15px;">• {{ \Carbon\Carbon::parse($acara->tanggal_acara)->locale('id')->isoFormat('D MMMM Y') }}</p>
                                 
                                 <h5 class="mt-4 text-uppercase" style="color: #333; font-size: 14px; font-weight: bold;">Lokasi</h5>
                                 <p style="font-size: 14px; color: #333; padding-left: 15px;">• {{ $acara->lokasi }}</p>
@@ -120,7 +120,7 @@
                                         <div class="alert alert-danger mb-4">
                                             <h5><i class="fas fa-times-circle mr-2"></i>Pendaftaran Ditutup!</h5>
                                             <p class="mb-0">
-                                                Periode pendaftaran sudah berakhir pada {{ $acara->tanggal_akhir_daftar->format('d F Y') }}
+                                                Periode pendaftaran sudah berakhir pada {{ \Carbon\Carbon::parse($acara->tanggal_akhir_daftar)->locale('id')->isoFormat('D MMMM Y') }}
                                             </p>
                                         </div>
                                         <button class="btn btn-secondary btn-lg" disabled>

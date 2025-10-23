@@ -112,7 +112,7 @@
                         <div class="col-md-9">
                             <div class="event-content">
                                 <h5 class="event-title">{{ strtoupper($event->judul) }}</h5>
-                                <div class="event-meta"><i class="fas fa-calendar"></i>Tanggal Pelaksanaan: {{ \Carbon\Carbon::parse($event->tanggal_acara)->format('d F Y') }}</div>
+                                <div class="event-meta"><i class="fas fa-calendar"></i>Tanggal Pelaksanaan: {{ \Carbon\Carbon::parse($event->tanggal_acara)->locale('id')->isoFormat('D MMMM Y') }}</div>
                                 <div class="event-meta"><i class="fas fa-map-marker-alt"></i>Lokasi: {{ $event->lokasi }}</div>
                                 <div class="event-meta"><i class="fas fa-users"></i>Kuota: {{ $event->kuota }} peserta</div>
                                 <div class="event-meta"><i class="fas fa-tag"></i>Sistem Pendaftaran: {{ $event->sistem_pendaftaran }}</div>
