@@ -5,32 +5,6 @@
 
 @section('content')
 
-
-
-<!-- Content Row -->
-<div class="row">
-    <div class="col-12">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Selamat Datang Panitia</h6>
-            </div>
-            <div class="card-body">
-                <p>Kelola Acara: <strong>{{ $acara->judul }}</strong></p>
-                <div class="row mt-4">
-                    <div class="col-md-4">
-                        <div class="card bg-primary text-white">
-                            <div class="card-body">
-                                <h5><i class="fas fa-users"></i> Total Pendaftar</h5>
-                                <h2>{{ $totalPendaftar }}</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Event Info Card -->
 <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -62,6 +36,11 @@
                     <i class="fas fa-calendar-check mr-2"></i>
                     Tenggat Pendaftaran: {{ \Carbon\Carbon::parse($acara->tanggal_mulai_daftar)->locale('id')->isoFormat('D/M') }} - {{ \Carbon\Carbon::parse($acara->tanggal_akhir_daftar)->locale('id')->isoFormat('D/M/Y') }}
                 </p>
+            </div>
+            <div class="col-md-4 text-center text-md-right"> {{-- text-center untuk mobile, text-md-right untuk layar medium ke atas --}}
+                <a href="{{ route('panitia.peserta') }}" class="btn btn-lg btn-primary shadow-sm mt-3 mt-md-0"> {{-- btn-lg agar lebih terlihat --}}
+                    <i class="fas fa-list-ul fa-sm mr-1"></i> Kelola Pendaftaran
+                </a>
             </div>
         </div>
     </div>

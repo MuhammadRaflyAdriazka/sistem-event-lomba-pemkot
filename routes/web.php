@@ -75,6 +75,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Dashboard Panitia
         Route::get('/dashboard', [PanitiaController::class, 'index'])->name('dashboard');
         
+        // Kelola Peserta
+        Route::get('/peserta', [PanitiaController::class, 'peserta'])->name('peserta');
+        Route::get('/peserta-diterima', [PanitiaController::class, 'pesertaDiterima'])->name('peserta.diterima');
+        Route::get('/peserta/{pendaftaran}/detail', [PanitiaController::class, 'detailPeserta'])->name('peserta.detail');
+        Route::post('/peserta/{pendaftaran}/terima', [PanitiaController::class, 'terimaPeserta'])->name('peserta.terima');
+        Route::post('/peserta/{pendaftaran}/tolak', [PanitiaController::class, 'tolakPeserta'])->name('peserta.tolak');
+        Route::post('/peserta/{pendaftaran}/batalkan', [PanitiaController::class, 'batalkanPenerimaan'])->name('peserta.batalkan');
+        Route::get('/file/{filename}', [PanitiaController::class, 'showFile'])->name('file');
+        
         // Profile Panitia
         Route::get('/profile', [PanitiaProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [PanitiaProfileController::class, 'update'])->name('profile.update');

@@ -20,22 +20,7 @@
         </a>
     </li>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Event Management
-    </div>
-
-    <!-- Nav Item - Kelola Event (Langsung ke Create) -->
-    <li class="nav-item">
-        <a class="nav-link" href="/panitia/kelola">
-            <i class="fas fa-fw fa-calendar"></i>
-            <span>Kelola Event</span>
-        </a>
-    </li>
-
+   
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 
