@@ -1,7 +1,7 @@
 @extends('layouts.panitia.app')
 
 {{-- Mengatur judul halaman --}}
-@section('title', 'Peserta Diterima')
+@section('title', 'Kelola Pendaftaran')
 
 @push('styles')
 <style>
@@ -49,10 +49,8 @@
 {{-- Informasi Event --}}
 <div class="card shadow mb-4 event-info-card">
     <div class="card-body d-flex align-items-center">
-        {{-- Ganti src dengan path gambar event Anda nanti --}}
-        <img src="{{ asset('templateadmin/img/undraw_posting_photo.svg') }}" alt="Gambar Event" class="img-thumbnail mr-4" style="max-height: 80px;" >
         <div>
-            <h5 class="m-0 font-weight-bold text-primary">Event: {{ $acara->judul }}</h5>
+            <h5 class="m-0 font-weight-bold text-primary">Acara: {{ $acara->judul }}</h5>
             <p class="m-0 text-muted">Kuota: {{ $acara->kuota }} peserta | Sistem: {{ $acara->sistem_pendaftaran }}</p>
         </div>
     </div>
@@ -128,7 +126,7 @@
                             @endphp
                             {{ $alamat ? $alamat->nilai_kolom : '-' }}
                         </td>
-                        <td>{{ $item->updated_at->format('d/m/Y H:i') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($item->updated_at)->timezone('Asia/Makassar')->format('d/m/Y H:i') }} WITA</td>
                         <td>
                             <a href="{{ route('panitia.peserta.detail', $item->id) }}" class="btn btn-primary btn-sm">
                                 Lihat Detail

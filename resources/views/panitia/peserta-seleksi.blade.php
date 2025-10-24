@@ -1,7 +1,7 @@
 @extends('layouts.panitia.app')
 
 {{-- Mengatur judul halaman --}}
-@section('title', 'Kelola Peserta')
+@section('title', 'Kelola Pendaftaran')
 
 @push('styles')
 <style>
@@ -21,7 +21,7 @@
 
 {{-- Header Halaman --}}
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Kelola Peserta</h1>
+    <h1 class="h3 mb-0 text-gray-800">Kelola Daftar Peserta</h1>
     <a href="{{ route('panitia.dashboard') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
         <i class="fas fa-arrow-left fa-sm text-white-50"></i> Kembali ke Dashboard
     </a>
@@ -89,6 +89,19 @@
         </div>
         <p><strong>Kuota Tersisa:</strong> {{ $acara->kuota - $jumlahDiterima }} dari {{ $acara->kuota }}</p>
 
+        {{-- Tombol Tolak Semua Sisa jika kuota penuh --}}
+        @if($jumlahDiterima >= $acara->kuota && $peserta->count() > 0)
+        <div class="alert alert-warning d-flex justify-content-between align-items-center">
+            <div>
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                <strong>Kuota sudah penuh!</strong> Masih ada {{ $peserta->count() }} peserta yang menunggu seleksi.
+            </div>
+            <button type="button" class="btn btn-danger" onclick="tolakSemuaSisa()">
+                <i class="fas fa-times-circle mr-1"></i> Tolak Semua Sisa
+            </button>
+        </div>
+        @endif
+
         <div class="table-responsive">
             <table class="table table-bordered table-striped" id="dataTablePeserta" width="100%" cellspacing="0">
                 <thead>
@@ -145,5 +158,48 @@
 @endsection
 
 @push('scripts')
-{{-- Script opsional jika diperlukan --}}
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+function tolakSemuaSisa() {
+    Swal.fire({
+        title: 'Tolak Semua Peserta Sisa?',
+        html: `
+            <p>Anda akan menolak <strong>{{ $peserta->count() }} peserta</strong> yang masih menunggu seleksi.</p>
+            <p class="text-muted">Alasan: Kuota sudah penuh</p>
+            <p class="text-danger"><strong>Tindakan ini tidak dapat dibatalkan!</strong></p>
+        `,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: '<i class="fas fa-times-circle"></i> Ya, Tolak Semua',
+        cancelButtonText: '<i class="fas fa-arrow-left"></i> Batal',
+        reverseButtons: true,
+        customClass: {
+            confirmButton: 'btn btn-danger btn-lg mx-2',
+            cancelButton: 'btn btn-secondary btn-lg mx-2'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Tampilkan loading
+            Swal.fire({
+                title: 'Memproses...',
+                text: 'Sedang menolak semua peserta sisa',
+                icon: 'info',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            
+            // Redirect ke route tolak semua
+            window.location.href = "{{ route('panitia.peserta.tolakSemua', $acara->id) }}";
+        }
+    });
+}
+</script>
 @endpush

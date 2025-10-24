@@ -82,6 +82,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/peserta/{pendaftaran}/terima', [PanitiaController::class, 'terimaPeserta'])->name('peserta.terima');
         Route::post('/peserta/{pendaftaran}/tolak', [PanitiaController::class, 'tolakPeserta'])->name('peserta.tolak');
         Route::post('/peserta/{pendaftaran}/batalkan', [PanitiaController::class, 'batalkanPenerimaan'])->name('peserta.batalkan');
+        Route::get('/peserta/tolak-semua/{acara}', [PanitiaController::class, 'tolakSemuaPeserta'])->name('peserta.tolakSemua');
         Route::get('/file/{filename}', [PanitiaController::class, 'showFile'])->name('file');
         
         // Profile Panitia

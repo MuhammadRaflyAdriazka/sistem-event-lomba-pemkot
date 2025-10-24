@@ -99,17 +99,17 @@
         @if($pendaftaran->status == 'pending')
         <div class="mt-4 text-center">
             {{-- Form untuk tombol Tolak --}}
-            <form action="{{ route('panitia.peserta.tolak', $pendaftaran->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Yakin ingin menolak peserta ini?')">
+            <form id="tolakForm" action="{{ route('panitia.peserta.tolak', $pendaftaran->id) }}" method="POST" style="display: inline-block;">
                 @csrf
-                <button type="submit" class="btn btn-danger btn-lg mr-2">
+                <button type="button" class="btn btn-danger btn-lg mr-2" onclick="confirmTolak()">
                     <i class="fas fa-times mr-1"></i> Tolak
                 </button>
             </form>
 
             {{-- Form untuk tombol Terima --}}
-            <form action="{{ route('panitia.peserta.terima', $pendaftaran->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Yakin ingin menerima peserta ini?')">
+            <form id="terimaForm" action="{{ route('panitia.peserta.terima', $pendaftaran->id) }}" method="POST" style="display: inline-block;">
                 @csrf
-                <button type="submit" class="btn btn-success btn-lg">
+                <button type="button" class="btn btn-success btn-lg" onclick="confirmTerima()">
                     <i class="fas fa-check mr-1"></i> Terima
                 </button>
             </form>
@@ -139,5 +139,80 @@
 @endsection
 
 @push('scripts')
-{{-- Script tambahan jika perlu (misal: konfirmasi sebelum tolak/terima) --}}
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+function confirmTolak() {
+    Swal.fire({
+        title: 'Konfirmasi Penolakan',
+        text: 'Apakah Anda yakin ingin menolak peserta ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: '<i class="fas fa-times"></i> Ya, Tolak',
+        cancelButtonText: '<i class="fas fa-arrow-left"></i> Batal',
+        reverseButtons: true,
+        customClass: {
+            confirmButton: 'btn btn-danger btn-lg mx-2',
+            cancelButton: 'btn btn-secondary btn-lg mx-2'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Tampilkan loading
+            Swal.fire({
+                title: 'Memproses...',
+                text: 'Sedang menolak peserta',
+                icon: 'info',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            
+            // Submit form
+            document.getElementById('tolakForm').submit();
+        }
+    });
+}
+
+function confirmTerima() {
+    Swal.fire({
+        title: 'Konfirmasi Penerimaan',
+        text: 'Apakah Anda yakin ingin menerima peserta ini? Peserta akan masuk ke kuota acara.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: '<i class="fas fa-check"></i> Ya, Terima',
+        cancelButtonText: '<i class="fas fa-arrow-left"></i> Batal',
+        reverseButtons: true,
+        customClass: {
+            confirmButton: 'btn btn-success btn-lg mx-2',
+            cancelButton: 'btn btn-secondary btn-lg mx-2'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Tampilkan loading
+            Swal.fire({
+                title: 'Memproses...',
+                text: 'Sedang menerima peserta',
+                icon: 'info',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            
+            // Submit form
+            document.getElementById('terimaForm').submit();
+        }
+    });
+}
+</script>
 @endpush
