@@ -116,6 +116,7 @@
                                 <div class="event-meta"><i class="fas fa-map-marker-alt"></i>Lokasi: {{ $event->lokasi }}</div>
                                 <div class="event-meta"><i class="fas fa-users"></i>Kuota: {{ $event->kuota }} peserta</div>
                                 <div class="event-meta"><i class="fas fa-tag"></i>Sistem Pendaftaran: {{ $event->sistem_pendaftaran }}</div>
+                                <div class="event-meta"><i class="fas fa-clock"></i>Tenggat Pendaftaran: Tenggat Pendaftaran: {{ \Carbon\Carbon::parse($event->tanggal_mulai_daftar)->locale('id')->isoFormat('D/M') }} - {{ \Carbon\Carbon::parse($event->tanggal_akhir_daftar)->locale('id')->isoFormat('D/M/Y') }}</div>
                             </div>
                         </div>
                         <div class="col-md-3">

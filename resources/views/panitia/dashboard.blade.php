@@ -37,10 +37,16 @@
                     Tenggat Pendaftaran: {{ \Carbon\Carbon::parse($acara->tanggal_mulai_daftar)->locale('id')->isoFormat('D/M') }} - {{ \Carbon\Carbon::parse($acara->tanggal_akhir_daftar)->locale('id')->isoFormat('D/M/Y') }}
                 </p>
             </div>
-            <div class="col-md-4 text-center text-md-right"> {{-- text-center untuk mobile, text-md-right untuk layar medium ke atas --}}
-                <a href="{{ route('panitia.peserta') }}" class="btn btn-lg btn-primary shadow-sm mt-3 mt-md-0"> {{-- btn-lg agar lebih terlihat --}}
-                    <i class="fas fa-list-ul fa-sm mr-1"></i> Kelola Pendaftaran
-                </a>
+            <div class="col-md-4 text-center text-md-right">
+                @if($acara->sistem_pendaftaran === 'Seleksi')
+                    <a href="{{ route('panitia.peserta') }}" class="btn btn-lg btn-primary shadow-sm mt-3 mt-md-0">
+                        <i class="fas fa-list-ul fa-sm mr-1"></i> Kelola Seleksi Peserta
+                    </a>
+                @else
+                    <a href="{{ route('panitia.peserta.tanpaSeleksi') }}" class="btn btn-lg btn-success shadow-sm mt-3 mt-md-0">
+                        <i class="fas fa-users fa-sm mr-1"></i> Kelola Peserta (Tanpa Seleksi)
+                    </a>
+                @endif
             </div>
         </div>
     </div>

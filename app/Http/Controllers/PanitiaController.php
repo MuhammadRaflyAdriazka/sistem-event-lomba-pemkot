@@ -21,7 +21,7 @@ class PanitiaController extends Controller
 
         // Cek apakah user ini terdaftar sebagai panitia untuk acara tertentu
         $panitiaAcara = DB::table('panitia_acara')
-            ->where('id_pengguna', $user->id) // ✅ Fix: pakai id_pengguna
+            ->where('id_pengguna', $user->id) 
             ->first();
 
         if (!$panitiaAcara) {
@@ -321,5 +321,139 @@ class PanitiaController extends Controller
             ]);
 
         return redirect()->route('panitia.peserta')->with('success', "Berhasil menolak {$updated} peserta karena kuota sudah penuh. Status peserta di halaman 'Acara Saya' telah diperbarui.");
+    }
+
+    /**
+     * Menampilkan halaman kelola peserta untuk sistem TANPA SELEKSI
+     * Peserta yang mendaftar langsung diterima otomatis (first come first served)
+     * sampai kuota penuh
+     */
+    public function pesertaTanpaSeleksi()
+    {
+        $user = Auth::user();
+        
+        // Pastikan user adalah panitia
+        if ($user->peran !== 'panitia') {
+            return redirect()->route('dashboard')->with('error', 'Akses ditolak');
+        }
+
+        // Cek apakah user ini terdaftar sebagai panitia untuk acara tertentu
+        $panitiaAcara = DB::table('panitia_acara')
+            ->where('id_pengguna', $user->id)
+            ->first();
+
+        if (!$panitiaAcara) {
+            return redirect()->route('dashboard')->with('error', 'Anda belum ditugaskan ke acara manapun');
+        }
+
+        // Ambil data acara yang ditugaskan
+        $acara = Acara::findOrFail($panitiaAcara->id_acara);
+        
+        // Pastikan acara ini menggunakan sistem tanpa seleksi
+        if ($acara->sistem_pendaftaran !== 'Tanpa Seleksi') {
+            return redirect()->route('panitia.peserta')->with('error', 'Acara ini menggunakan sistem seleksi, bukan tanpa seleksi');
+        }
+
+        // Ambil data peserta yang sudah diterima otomatis (status disetujui)
+        $pesertaDiterima = Pendaftaran::with(['pengguna', 'dataPendaftaran'])
+            ->where('id_acara', $acara->id)
+            ->where('status', 'disetujui')
+            ->orderBy('created_at', 'asc') // Urutkan berdasarkan waktu daftar (first come first served)
+            ->get();
+
+        // Hitung statistik
+        $totalPendaftar = Pendaftaran::where('id_acara', $acara->id)->count();
+        $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)->where('status', 'disetujui')->count();
+        $jumlahDitolak = Pendaftaran::where('id_acara', $acara->id)->where('status', 'ditolak')->count();
+        $kuotaTersisa = $acara->kuota - $jumlahDiterima;
+
+        return view('panitia.peserta-tanpa-seleksi', compact('acara', 'pesertaDiterima', 'totalPendaftar', 'jumlahDiterima', 'jumlahDitolak', 'kuotaTersisa'));
+    }
+
+    /**
+     * Batalkan penerimaan peserta pada sistem TANPA SELEKSI
+     * Digunakan jika ada peserta yang tidak memenuhi syarat setelah dicek
+     */
+    public function batalkanPenerimaanTanpaSeleksi(Request $request, $pendaftaranId)
+    {
+        $user = Auth::user();
+        
+        // Pastikan user adalah panitia
+        if ($user->peran !== 'panitia') {
+            return redirect()->route('dashboard')->with('error', 'Akses ditolak');
+        }
+
+        // Cek apakah user ini terdaftar sebagai panitia
+        $panitiaAcara = DB::table('panitia_acara')
+            ->where('id_pengguna', $user->id)
+            ->first();
+
+        if (!$panitiaAcara) {
+            return redirect()->route('dashboard')->with('error', 'Anda belum ditugaskan ke acara manapun');
+        }
+
+        // Ambil data pendaftaran dengan validasi
+        $pendaftaran = Pendaftaran::where('id', $pendaftaranId)
+            ->where('id_acara', $panitiaAcara->id_acara)
+            ->where('status', 'disetujui') // Hanya bisa batalkan yang statusnya diterima
+            ->firstOrFail();
+
+        // Validasi alasan pembatalan wajib diisi
+        $request->validate([
+            'alasan_pembatalan' => 'required|string|min:10|max:500'
+        ], [
+            'alasan_pembatalan.required' => 'Alasan pembatalan wajib diisi',
+            'alasan_pembatalan.min' => 'Alasan pembatalan minimal 10 karakter',
+            'alasan_pembatalan.max' => 'Alasan pembatalan maksimal 500 karakter'
+        ]);
+
+        // Update status menjadi ditolak dengan alasan pembatalan
+        $pendaftaran->update([
+            'status' => 'ditolak',
+            'alasan_penolakan' => $request->alasan_pembatalan
+        ]);
+
+        return redirect()->route('panitia.peserta.tanpaSeleksi')->with('success', 'Penerimaan peserta berhasil dibatalkan dan peserta akan diberitahu melalui status di halaman "Acara Saya".');
+    }
+
+    /**
+     * Menampilkan detail peserta untuk sistem TANPA SELEKSI
+     */
+    public function detailPesertaTanpaSeleksi($pendaftaranId)
+    {
+        $user = Auth::user();
+        
+        // Pastikan user adalah panitia
+        if ($user->peran !== 'panitia') {
+            return redirect()->route('dashboard')->with('error', 'Akses ditolak');
+        }
+
+        // Cek apakah user ini terdaftar sebagai panitia
+        $panitiaAcara = DB::table('panitia_acara')
+            ->where('id_pengguna', $user->id)
+            ->first();
+
+        if (!$panitiaAcara) {
+            return redirect()->route('dashboard')->with('error', 'Anda belum ditugaskan ke acara manapun');
+        }
+
+        // Ambil data pendaftaran dengan validasi bahwa pendaftaran ini untuk acara yang ditugaskan ke panitia
+        $pendaftaran = Pendaftaran::with(['pengguna', 'dataPendaftaran', 'acara'])
+            ->where('id', $pendaftaranId)
+            ->where('id_acara', $panitiaAcara->id_acara)
+            ->firstOrFail();
+
+        // Pastikan acara menggunakan sistem tanpa seleksi
+        if ($pendaftaran->acara->sistem_pendaftaran !== 'Tanpa Seleksi') {
+            return redirect()->route('panitia.peserta')->with('error', 'Pendaftaran ini bukan untuk sistem tanpa seleksi');
+        }
+
+        // Ambil kolom formulir untuk acara ini
+        $kolomFormulir = DB::table('kolom_formulir_acara')
+            ->where('id_acara', $pendaftaran->id_acara)
+            ->orderBy('urutan_kolom')
+            ->get();
+
+        return view('panitia.detail-tanpa-seleksi', compact('pendaftaran', 'kolomFormulir'));
     }
 }

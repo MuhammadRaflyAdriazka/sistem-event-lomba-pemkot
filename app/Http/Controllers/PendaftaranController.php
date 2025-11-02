@@ -38,6 +38,18 @@ class PendaftaranController extends Controller
                            ->with('info', 'Anda sudah terdaftar pada acara ini');
         }
 
+        // Cek apakah kuota masih tersedia untuk sistem tanpa seleksi
+        if ($acara->sistem_pendaftaran === 'Tanpa Seleksi') {
+            $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)
+                                        ->where('status', 'disetujui')
+                                        ->count();
+            
+            if ($jumlahDiterima >= $acara->kuota) {
+                return redirect()->route('acara.show', $acara->id)
+                               ->with('error', 'Maaf, kuota peserta sudah penuh. Pendaftaran ditutup.');
+            }
+        }
+
         return view('pendaftaran', compact('acara'));
     }
 
@@ -56,13 +68,15 @@ class PendaftaranController extends Controller
             return back()->with('error', 'Periode pendaftaran sudah ditutup');
         }
 
-        // Cek apakah user sudah terdaftar
-        $sudahDaftar = Pendaftaran::where('id_acara', $acara->id)
-                                 ->where('id_pengguna', auth()->id())
-                                 ->exists();
-
-        if ($sudahDaftar) {
-            return back()->with('error', 'Anda sudah terdaftar pada acara ini');
+        // Cek apakah kuota masih tersedia untuk sistem tanpa seleksi
+        if ($acara->sistem_pendaftaran === 'Tanpa Seleksi') {
+            $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)
+                                        ->where('status', 'disetujui')
+                                        ->count();
+            
+            if ($jumlahDiterima >= $acara->kuota) {
+                return back()->with('error', 'Maaf, kuota peserta sudah penuh. Pendaftaran ditutup.');
+            }
         }
 
         // Buat validasi rules berdasarkan kolom formulir
@@ -91,11 +105,27 @@ class PendaftaranController extends Controller
         $validatedData = $request->validate($rules);
 
         try {
+            // Tentukan status berdasarkan sistem pendaftaran
+            $status = 'pending'; // Default untuk sistem seleksi
+            
+            if ($acara->sistem_pendaftaran === 'Tanpa Seleksi') {
+                // Cek ulang kuota sebelum menerima otomatis
+                $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)
+                                            ->where('status', 'disetujui')
+                                            ->count();
+                
+                if ($jumlahDiterima < $acara->kuota) {
+                    $status = 'disetujui'; // Auto-accept jika kuota masih ada
+                } else {
+                    return back()->with('error', 'Maaf, kuota peserta sudah penuh. Pendaftaran ditutup.');
+                }
+            }
+
             // Buat record pendaftaran
             $pendaftaran = Pendaftaran::create([
                 'id_acara' => $acara->id,
                 'id_pengguna' => auth()->id(),
-                'status' => 'pending'
+                'status' => $status
             ]);
 
             \Log::info('Pendaftaran berhasil dibuat:', ['id' => $pendaftaran->id]);
@@ -137,7 +167,12 @@ class PendaftaranController extends Controller
                 \Log::info('Data berhasil disimpan:', ['data_id' => $dataResult->id]);
             }
 
-            return redirect()->route('acara')->with('success', 'Pendaftaran berhasil! Terima kasih telah mendaftar.');
+            // Pesan sukses yang berbeda berdasarkan sistem pendaftaran
+            if ($acara->sistem_pendaftaran === 'Tanpa Seleksi') {
+                return redirect()->route('acara')->with('success', 'Selamat! Pendaftaran Anda berhasil dan LANGSUNG DITERIMA. Anda telah menjadi peserta ' . $acara->judul . '. Silakan cek status di halaman "Acara Saya".');
+            } else {
+                return redirect()->route('acara')->with('success', 'Pendaftaran berhasil! Silakan tunggu hasil seleksi. Status akan diumumkan di halaman "Acara Saya".');
+            }
 
         } catch (\Exception $e) {
             \Log::error('Error saat menyimpan pendaftaran: ' . $e->getMessage());

@@ -1,7 +1,7 @@
 @extends('layouts.admin.app')
 
 {{-- Mengatur judul halaman yang akan tampil di top bar --}}
-@section('title', 'Edit Event')
+@section('title', 'Edit Acara')
 
 {{-- Menyisipkan CSS khusus untuk halaman ini ke dalam <head> --}}
 @push('styles')
@@ -102,8 +102,8 @@
 @section('content')
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Edit Event: {{ $acara->judul }}</h1>
-    <p class="text-muted">Perbarui informasi event sesuai kebutuhan</p>
+    <h1 class="h3 mb-0 text-gray-800">Edit Acara: {{ $acara->judul }}</h1>
+    <p class="text-muted">Perbarui informasi acara sesuai kebutuhan</p>
 </div>
 
 @if(session('success'))
@@ -133,7 +133,7 @@
     <div class="step-indicator">
         <div class="step-item active" data-step="1">
             <div class="step-number">1</div>
-            <div class="step-title">Informasi Event</div>
+            <div class="step-title">Informasi Acara</div>
         </div>
         <div class="step-item" data-step="2">
             <div class="step-number">2</div>
