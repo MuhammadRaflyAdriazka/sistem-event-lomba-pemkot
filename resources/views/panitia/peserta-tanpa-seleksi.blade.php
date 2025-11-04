@@ -1,7 +1,6 @@
 @extends('layouts.panitia.app')
 
-{{-- Mengatur judul halaman --}}
-@section('title', 'Kelola Pendaftaran (Tanpa Seleksi)')
+@section('title', 'Kelola Pendaftaran')
 
 @push('styles')
 <style>
@@ -21,7 +20,7 @@
 
 {{-- Header Halaman --}}
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Kelola Daftar Peserta (Tanpa Seleksi)</h1>
+    <h1 class="h3 mb-0 text-gray-800">Kelola Daftar Peserta</h1>
     {{-- Tombol Kembali --}}
     <a href="{{ route('panitia.dashboard') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
         <i class="fas fa-arrow-left fa-sm text-white-50"></i> Kembali ke Dashboard
@@ -77,7 +76,7 @@
         <div>
             <h5 class="m-0 font-weight-bold text-primary">Acara: {{ $acara->judul }}</h5>
             <p class="m-0 text-muted">Kuota: {{ $acara->kuota }} peserta |
-                Sistem: <span class="badge badge-info">{{ $acara->sistem_pendaftaran }}</span>
+                Sistem: <span class="">{{ $acara->sistem_pendaftaran }}</span>
             </p>
         </div>
     </div>

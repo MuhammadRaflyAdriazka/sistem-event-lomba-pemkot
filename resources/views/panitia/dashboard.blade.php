@@ -1,6 +1,5 @@
 @extends('layouts.panitia.app')
 
-{{-- Mengatur judul halaman yang akan tampil di top bar --}}
 @section('title', 'Dashboard Panitia')
 
 @section('content')
@@ -37,14 +36,14 @@
                     Tenggat Pendaftaran: {{ \Carbon\Carbon::parse($acara->tanggal_mulai_daftar)->locale('id')->isoFormat('D/M') }} - {{ \Carbon\Carbon::parse($acara->tanggal_akhir_daftar)->locale('id')->isoFormat('D/M/Y') }}
                 </p>
             </div>
-            <div class="col-md-4 text-center text-md-right">
+            <div class="col-md-5 text-center text-md-right">
                 @if($acara->sistem_pendaftaran === 'Seleksi')
-                    <a href="{{ route('panitia.peserta') }}" class="btn btn-lg btn-primary shadow-sm mt-3 mt-md-0">
-                        <i class="fas fa-list-ul fa-sm mr-1"></i> Kelola Seleksi Peserta
+                    <a href="{{ route('panitia.peserta') }}" class="btn btn-lg btn-primary shadow-sm mt-3 mt-5">
+                        <i class="fas fa-list-ul fa-sm mr-1"></i> Kelola Peserta
                     </a>
                 @else
                     <a href="{{ route('panitia.peserta.tanpaSeleksi') }}" class="btn btn-lg btn-success shadow-sm mt-3 mt-md-0">
-                        <i class="fas fa-users fa-sm mr-1"></i> Kelola Peserta (Tanpa Seleksi)
+                        <i class="fas fa-users fa-sm mr-1"></i> Kelola Peserta
                     </a>
                 @endif
             </div>

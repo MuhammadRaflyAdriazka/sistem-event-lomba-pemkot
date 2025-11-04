@@ -91,20 +91,20 @@
                         </div>
                         <div class="card-body p-4">
                             <h1 class="card-title mb-3">{{ $acara->judul }}</h1>
-                            <p><i class="fa fa-calendar"></i> {{ \Carbon\Carbon::parse($acara->tanggal_acara)->locale('id')->isoFormat('D MMMM Y') }}</p>
+                            <p><i class="fa fa-calendar"></i> Tanggal Pelaksanaan: {{ \Carbon\Carbon::parse($acara->tanggal_acara)->locale('id')->isoFormat('D MMMM Y') }}</p>
                             <p><i class="fa fa-map-marker-alt"></i> Lokasi: {{ $acara->lokasi }}</p>
                             
-                            <h5 class="mt-4">Sistem Pendaftaran</h5>
-                            <p>
-                                <span class="badge {{ $acara->sistem_pendaftaran == 'Seleksi' ? 'badge-warning' : 'badge-info' }}">{{ $acara->sistem_pendaftaran }}</span>
-                                <small class="text-muted ml-2">- Kuota: {{ number_format($acara->kuota) }} peserta</small>
-                            </p>
-                            
                             <h5 class="mt-4">Biaya Pendaftaran</h5>
-                            <p><i class="fa fa-money-bill-wave"></i> {{ $acara->biaya }}</p>
+                            <p><i class=""></i> {{ $acara->biaya }}</p>
                             
                             <h5 class="mt-4">Syarat Pendaftaran</h5>
                             <p>{{ Str::limit($acara->persyaratan, 120, '...') }}</p>
+
+                            <h5 class="mt-4">Kuota</h5>
+                            <p class="text-muted">{{ number_format($acara->kuota) }} peserta</p>
+
+                            <h5 class="mt-4">Sistem Pendaftaran</h5>
+                            <p class="text-muted">{{ $acara->sistem_pendaftaran }}</p>
                             
                             <h5 class="mt-4">Periode Registrasi</h5>
                             <p>{{ \Carbon\Carbon::parse($acara->tanggal_mulai_daftar)->locale('id')->isoFormat('D MMMM') }} – {{ \Carbon\Carbon::parse($acara->tanggal_akhir_daftar)->locale('id')->isoFormat('D MMMM Y') }}</p>
