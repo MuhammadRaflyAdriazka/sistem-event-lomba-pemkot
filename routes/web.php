@@ -26,6 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // -- Rute Umum untuk Semua Peran --
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/acara', [DashboardController::class, 'acaraSaya'])->name('acara');
+    Route::get('/acara/{pendaftaran}/detail-pendaftaran', [DashboardController::class, 'detailPendaftaran'])->name('acara.detailPendaftaran');
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -95,8 +95,12 @@
                                             </p>
                                             <p><i class="fa fa-calendar-plus"></i> Tanggal Daftar: {{ \Carbon\Carbon::parse($pendaftaran->created_at)->locale('id')->isoFormat('D MMMM Y, HH:mm') }}</p>
                                             <div class="mt-3">
-                                                <a href="{{ route('acara.show', $pendaftaran->acara->id) }}" class="btn btn-outline-primary">Lihat Detail</a>
-                                                <a href="{{ route('acara.show', $pendaftaran->acara->id) }}" class="btn btn-outline-primary">Lihat Pengumuman</a>
+                                                <a href="{{ route('acara.detailPendaftaran', $pendaftaran->id) }}" class="btn btn-primary">
+                                                    <i class=""></i>Lihat Detail
+                                                </a>
+                                                <a href="{{ route('acara.show', $pendaftaran->acara->id) }}" class="btn btn-outline-secondary">
+                                                    <i class=""></i>Lihat Pengumuman
+                                                </a>
                                             </div>
                                         </div>
                                     </div>

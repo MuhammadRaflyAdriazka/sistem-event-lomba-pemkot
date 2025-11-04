@@ -46,4 +46,22 @@ class DashboardController extends Controller
 
         return view('acara', compact('pendaftaranUser'));
     }
+
+    /**
+     * Menampilkan detail status pendaftaran user untuk acara tertentu
+     */
+    public function detailPendaftaran(Pendaftaran $pendaftaran)
+    {
+        $user = auth()->user();
+
+        // Pastikan pendaftaran ini milik user yang sedang login
+        if ($pendaftaran->id_pengguna !== $user->id) {
+            abort(403, 'Anda tidak memiliki akses ke pendaftaran ini.');
+        }
+
+        // Ambil data acara
+        $acara = $pendaftaran->acara;
+
+        return view('detail-pendaftaran', compact('pendaftaran', 'acara'));
+    }
 }

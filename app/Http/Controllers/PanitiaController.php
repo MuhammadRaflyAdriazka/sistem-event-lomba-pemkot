@@ -195,10 +195,24 @@ class PanitiaController extends Controller
             ->where('id_acara', $panitiaAcara->id_acara)
             ->firstOrFail();
 
-        // Update status menjadi ditolak
+        // Ambil data acara untuk cek kuota
+        $acara = Acara::findOrFail($panitiaAcara->id_acara);
+        $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)
+            ->where('status', 'disetujui')
+            ->count();
+
+        // Tentukan alasan penolakan otomatis berdasarkan kondisi
+        $alasanPenolakan = '';
+        if ($jumlahDiterima >= $acara->kuota) {
+            $alasanPenolakan = 'Kuota sudah penuh - Seleksi ditutup';
+        } else {
+            $alasanPenolakan = 'Tidak memenuhi kriteria seleksi';
+        }
+
+        // Update status menjadi ditolak dengan alasan otomatis
         $pendaftaran->update([
             'status' => 'ditolak',
-            'alasan_penolakan' => 'Tidak memenuhi kriteria seleksi'
+            'alasan_penolakan' => $alasanPenolakan
         ]);
 
         return redirect()->route('panitia.peserta')->with('success', 'Peserta berhasil ditolak!');
