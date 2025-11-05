@@ -79,16 +79,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Kelola Peserta
         Route::get('/peserta', [PanitiaController::class, 'peserta'])->name('peserta');
         Route::get('/peserta-diterima', [PanitiaController::class, 'pesertaDiterima'])->name('peserta.diterima');
+        Route::get('/peserta-ditolak', [PanitiaController::class, 'pesertaDitolak'])->name('peserta.ditolak');
         Route::get('/peserta/{pendaftaran}/detail', [PanitiaController::class, 'detailPeserta'])->name('peserta.detail');
         Route::post('/peserta/{pendaftaran}/terima', [PanitiaController::class, 'terimaPeserta'])->name('peserta.terima');
         Route::post('/peserta/{pendaftaran}/tolak', [PanitiaController::class, 'tolakPeserta'])->name('peserta.tolak');
         Route::post('/peserta/{pendaftaran}/batalkan', [PanitiaController::class, 'batalkanPenerimaan'])->name('peserta.batalkan');
-        Route::get('/peserta/tolak-semua/{acara}', [PanitiaController::class, 'tolakSemuaPeserta'])->name('peserta.tolakSemua');
+        Route::post('/peserta/{pendaftaran}/batalkan-penolakan', [PanitiaController::class, 'batalkanPenolakan'])->name('peserta.batalkanPenolakan');
+        Route::post('/peserta/tolak-massal-kuota-penuh', [PanitiaController::class, 'tolakMassalKuotaPenuh'])->name('peserta.tolakMassalKuotaPenuh');
         Route::get('/file/{filename}', [PanitiaController::class, 'showFile'])->name('file');
 
         Route::get('/tanpa-seleksi', [PanitiaController::class, 'pesertaTanpaSeleksi'])->name('peserta.tanpaSeleksi');
+        Route::get('/peserta-ditolak-tanpa-seleksi', [PanitiaController::class, 'pesertaDitolakTanpaSeleksi'])->name('peserta.ditolakTanpaSeleksi');
         Route::get('/peserta/{pendaftaran}/detail-tanpa-seleksi', [PanitiaController::class, 'detailPesertaTanpaSeleksi'])->name('peserta.detailTanpaSeleksi');
         Route::patch('/peserta/{pendaftaran}/batalkan-tanpa-seleksi', [PanitiaController::class, 'batalkanPenerimaanTanpaSeleksi'])->name('peserta.batalkanTanpaSeleksi');
+        Route::post('/peserta/{pendaftaran}/batalkan-penolakan-tanpa-seleksi', [PanitiaController::class, 'batalkanPenolakanTanpaSeleksi'])->name('peserta.batalkanPenolakanTanpaSeleksi');
         
         // Profile Panitia
         Route::get('/profile', [PanitiaProfileController::class, 'edit'])->name('profile.edit');

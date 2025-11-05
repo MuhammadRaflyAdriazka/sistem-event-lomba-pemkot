@@ -60,9 +60,19 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
         <h6 class="m-0 font-weight-bold text-primary">Daftar Peserta Menunggu Seleksi</h6>
-        <a href="{{ route('panitia.peserta.diterima') }}" class="btn btn-success btn-sm">
-            <i class="fas fa-check-circle"></i> Lihat Peserta Diterima
-        </a>
+        <div>
+            @if($peserta->count() > 0)
+            <button type="button" class="btn btn-warning btn-sm mr-2" onclick="tolakMassalKuotaPenuh()">
+                <i class="fas fa-users-slash"></i> Tolak Semua Sisa Peserta
+            </button>
+            @endif
+            <a href="{{ route('panitia.peserta.diterima') }}" class="btn btn-success btn-sm mr-2">
+                <i class="fas fa-check-circle"></i> Lihat Peserta Diterima
+            </a>
+            <a href="{{ route('panitia.peserta.ditolak') }}" class="btn btn-danger btn-sm">
+                <i class="fas fa-times-circle"></i> Lihat Peserta Ditolak
+            </a>
+        </div>
     </div>
     <div class="card-body">
         <p><strong>Sistem Pendaftaran:</strong>
@@ -155,6 +165,42 @@
     </div>
 </div>
 
+{{-- Modal Tolak Individual --}}
+<div class="modal fade" id="modalTolakIndividual" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tolak Peserta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="formTolakIndividual" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <p>Anda akan menolak peserta: <strong id="namaPesertaTolak"></strong></p>
+                    <div class="form-group">
+                        <label for="alasan_penolakan">Alasan Penolakan <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="alasan_penolakan" name="alasan_penolakan" rows="3" required
+                                  placeholder="Tuliskan alasan penolakan (minimal 5 karakter)"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-times"></i> Tolak Peserta
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- Form tersembunyi untuk terima peserta --}}
+<form id="formTerimaPeserta" method="POST" style="display: none;">
+    @csrf
+</form>
+
 @endsection
 
 @push('scripts')
@@ -162,6 +208,43 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+// Terima peserta
+function terimaPeserta(pendaftaranId, namaPeserta) {
+    if (confirm(`Apakah Anda yakin ingin menerima peserta "${namaPeserta}"?`)) {
+        const form = document.getElementById('formTerimaPeserta');
+        form.action = `/panitia/peserta/${pendaftaranId}/terima`;
+        form.submit();
+    }
+}
+
+// Show modal tolak individual
+function showTolakForm(pendaftaranId, namaPeserta) {
+    document.getElementById('namaPesertaTolak').textContent = namaPeserta;
+    document.getElementById('formTolakIndividual').action = `/panitia/peserta/${pendaftaranId}/tolak`;
+    document.getElementById('alasan_penolakan').value = '';
+    $('#modalTolakIndividual').modal('show');
+}
+
+// Tolak massal dengan alasan "Kuota sudah terpenuhi"
+function tolakMassalKuotaPenuh() {
+    if (confirm('Apakah Anda yakin ingin menolak semua peserta yang tersisa dengan alasan "Maaf, kuota sudah terpenuhi"?')) {
+        // Buat form tersembunyi untuk submit
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{{ route("panitia.peserta.tolakMassalKuotaPenuh") }}';
+        
+        const csrfToken = document.createElement('input');
+        csrfToken.type = 'hidden';
+        csrfToken.name = '_token';
+        csrfToken.value = '{{ csrf_token() }}';
+        
+        form.appendChild(csrfToken);
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+// Tolak semua sisa (fungsi lama untuk kuota penuh)
 function tolakSemuaSisa() {
     Swal.fire({
         title: 'Tolak Semua Peserta Sisa?',
@@ -187,7 +270,7 @@ function tolakSemuaSisa() {
             // Tampilkan loading
             Swal.fire({
                 title: 'Memproses...',
-                text: 'Sedang menolak semua peserta sisa',
+                text: 'Sedang menolak peserta',
                 icon: 'info',
                 allowOutsideClick: false,
                 showConfirmButton: false,
@@ -196,8 +279,19 @@ function tolakSemuaSisa() {
                 }
             });
             
-            // Redirect ke route tolak semua
-            window.location.href = "{{ route('panitia.peserta.tolakSemua', $acara->id) }}";
+            // Buat form tersembunyi untuk submit
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ route("panitia.peserta.tolakMassalKuotaPenuh") }}';
+            
+            const csrfToken = document.createElement('input');
+            csrfToken.type = 'hidden';
+            csrfToken.name = '_token';
+            csrfToken.value = '{{ csrf_token() }}';
+            
+            form.appendChild(csrfToken);
+            document.body.appendChild(form);
+            form.submit();
         }
     });
 }

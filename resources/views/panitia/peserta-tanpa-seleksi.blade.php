@@ -86,10 +86,10 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
         <h6 class="m-0 font-weight-bold text-primary">Daftar Peserta Diterima</h6>
-        {{-- Tombol opsional --}}
-        {{-- <a href="#" class="btn btn-danger btn-sm">
-            <i class="fas fa-times-circle"></i> Lihat Peserta Ditolak/Dibatalkan (0)
-        </a> --}}
+        {{-- Tombol untuk lihat peserta ditolak --}}
+        <a href="{{ route('panitia.peserta.ditolakTanpaSeleksi') }}" class="btn btn-danger btn-sm">
+            <i class="fas fa-times-circle"></i> Lihat Peserta Ditolak
+        </a>
     </div>
     <div class="card-body">
         {{-- Statistik --}}

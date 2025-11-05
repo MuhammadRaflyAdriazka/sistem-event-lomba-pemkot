@@ -172,7 +172,7 @@ class PanitiaController extends Controller
         return redirect()->route('panitia.peserta')->with('success', 'Peserta berhasil diterima!');
     }
 
-    public function tolakPeserta($pendaftaranId)
+    public function tolakPeserta(Request $request, $pendaftaranId)
     {
         $user = Auth::user();
         
@@ -195,24 +195,19 @@ class PanitiaController extends Controller
             ->where('id_acara', $panitiaAcara->id_acara)
             ->firstOrFail();
 
-        // Ambil data acara untuk cek kuota
-        $acara = Acara::findOrFail($panitiaAcara->id_acara);
-        $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)
-            ->where('status', 'disetujui')
-            ->count();
+        // Validasi input alasan penolakan
+        $request->validate([
+            'alasan_penolakan' => 'required|string|min:5|max:255'
+        ], [
+            'alasan_penolakan.required' => 'Alasan penolakan wajib diisi',
+            'alasan_penolakan.min' => 'Alasan penolakan minimal 5 karakter',
+            'alasan_penolakan.max' => 'Alasan penolakan maksimal 255 karakter'
+        ]);
 
-        // Tentukan alasan penolakan otomatis berdasarkan kondisi
-        $alasanPenolakan = '';
-        if ($jumlahDiterima >= $acara->kuota) {
-            $alasanPenolakan = 'Kuota sudah penuh - Seleksi ditutup';
-        } else {
-            $alasanPenolakan = 'Tidak memenuhi kriteria seleksi';
-        }
-
-        // Update status menjadi ditolak dengan alasan otomatis
+        // Update status menjadi ditolak dengan alasan dari input
         $pendaftaran->update([
             'status' => 'ditolak',
-            'alasan_penolakan' => $alasanPenolakan
+            'alasan_penolakan' => $request->alasan_penolakan
         ]);
 
         return redirect()->route('panitia.peserta')->with('success', 'Peserta berhasil ditolak!');
@@ -253,6 +248,46 @@ class PanitiaController extends Controller
         return view('panitia.terima-seleksi', compact('acara', 'pesertaDiterima', 'jumlahPending', 'jumlahDitolak'));
     }
 
+    public function pesertaDitolak()
+    {
+        $user = Auth::user();
+        
+        // Pastikan user adalah panitia
+        if ($user->peran !== 'panitia') {
+            return redirect()->route('dashboard')->with('error', 'Akses ditolak');
+        }
+
+        // Cek apakah user ini terdaftar sebagai panitia untuk acara tertentu
+        $panitiaAcara = DB::table('panitia_acara')
+            ->where('id_pengguna', $user->id)
+            ->first();
+
+        if (!$panitiaAcara) {
+            return redirect()->route('dashboard')->with('error', 'Anda belum ditugaskan ke acara manapun');
+        }
+
+        // Ambil data acara yang ditugaskan
+        $acara = Acara::findOrFail($panitiaAcara->id_acara);
+        
+        // Pastikan acara menggunakan sistem seleksi
+        if ($acara->sistem_pendaftaran !== 'Seleksi') {
+            return redirect()->route('panitia.peserta')->with('error', 'Fitur ini hanya untuk acara dengan sistem seleksi');
+        }
+
+        // Ambil data peserta yang ditolak
+        $pesertaDitolak = Pendaftaran::with(['pengguna', 'dataPendaftaran'])
+            ->where('id_acara', $acara->id)
+            ->where('status', 'ditolak')
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        // Hitung statistik
+        $jumlahPending = Pendaftaran::where('id_acara', $acara->id)->where('status', 'pending')->count();
+        $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)->where('status', 'disetujui')->count();
+
+        return view('panitia.ditolak-seleksi', compact('acara', 'pesertaDitolak', 'jumlahPending', 'jumlahDiterima'));
+    }
+
     public function batalkanPenerimaan($pendaftaranId)
     {
         $user = Auth::user();
@@ -286,7 +321,7 @@ class PanitiaController extends Controller
         return redirect()->route('panitia.peserta.diterima')->with('success', 'Penerimaan peserta berhasil dibatalkan! Peserta dikembalikan ke status menunggu seleksi.');
     }
 
-    public function tolakSemuaPeserta($acaraId)
+    public function batalkanPenolakan($pendaftaranId)
     {
         $user = Auth::user();
         
@@ -295,46 +330,69 @@ class PanitiaController extends Controller
             return redirect()->route('dashboard')->with('error', 'Akses ditolak');
         }
 
-        // Cek apakah user ini terdaftar sebagai panitia untuk acara ini
+        // Cek apakah user ini terdaftar sebagai panitia
         $panitiaAcara = DB::table('panitia_acara')
             ->where('id_pengguna', $user->id)
-            ->where('id_acara', $acaraId)
             ->first();
 
         if (!$panitiaAcara) {
-            return redirect()->route('dashboard')->with('error', 'Anda tidak berhak mengelola acara ini');
+            return redirect()->route('dashboard')->with('error', 'Anda belum ditugaskan ke acara manapun');
         }
 
-        // Ambil acara
-        $acara = Acara::findOrFail($acaraId);
+        // Ambil data pendaftaran dengan validasi
+        $pendaftaran = Pendaftaran::where('id', $pendaftaranId)
+            ->where('id_acara', $panitiaAcara->id_acara)
+            ->where('status', 'ditolak')
+            ->firstOrFail();
 
-        // Cek apakah kuota sudah penuh
-        $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)
-            ->where('status', 'disetujui')
-            ->count();
+        // Update status kembali ke pending dan hapus alasan penolakan
+        $pendaftaran->update([
+            'status' => 'pending',
+            'alasan_penolakan' => null
+        ]);
 
-        if ($jumlahDiterima < $acara->kuota) {
-            return redirect()->route('panitia.peserta')->with('error', 'Kuota belum penuh! Tidak bisa menolak semua peserta sisa.');
+        return redirect()->route('panitia.peserta.ditolak')->with('success', 'Penolakan berhasil dibatalkan! Peserta dikembalikan ke status menunggu seleksi.');
+    }
+
+    public function tolakMassalKuotaPenuh()
+    {
+        $user = Auth::user();
+        
+        // Pastikan user adalah panitia
+        if ($user->peran !== 'panitia') {
+            return redirect()->route('dashboard')->with('error', 'Akses ditolak');
         }
 
-        // Hitung berapa peserta yang akan ditolak
-        $jumlahPending = Pendaftaran::where('id_acara', $acara->id)
-            ->where('status', 'pending')
-            ->count();
+        // Cek apakah user ini terdaftar sebagai panitia untuk acara tertentu
+        $panitiaAcara = DB::table('panitia_acara')
+            ->where('id_pengguna', $user->id)
+            ->first();
 
-        if ($jumlahPending == 0) {
-            return redirect()->route('panitia.peserta')->with('info', 'Tidak ada peserta yang perlu ditolak.');
+        if (!$panitiaAcara) {
+            return redirect()->route('dashboard')->with('error', 'Anda belum ditugaskan ke acara manapun');
         }
 
-        // Tolak semua peserta yang masih pending
+        // Ambil data acara yang ditugaskan
+        $acara = Acara::findOrFail($panitiaAcara->id_acara);
+
+        // Pastikan ini acara seleksi
+        if ($acara->sistem_pendaftaran !== 'Seleksi') {
+            return redirect()->route('panitia.peserta')->with('error', 'Fitur ini hanya untuk acara dengan sistem seleksi');
+        }
+
+        // Tolak semua peserta yang masih pending dengan alasan kuota penuh
         $updated = Pendaftaran::where('id_acara', $acara->id)
             ->where('status', 'pending')
             ->update([
                 'status' => 'ditolak',
-                'alasan_penolakan' => 'Kuota sudah penuh - Seleksi ditutup'
+                'alasan_penolakan' => 'Maaf, kuota sudah terpenuhi'
             ]);
 
-        return redirect()->route('panitia.peserta')->with('success', "Berhasil menolak {$updated} peserta karena kuota sudah penuh. Status peserta di halaman 'Acara Saya' telah diperbarui.");
+        if ($updated > 0) {
+            return redirect()->route('panitia.peserta')->with('success', "Berhasil menolak {$updated} sisa peserta dengan alasan: Kuota sudah terpenuhi");
+        } else {
+            return redirect()->route('panitia.peserta')->with('info', 'Tidak ada peserta yang perlu ditolak (semua sudah diproses)');
+        }
     }
 
     /**
@@ -366,6 +424,22 @@ class PanitiaController extends Controller
         // Pastikan acara ini menggunakan sistem tanpa seleksi
         if ($acara->sistem_pendaftaran !== 'Tanpa Seleksi') {
             return redirect()->route('panitia.peserta')->with('error', 'Acara ini menggunakan sistem seleksi, bukan tanpa seleksi');
+        }
+
+        // Auto-approve peserta yang masih pending di sistem tanpa seleksi
+        $pendingPeserta = Pendaftaran::where('id_acara', $acara->id)
+            ->where('status', 'pending')
+            ->get();
+
+        foreach ($pendingPeserta as $pendaftaran) {
+            // Cek apakah kuota masih tersedia
+            $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)
+                ->where('status', 'disetujui')
+                ->count();
+                
+            if ($jumlahDiterima < $acara->kuota) {
+                $pendaftaran->update(['status' => 'disetujui']);
+            }
         }
 
         // Ambil data peserta yang sudah diterima otomatis (status disetujui)
@@ -469,5 +543,91 @@ class PanitiaController extends Controller
             ->get();
 
         return view('panitia.detail-tanpa-seleksi', compact('pendaftaran', 'kolomFormulir'));
+    }
+
+    public function pesertaDitolakTanpaSeleksi()
+    {
+        $user = Auth::user();
+        
+        // Pastikan user adalah panitia
+        if ($user->peran !== 'panitia') {
+            return redirect()->route('dashboard')->with('error', 'Akses ditolak');
+        }
+
+        // Cek apakah user ini terdaftar sebagai panitia untuk acara tertentu
+        $panitiaAcara = DB::table('panitia_acara')
+            ->where('id_pengguna', $user->id)
+            ->first();
+
+        if (!$panitiaAcara) {
+            return redirect()->route('dashboard')->with('error', 'Anda belum ditugaskan ke acara manapun');
+        }
+
+        // Ambil data acara yang ditugaskan
+        $acara = Acara::findOrFail($panitiaAcara->id_acara);
+        
+        // Pastikan acara menggunakan sistem tanpa seleksi
+        if ($acara->sistem_pendaftaran !== 'Tanpa Seleksi') {
+            return redirect()->route('panitia.peserta')->with('error', 'Fitur ini hanya untuk acara dengan sistem tanpa seleksi');
+        }
+
+        // Ambil data peserta yang ditolak
+        $pesertaDitolak = Pendaftaran::with(['pengguna', 'dataPendaftaran'])
+            ->where('id_acara', $acara->id)
+            ->where('status', 'ditolak')
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        // Hitung statistik
+        $jumlahPending = Pendaftaran::where('id_acara', $acara->id)->where('status', 'pending')->count();
+        $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)->where('status', 'disetujui')->count();
+
+        return view('panitia.ditolak-tanpa-seleksi', compact('acara', 'pesertaDitolak', 'jumlahPending', 'jumlahDiterima'));
+    }
+
+    public function batalkanPenolakanTanpaSeleksi($pendaftaranId)
+    {
+        $user = Auth::user();
+        
+        // Pastikan user adalah panitia
+        if ($user->peran !== 'panitia') {
+            return redirect()->route('dashboard')->with('error', 'Akses ditolak');
+        }
+
+        // Cek apakah user ini terdaftar sebagai panitia
+        $panitiaAcara = DB::table('panitia_acara')
+            ->where('id_pengguna', $user->id)
+            ->first();
+
+        if (!$panitiaAcara) {
+            return redirect()->route('dashboard')->with('error', 'Anda belum ditugaskan ke acara manapun');
+        }
+
+        // Ambil data pendaftaran dengan validasi
+        $pendaftaran = Pendaftaran::where('id', $pendaftaranId)
+            ->where('id_acara', $panitiaAcara->id_acara)
+            ->where('status', 'ditolak')
+            ->firstOrFail();
+
+        // Ambil data acara untuk cek kuota
+        $acara = Acara::findOrFail($panitiaAcara->id_acara);
+        
+        // Cek kuota tersedia
+        $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)
+            ->where('status', 'disetujui')
+            ->count();
+
+        if ($jumlahDiterima >= $acara->kuota) {
+            return redirect()->route('panitia.peserta.ditolakTanpaSeleksi')
+                ->with('error', 'Tidak dapat menerima peserta karena kuota sudah penuh.');
+        }
+
+        // Update status langsung ke disetujui (bukan pending) dan hapus alasan penolakan
+        $pendaftaran->update([
+            'status' => 'disetujui',
+            'alasan_penolakan' => null
+        ]);
+
+        return redirect()->route('panitia.peserta.ditolakTanpaSeleksi')->with('success', 'Peserta berhasil diterima kembali!');
     }
 }

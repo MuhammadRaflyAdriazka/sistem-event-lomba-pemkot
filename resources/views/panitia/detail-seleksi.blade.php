@@ -101,6 +101,7 @@
             {{-- Form untuk tombol Tolak --}}
             <form id="tolakForm" action="{{ route('panitia.peserta.tolak', $pendaftaran->id) }}" method="POST" style="display: inline-block;">
                 @csrf
+                <input type="hidden" name="alasan_penolakan" id="tolakReasonInput">
                 <button type="button" class="btn btn-danger btn-lg mr-2" onclick="confirmTolak()">
                     <i class="fas fa-times mr-1"></i> Tolak
                 </button>
@@ -145,38 +146,54 @@
 <script>
 function confirmTolak() {
     Swal.fire({
-        title: 'Konfirmasi Penolakan',
-        text: 'Apakah Anda yakin ingin menolak peserta ini?',
+        title: 'Tolak Peserta?',
+        input: 'textarea',
+        inputLabel: 'Alasan Penolakan (Wajib Diisi)',
+        inputPlaceholder: 'Masukkan alasan mengapa peserta ini ditolak...',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#dc3545',
         cancelButtonColor: '#6c757d',
-        confirmButtonText: '<i class="fas fa-times"></i> Ya, Tolak',
-        cancelButtonText: '<i class="fas fa-arrow-left"></i> Batal',
-        reverseButtons: true,
-        customClass: {
-            confirmButton: 'btn btn-danger btn-lg mx-2',
-            cancelButton: 'btn btn-secondary btn-lg mx-2'
+        confirmButtonText: 'Ya, Tolak!',
+        cancelButtonText: 'Tidak',
+        inputValidator: (value) => {
+            if (!value) {
+                return 'Anda harus memasukkan alasan penolakan!'
+            }
+            if (value.length < 10) {
+                return 'Alasan penolakan minimal 10 karakter!'
+            }
         },
-        buttonsStyling: false
+         customClass: {
+             confirmButton: 'btn btn-danger btn-lg mx-2',
+             cancelButton: 'btn btn-secondary btn-lg mx-2'
+         },
+         buttonsStyling: false,
+         reverseButtons: true
     }).then((result) => {
-        if (result.isConfirmed) {
+        if (result.isConfirmed && result.value) {
+            // Set nilai alasan ke input hidden dan submit form
+            document.getElementById('tolakReasonInput').value = result.value;
+            
             // Tampilkan loading
-            Swal.fire({
-                title: 'Memproses...',
-                text: 'Sedang menolak peserta',
-                icon: 'info',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {
-                    Swal.showLoading()
-                }
+            Swal.fire({ 
+                title: 'Memproses...', 
+                allowOutsideClick: false, 
+                didOpen: () => { 
+                    Swal.showLoading() 
+                } 
             });
             
             // Submit form
             document.getElementById('tolakForm').submit();
         }
     });
+}
+
+// Show modal tolak peserta
+function showTolakForm() {
+    document.getElementById('alasan_penolakan').value = '';
+    $('#modalTolakPeserta').modal('show');
 }
 
 function confirmTerima() {
