@@ -16,6 +16,9 @@
 
     <link href="{{ asset('templateadmin/css/sb-admin-2.min.css')}}" rel="stylesheet">
 
+    <!-- SweetAlert2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
+
     {{-- Slot untuk CSS tambahan dari halaman lain --}}
     @stack('styles')
 </head>
@@ -26,7 +29,7 @@
         @include('layouts.panitia.sidebar')
         <div id="content-wrapper" class="d-flex flex-column">
 
-            <d id="content">
+            <div id="content">
 
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
@@ -47,6 +50,7 @@
                 </div>
             </div>
         </div>
+    </div>
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
@@ -83,6 +87,9 @@
 
     <script src="{{ asset('templateadmin/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('templateadmin/js/demo/chart-pie-demo.js') }}"></script>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 
     {{-- Slot untuk JavaScript tambahan dari halaman lain --}}
     @stack('scripts')

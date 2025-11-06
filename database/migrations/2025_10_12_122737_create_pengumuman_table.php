@@ -15,7 +15,6 @@ return new class extends Migration
              $table->id();
              $table->foreignId('id_acara')->constrained('acara')->onDelete('cascade');
              $table->foreignId('id_pengguna')->constrained('users')->onDelete('cascade'); // Pembuat pengumuman (panitia/admin)
-             $table->string('judul');
              $table->text('isi');
              $table->timestamps();
         });

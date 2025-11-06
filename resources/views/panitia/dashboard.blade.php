@@ -46,6 +46,10 @@
                         <i class="fas fa-users fa-sm mr-1"></i> Kelola Peserta
                     </a>
                 @endif
+                <br>
+                <a href="{{ route('panitia.pengumuman') }}" class="btn btn-lg btn-warning shadow-sm mt-3">
+                    <i class="fas fa-bullhorn fa-sm mr-1"></i> Buat Pengumuman
+                </a>
             </div>
         </div>
     </div>

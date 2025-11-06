@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Acara;
 use App\Models\Pendaftaran;
+use App\Models\Pengumuman;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -63,5 +64,30 @@ class DashboardController extends Controller
         $acara = $pendaftaran->acara;
 
         return view('detail-pendaftaran', compact('pendaftaran', 'acara'));
+    }
+
+    /**
+     * Menampilkan pengumuman untuk peserta yang diterima
+     */
+    public function pengumuman(Pendaftaran $pendaftaran)
+    {
+        $user = auth()->user();
+
+        // Pastikan pendaftaran ini milik user yang sedang login
+        if ($pendaftaran->id_pengguna !== $user->id) {
+            abort(403, 'Anda tidak memiliki akses ke pendaftaran ini.');
+        }
+
+        // Hanya peserta yang diterima yang bisa melihat pengumuman
+        if ($pendaftaran->status !== 'diterima' && $pendaftaran->status !== 'disetujui') {
+            return redirect()->route('acara')->with('error', 'Hanya peserta yang diterima yang dapat melihat pengumuman.');
+        }
+
+        // Ambil semua pengumuman untuk acara ini
+        $pengumumanList = Pengumuman::where('id_acara', $pendaftaran->acara->id)
+                                  ->orderBy('created_at', 'desc')
+                                  ->get();
+
+        return view('pengumuman', compact('pendaftaran', 'pengumumanList'));
     }
 }

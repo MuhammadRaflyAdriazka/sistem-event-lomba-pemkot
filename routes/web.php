@@ -27,6 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/acara', [DashboardController::class, 'acaraSaya'])->name('acara');
     Route::get('/acara/{pendaftaran}/detail-pendaftaran', [DashboardController::class, 'detailPendaftaran'])->name('acara.detailPendaftaran');
+    Route::get('/acara/{pendaftaran}/pengumuman', [DashboardController::class, 'pengumuman'])->name('acara.pengumuman');
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -93,6 +94,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/peserta/{pendaftaran}/detail-tanpa-seleksi', [PanitiaController::class, 'detailPesertaTanpaSeleksi'])->name('peserta.detailTanpaSeleksi');
         Route::patch('/peserta/{pendaftaran}/batalkan-tanpa-seleksi', [PanitiaController::class, 'batalkanPenerimaanTanpaSeleksi'])->name('peserta.batalkanTanpaSeleksi');
         Route::post('/peserta/{pendaftaran}/batalkan-penolakan-tanpa-seleksi', [PanitiaController::class, 'batalkanPenolakanTanpaSeleksi'])->name('peserta.batalkanPenolakanTanpaSeleksi');
+        
+        // Pengumuman
+        Route::get('/pengumuman', [PanitiaController::class, 'pengumuman'])->name('pengumuman');
+        Route::post('/pengumuman', [PanitiaController::class, 'storePengumuman'])->name('pengumuman.store');
         
         // Profile Panitia
         Route::get('/profile', [PanitiaProfileController::class, 'edit'])->name('profile.edit');

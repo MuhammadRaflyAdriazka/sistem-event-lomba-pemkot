@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Acara;
 use App\Models\Pendaftaran;
+use App\Models\Pengumuman;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -629,5 +630,78 @@ class PanitiaController extends Controller
         ]);
 
         return redirect()->route('panitia.peserta.ditolakTanpaSeleksi')->with('success', 'Peserta berhasil diterima kembali!');
+    }
+
+    public function pengumuman()
+    {
+        $user = Auth::user();
+        
+        // Pastikan user adalah panitia
+        if ($user->peran !== 'panitia') {
+            return redirect()->route('home')->with('error', 'Akses ditolak - Anda bukan panitia');
+        }
+
+        // Ambil acara yang ditugaskan untuk panitia ini
+        $panitiaAcara = DB::table('panitia_acara')->where('id_pengguna', $user->id)->first();
+        
+        if (!$panitiaAcara) {
+            return redirect()->route('home')->with('error', 'Anda belum ditugaskan untuk mengelola acara apapun.');
+        }
+
+        $acara = Acara::findOrFail($panitiaAcara->id_acara);
+
+        // Ambil semua pengumuman untuk acara ini
+        $pengumumanList = Pengumuman::where('id_acara', $acara->id)
+                                  ->orderBy('created_at', 'desc')
+                                  ->get();
+
+        return view('panitia.pengumuman', compact('acara', 'pengumumanList'));
+    }
+
+    public function storePengumuman(Request $request)
+    {
+        $user = Auth::user();
+        
+        // Pastikan user adalah panitia
+        if ($user->peran !== 'panitia') {
+            return redirect()->route('home')->with('error', 'Akses ditolak - Anda bukan panitia');
+        }
+
+        // Ambil acara yang ditugaskan untuk panitia ini
+        $panitiaAcara = DB::table('panitia_acara')->where('id_pengguna', $user->id)->first();
+        
+        if (!$panitiaAcara) {
+            return redirect()->route('home')->with('error', 'Anda belum ditugaskan untuk mengelola acara apapun.');
+        }
+
+        $request->validate([
+            'isi' => 'required|string'
+        ]);
+
+        // Cek apakah ini mode update atau create baru
+        if ($request->has('update_mode')) {
+            // Update pengumuman yang sudah ada
+            $pengumuman = Pengumuman::where('id_acara', $panitiaAcara->id_acara)->first();
+            if ($pengumuman) {
+                $pengumuman->update([
+                    'isi' => $request->isi,
+                    'updated_at' => now()
+                ]);
+                return redirect()->route('panitia.pengumuman')->with('success', 'Pengumuman berhasil diperbarui!');
+            }
+        } else {
+            // Buat pengumuman baru (hanya jika belum ada)
+            $existingPengumuman = Pengumuman::where('id_acara', $panitiaAcara->id_acara)->first();
+            if (!$existingPengumuman) {
+                Pengumuman::create([
+                    'id_acara' => $panitiaAcara->id_acara,
+                    'id_pengguna' => $user->id,
+                    'isi' => $request->isi
+                ]);
+                return redirect()->route('panitia.pengumuman')->with('success', 'Pengumuman berhasil dibuat!');
+            }
+        }
+
+        return redirect()->route('panitia.pengumuman')->with('error', 'Terjadi kesalahan!');
     }
 }
