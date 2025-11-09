@@ -89,6 +89,8 @@
                                                     <span class="badge bg-success text-white">Disetujui</span>
                                                 @elseif($pendaftaran->status == 'ditolak')
                                                     <span class="badge bg-danger text-white">Ditolak</span>
+                                                @elseif($pendaftaran->status == 'mengundurkan_diri')
+                                                    <span class="badge bg-secondary text-white">Mengundurkan Diri</span>
                                                 @else
                                                     <span class="badge bg-info text-white">{{ ucfirst($pendaftaran->status) }}</span>
                                                 @endif

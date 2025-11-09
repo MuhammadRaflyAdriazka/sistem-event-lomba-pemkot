@@ -24,6 +24,8 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{{ asset('templatepeserta/css/style.css') }}" rel="stylesheet">
+
+    @include('layouts.peserta.topbar')
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -75,14 +77,35 @@
                                                     Maaf, pendaftaran Anda tidak dapat diterima.
                                                 </p>
                                             </div>
+                                        @elseif($pendaftaran->status == 'mengundurkan_diri')
+                                            <div class="alert alert-secondary mb-0">
+                                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                                <strong>MENGUNDURKAN DIRI</strong>
+                                                <p class="mt-2 mb-0 small">
+                                                    Anda telah mengundurkan diri dari acara ini.
+                                                </p>
+                                            </div>
+                                        @else
+                                            <div class="alert alert-info mb-0">
+                                                <i class="fas fa-info-circle mr-2"></i>
+                                                <strong>{{ strtoupper($pendaftaran->status) }}</strong>
+                                                <p class="mt-2 mb-0 small">
+                                                    Status: {{ ucfirst($pendaftaran->status) }}
+                                                </p>
+                                            </div>
                                         @endif
                                     </div>
                                     
                                     <div class="col-md-6">
                                         <h6 class="text-uppercase font-weight-bold text-muted mb-3">INFORMASI PENDAFTARAN</h6>
                                         <div class="mb-3">
-                                            <small class="text-muted">Tanggal Daftar:</small><br>
-                                            <strong>{{ \Carbon\Carbon::parse($pendaftaran->created_at)->locale('id')->isoFormat('dddd, D MMMM Y HH:mm') }}</strong>
+                                            @if($pendaftaran->status == 'mengundurkan_diri')
+                                                <small class="text-muted">Tanggal Mengundurkan Diri:</small><br>
+                                                <strong>{{ \Carbon\Carbon::parse($pendaftaran->updated_at)->locale('id')->isoFormat('dddd, D MMMM Y HH:mm') }}</strong>
+                                            @else
+                                                <small class="text-muted">Tanggal Daftar:</small><br>
+                                                <strong>{{ \Carbon\Carbon::parse($pendaftaran->created_at)->locale('id')->isoFormat('dddd, D MMMM Y HH:mm') }}</strong>
+                                            @endif
                                         </div>
                                         <div class="mb-0">
                                             <small class="text-muted">Sistem Pendaftaran:</small><br>
@@ -97,6 +120,26 @@
                                     <div class="alert alert-light border-left-danger">
                                         {{ $pendaftaran->alasan_penolakan }}
                                     </div>
+                                </div>
+                                @endif
+
+                                {{-- Tombol Mengundurkan Diri --}}
+                                @php
+                                    $sekarang = now();
+                                    $periodePendaftaranMasihBuka = $sekarang->between($acara->tanggal_mulai_daftar, $acara->tanggal_akhir_daftar);
+                                    $bisaMengundurkanDiri = $periodePendaftaranMasihBuka && 
+                                                           ($pendaftaran->status == 'pending' || $pendaftaran->status == 'disetujui');
+                                @endphp
+
+                                @if($bisaMengundurkanDiri)
+                                <div class="mt-4 text-center">
+                                    <button class="btn btn-outline-danger" onclick="confirmWithdraw()">
+                                        <i class="fas fa-sign-out-alt mr-2"></i>Mengundurkan Diri
+                                    </button>
+                                    <br>
+                                    <small class="text-muted mt-2 d-block">
+                                        Anda dapat mengundurkan diri selama periode pendaftaran masih dibuka
+                                    </small>
                                 </div>
                                 @endif
                             </div>
@@ -121,6 +164,89 @@
 
     <!-- Template Javascript -->
     <script src="{{ asset('templatepeserta/js/main.js')}}"></script>
+    
+    <!-- SweetAlert2 for confirmation -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    {{-- Hidden form untuk mengundurkan diri --}}
+    @if(isset($bisaMengundurkanDiri) && $bisaMengundurkanDiri)
+    <form id="withdrawForm" action="{{ route('acara.mengundurkanDiri', $pendaftaran->id) }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+
+    <script>
+        function confirmWithdraw() {
+            Swal.fire({
+                title: 'Yakin Mengundurkan Diri?',
+                text: 'Anda akan kehilangan slot dan tidak bisa mendaftar lagi untuk acara ini!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Mengundurkan Diri',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading
+                    Swal.fire({
+                        title: 'Memproses...',
+                        text: 'Mohon tunggu sebentar',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    // Submit form via AJAX
+                    const form = document.getElementById('withdrawForm');
+                    const formData = new FormData(form);
+
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: data.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                // Refresh halaman untuk update status
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Gagal!',
+                                text: data.message,
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Terjadi kesalahan saat memproses permintaan',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                }
+            });
+        }
+    </script>
+    @endif
+
 </body>
 
 </html>

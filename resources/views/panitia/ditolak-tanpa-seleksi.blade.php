@@ -69,16 +69,19 @@
             <span class="badge badge-success">Tanpa Seleksi (FCFS)</span>
         </p>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <p><strong>Peserta Ditolak:</strong> {{ $pesertaDitolak->count() }}</p>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <p><strong>Menunggu:</strong> {{ $jumlahPending }}</p>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <p><strong>Diterima:</strong> <span class="text-success">{{ $jumlahDiterima }}</span></p>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
+                <p><strong>Mengundurkan Diri:</strong> <span class="text-secondary">{{ $jumlahMengundurkanDiri }}</span></p>
+            </div>
+            <div class="col-md-2">
                 <p><strong>Kuota Tersisa:</strong> {{ $acara->kuota - $jumlahDiterima }}</p>
             </div>
         </div>

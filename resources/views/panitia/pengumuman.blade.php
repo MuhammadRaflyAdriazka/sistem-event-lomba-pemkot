@@ -37,7 +37,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                     <small class="form-text text-muted">
-                        Pengumuman ini akan dikirim ke semua peserta yang diterima pada event ini.
+                        Pengumuman ini akan dikirim ke semua peserta yang diterima pada acara ini.
                     </small>
                 </div>
 
@@ -45,7 +45,7 @@
                     <button type="button" onclick="confirmUpdate()" class="btn btn-warning mr-2" id="updateBtn">
                         <i class="fas fa-edit mr-1"></i>Update Pengumuman
                     </button>
-                    <small class="text-muted d-block mt-2">Klik tombol di atas untuk memperbarui pengumuman</small>
+                    
                 </div>
             </form>
         @else

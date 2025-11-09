@@ -66,8 +66,9 @@ class PanitiaController extends Controller
         $totalPendaftar = Pendaftaran::where('id_acara', $acara->id)->count();
         $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)->where('status', 'disetujui')->count();
         $jumlahDitolak = Pendaftaran::where('id_acara', $acara->id)->where('status', 'ditolak')->count();
+        $jumlahMengundurkanDiri = Pendaftaran::where('id_acara', $acara->id)->where('status', 'mengundurkan_diri')->count();
 
-        return view('panitia.peserta-seleksi', compact('acara', 'peserta', 'totalPendaftar', 'jumlahDiterima', 'jumlahDitolak'));
+        return view('panitia.peserta-seleksi', compact('acara', 'peserta', 'totalPendaftar', 'jumlahDiterima', 'jumlahDitolak', 'jumlahMengundurkanDiri'));
     }
 
     public function detailPeserta($pendaftaranId)
@@ -245,8 +246,9 @@ class PanitiaController extends Controller
         // Hitung statistik
         $jumlahPending = Pendaftaran::where('id_acara', $acara->id)->where('status', 'pending')->count();
         $jumlahDitolak = Pendaftaran::where('id_acara', $acara->id)->where('status', 'ditolak')->count();
+        $jumlahMengundurkanDiri = Pendaftaran::where('id_acara', $acara->id)->where('status', 'mengundurkan_diri')->count();
 
-        return view('panitia.terima-seleksi', compact('acara', 'pesertaDiterima', 'jumlahPending', 'jumlahDitolak'));
+        return view('panitia.terima-seleksi', compact('acara', 'pesertaDiterima', 'jumlahPending', 'jumlahDitolak', 'jumlahMengundurkanDiri'));
     }
 
     public function pesertaDitolak()
@@ -285,8 +287,9 @@ class PanitiaController extends Controller
         // Hitung statistik
         $jumlahPending = Pendaftaran::where('id_acara', $acara->id)->where('status', 'pending')->count();
         $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)->where('status', 'disetujui')->count();
+        $jumlahMengundurkanDiri = Pendaftaran::where('id_acara', $acara->id)->where('status', 'mengundurkan_diri')->count();
 
-        return view('panitia.ditolak-seleksi', compact('acara', 'pesertaDitolak', 'jumlahPending', 'jumlahDiterima'));
+        return view('panitia.ditolak-seleksi', compact('acara', 'pesertaDitolak', 'jumlahPending', 'jumlahDiterima', 'jumlahMengundurkanDiri'));
     }
 
     public function batalkanPenerimaan($pendaftaranId)
@@ -454,9 +457,10 @@ class PanitiaController extends Controller
         $totalPendaftar = Pendaftaran::where('id_acara', $acara->id)->count();
         $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)->where('status', 'disetujui')->count();
         $jumlahDitolak = Pendaftaran::where('id_acara', $acara->id)->where('status', 'ditolak')->count();
+        $jumlahMengundurkanDiri = Pendaftaran::where('id_acara', $acara->id)->where('status', 'mengundurkan_diri')->count();
         $kuotaTersisa = $acara->kuota - $jumlahDiterima;
 
-        return view('panitia.peserta-tanpa-seleksi', compact('acara', 'pesertaDiterima', 'totalPendaftar', 'jumlahDiterima', 'jumlahDitolak', 'kuotaTersisa'));
+        return view('panitia.peserta-tanpa-seleksi', compact('acara', 'pesertaDiterima', 'totalPendaftar', 'jumlahDiterima', 'jumlahDitolak', 'jumlahMengundurkanDiri', 'kuotaTersisa'));
     }
 
     /**
@@ -582,8 +586,9 @@ class PanitiaController extends Controller
         // Hitung statistik
         $jumlahPending = Pendaftaran::where('id_acara', $acara->id)->where('status', 'pending')->count();
         $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)->where('status', 'disetujui')->count();
+        $jumlahMengundurkanDiri = Pendaftaran::where('id_acara', $acara->id)->where('status', 'mengundurkan_diri')->count();
 
-        return view('panitia.ditolak-tanpa-seleksi', compact('acara', 'pesertaDitolak', 'jumlahPending', 'jumlahDiterima'));
+        return view('panitia.ditolak-tanpa-seleksi', compact('acara', 'pesertaDitolak', 'jumlahPending', 'jumlahDiterima', 'jumlahMengundurkanDiri'));
     }
 
     public function batalkanPenolakanTanpaSeleksi($pendaftaranId)

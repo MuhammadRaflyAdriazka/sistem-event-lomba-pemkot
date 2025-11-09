@@ -86,9 +86,7 @@
                                 <p style="font-size: 14px; color: #333; padding-left: 15px;">• {{ $acara->sistem_pendaftaran }}</p>
 
                                 <h5 class="mt-4 text-uppercase" style="color: #333; font-size: 14px; font-weight: bold;">KUOTA PESERTA</h5>
-                                <p style="font-size: 14px; color: #333; padding-left: 15px;">• {{ number_format($acara->kuota) }} Orang</p>
-                                
-                                <h5 class="mt-4 text-uppercase" style="color: #333; font-size: 14px; font-weight: bold;">BIAYA PENDAFTARAN</h5>
+                                <p style="font-size: 14px; color: #333; padding-left: 15px;">• {{ number_format($acara->kuota) }} Orang</p>                                <h5 class="mt-4 text-uppercase" style="color: #333; font-size: 14px; font-weight: bold;">BIAYA PENDAFTARAN</h5>
                                 <p style="font-size: 14px; color: #333; padding-left: 15px;">• {{ $acara->biaya }}</p>
                                 
                                 <h5 class="mt-4 text-uppercase" style="color: #333; font-size: 14px; font-weight: bold;">SYARAT PENDAFTARAN</h5>
@@ -112,7 +110,8 @@
                                 <div class="text-center mt-4">
                                     @php
                                         $registrationOpen = now()->between($acara->tanggal_mulai_daftar, $acara->tanggal_akhir_daftar);
-                                        $hasRegistered = auth()->check() && \App\Models\Pendaftaran::where('id_acara', $acara->id)->where('id_pengguna', auth()->id())->exists();
+                                        $pendaftaranUser = auth()->check() ? \App\Models\Pendaftaran::where('id_acara', $acara->id)->where('id_pengguna', auth()->id())->first() : null;
+                                        $hasRegistered = $pendaftaranUser !== null;
                                     @endphp
                                     
                                     @if(!$registrationOpen)
@@ -126,29 +125,82 @@
                                         <button class="btn btn-secondary btn-lg" disabled>
                                             <i class="fas fa-lock mr-2"></i>Pendaftaran Ditutup
                                         </button>
+                                    @elseif($acara->sistem_pendaftaran === 'Tanpa Seleksi' && $acara->is_kuota_penuh && !$hasRegistered)
+                                        <!-- Kuota penuh untuk sistem tanpa seleksi - hanya tampil jika user belum terdaftar -->
+                                        <div class="alert alert-warning mb-4">
+                                            <h5><i class="fas fa-users mr-2"></i>Kuota Sudah Penuh!</h5>
+                                            <p class="mb-0">
+                                                Maaf, semua slot peserta sudah terisi penuh.
+                                                <br>Jika ada peserta yang mengundurkan diri, slot akan terbuka kembali secara otomatis.
+                                            </p>
+                                        </div>
                                     @else
                                         @auth
                                             <!-- User sudah login -->
                                             @if($hasRegistered)
                                                 <!-- User sudah terdaftar -->
-                                                <div class="alert alert-success mb-4">
-                                                    <h5><i class="fas fa-check-circle mr-2"></i>Anda Sudah Terdaftar!</h5>
-                                                    <p class="mb-0">Anda sudah terdaftar pada acara ini. Terima kasih atas partisipasinya!</p>
-                                                </div>
-                                                <button class="btn btn-success btn-lg" disabled>
-                                                    <i class="fas fa-check mr-2"></i>Sudah Terdaftar
-                                                </button>
+                                                @if($pendaftaranUser->status == 'mengundurkan_diri')
+                                                    <!-- Status mengundurkan diri -->
+                                                    <div class="alert alert-secondary mb-4">
+                                                        <h5><i class="fas fa-sign-out-alt mr-2"></i>Anda Telah Mengundurkan Diri</h5>
+                                                        <p class="mb-0">Anda telah mengundurkan diri dari acara ini dan tidak dapat mendaftar lagi.</p>
+                                                    </div>
+                                                @elseif($pendaftaranUser->status == 'ditolak')
+                                                    <!-- Status ditolak -->
+                                                    <div class="alert alert-danger mb-4">
+                                                        <h5><i class="fas fa-times-circle mr-2"></i>Pendaftaran Anda Ditolak</h5>
+                                                        <p class="mb-0">
+                                                            Maaf, pendaftaran Anda untuk acara ini tidak dapat diterima.
+                                                            @if($pendaftaranUser->alasan_penolakan)
+                                                                <br><strong>Alasan:</strong> {{ $pendaftaranUser->alasan_penolakan }}
+                                                            @endif
+                                                        </p>
+                                                    </div>
+                                                @elseif($pendaftaranUser->status == 'pending')
+                                                    <!-- Status pending -->
+                                                    <div class="alert alert-warning mb-4">
+                                                        <h5><i class="fas fa-clock mr-2"></i>Menunggu Persetujuan</h5>
+                                                        <p class="mb-0">Pendaftaran Anda sedang dalam proses review. Mohon tunggu pengumuman hasil seleksi.</p>
+                                                    </div>
+                                                @else
+                                                    <!-- Status disetujui/diterima -->
+                                                    <div class="alert alert-success mb-4">
+                                                        <h5><i class="fas fa-check-circle mr-2"></i>Anda Sudah Terdaftar!</h5>
+                                                        <p class="mb-0">Anda sudah terdaftar pada acara ini. Terima kasih atas partisipasinya!</p>
+                                                    </div>
+                                                @endif
                                             @else
-                                                <!-- User belum terdaftar -->
+                                                <!-- User belum terdaftar - show slot info for tanpa seleksi -->
+                                                @if($acara->sistem_pendaftaran === 'Tanpa Seleksi')
+                                                    <div class="alert alert-info mb-4">
+                                                        <h5><i class="fas fa-info-circle mr-2"></i>Sistem Tanpa Seleksi</h5>
+                                                        <p class="mb-0">
+                                                            Pendaftaran akan <strong>langsung diterima</strong> selama kuota masih tersedia.
+                                                            <br>
+                                                            <strong>Tersisa {{ $acara->sisa_kuota }} slot tersedia.</strong>
+                                                        </p>
+                                                    </div>
+                                                @endif
+                                                
                                                 <a href="/pendaftaran/{{ $acara->id }}" class="btn btn-primary btn-lg">
-                                                    <i class="fas fa-user-plus mr-2"></i>Daftar Sekarang
+                                                    <i class="fas fa-user-plus mr-2"></i>
+                                                    @if($acara->sistem_pendaftaran === 'Tanpa Seleksi')
+                                                        Daftar & Langsung Diterima
+                                                    @else
+                                                        Daftar Sekarang
+                                                    @endif
                                                 </a>
                                             @endif
                                         @else
                                             <!-- User belum punya akun -->
                                             <div class="alert alert-info mb-4">
                                                 <h5><i class="fas fa-info-circle mr-2"></i>Ingin Ikut Acara Ini?</h5>
-                                                <p class="mb-0">Buat akun terlebih dahulu untuk bisa mendaftar pada acara ini</p>
+                                                <p class="mb-0">
+                                                    Buat akun terlebih dahulu untuk bisa mendaftar pada acara ini
+                                                    @if($acara->sistem_pendaftaran === 'Tanpa Seleksi')
+                                                        <br><strong>Tersisa {{ $acara->sisa_kuota }} slot tersedia</strong> (Sistem Tanpa Seleksi)
+                                                    @endif
+                                                </p>
                                             </div>
                                             <a href="{{ route('register') }}" class="btn btn-success btn-lg mr-3">
                                                 <i class="fas fa-user-plus mr-2"></i>Buat Akun Sekarang

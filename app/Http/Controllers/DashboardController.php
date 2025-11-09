@@ -90,4 +90,60 @@ class DashboardController extends Controller
 
         return view('pengumuman', compact('pendaftaran', 'pengumumanList'));
     }
+
+    /**
+     * Mengundurkan diri dari acara yang sudah diterima
+     */
+    public function mengundurkanDiri(Request $request, Pendaftaran $pendaftaran)
+    {
+
+
+        $user = auth()->user();
+
+        // Pastikan pendaftaran ini milik user yang sedang login
+        if ($pendaftaran->id_pengguna !== $user->id) {
+            return response()->json([
+                'success' => false, 
+                'message' => 'Anda tidak memiliki akses ke pendaftaran ini.'
+            ], 403);
+        }
+
+        // Pastikan status saat ini adalah disetujui
+        if ($pendaftaran->status !== 'disetujui') {
+            return response()->json([
+                'success' => false, 
+                'message' => 'Hanya peserta yang diterima yang dapat mengundurkan diri.'
+            ], 400);
+        }
+
+        $acara = $pendaftaran->acara;
+        $sekarang = Carbon::now();
+
+        // Pastikan masih dalam periode pendaftaran
+        if ($sekarang->gt(Carbon::parse($acara->tanggal_akhir_daftar))) {
+            return response()->json([
+                'success' => false, 
+                'message' => 'Periode pendaftaran telah berakhir. Anda tidak dapat mengundurkan diri lagi.'
+            ], 400);
+        }
+
+        // Update status menjadi mengundurkan_diri
+        $pendaftaran->update([
+            'status' => 'mengundurkan_diri',
+            'alasan_penolakan' => 'Peserta mengundurkan diri pada ' . $sekarang->format('d/m/Y H:i:s')
+        ]);
+
+        // Log activity (optional)
+        \Log::info('Peserta mengundurkan diri', [
+            'user_id' => $user->id,
+            'pendaftaran_id' => $pendaftaran->id,
+            'acara_id' => $acara->id,
+            'timestamp' => $sekarang
+        ]);
+
+        return response()->json([
+            'success' => true, 
+            'message' => 'Anda telah berhasil mengundurkan diri dari acara ini.'
+        ]);
+    }
 }

@@ -115,10 +115,32 @@
                             <div class="mt-3">
                                 <a href="{{ route('acara.show', $acara->id) }}" class="btn btn-outline-primary">Lihat Detail</a>
                                 @php
-                                    $sudahDaftar = $pendaftaranUser->where('id_acara', $acara->id)->isNotEmpty();
+                                    $pendaftaranAcara = $pendaftaranUser->where('id_acara', $acara->id)->first();
                                 @endphp
-                                @if($sudahDaftar)
-                                    <span class="btn btn-success disabled ml-2"><i class="fas fa-check"></i> Sudah Terdaftar</span>
+                                @if($pendaftaranAcara)
+                                    @php
+                                        $periodePendaftaranMasihBuka = now()->between($acara->tanggal_mulai_daftar, $acara->tanggal_akhir_daftar);
+                                        $bisaMengundurkanDiri = $periodePendaftaranMasihBuka && 
+                                                               ($pendaftaranAcara->status == 'pending' || $pendaftaranAcara->status == 'disetujui');
+                                    @endphp
+                                    
+                                    @if($pendaftaranAcara->status == 'pending')
+                                        <span class="btn btn-warning disabled ml-2"><i class="fas fa-clock"></i> Menunggu Persetujuan</span>
+                                    @elseif($pendaftaranAcara->status == 'disetujui')
+                                        <span class="btn btn-success disabled ml-2"><i class="fas fa-check"></i> Sudah Terdaftar</span>
+                                    @elseif($pendaftaranAcara->status == 'ditolak')
+                                        <span class="btn btn-danger disabled ml-2"><i class="fas fa-times"></i> Ditolak</span>
+                                    @elseif($pendaftaranAcara->status == 'mengundurkan_diri')
+                                        <span class="btn btn-secondary disabled ml-2"><i class="fas fa-sign-out-alt"></i> Mengundurkan Diri</span>
+                                    @else
+                                        <span class="btn btn-info disabled ml-2"><i class="fas fa-info"></i> {{ ucfirst($pendaftaranAcara->status) }}</span>
+                                    @endif
+                                    
+                                    @if($bisaMengundurkanDiri)
+                                        <button class="btn btn-outline-danger btn-sm ml-1" onclick="confirmWithdrawDashboard({{ $pendaftaranAcara->id }})">
+                                            <i class="fas fa-sign-out-alt"></i> Mengundurkan Diri
+                                        </button>
+                                    @endif
                                 @else
                                     @if(now()->between($acara->tanggal_mulai_daftar, $acara->tanggal_akhir_daftar))
                                         <a href="/pendaftaran/{{ $acara->id }}" class="btn btn-primary ml-2"><i class="fas fa-plus"></i> Daftar Sekarang</a>
@@ -160,6 +182,12 @@
 @endsection
 
 @push('scripts')
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
     <script>
         $(document).ready(function() {
             function filterEvents() {
@@ -189,5 +217,74 @@
             
             $('#categoryFilter, #eventCategoryFilter, #registrationSystemFilter').on('change', filterEvents);
         });
+
+        // Function untuk mengundurkan diri dari dashboard
+        function confirmWithdrawDashboard(pendaftaranId) {
+            Swal.fire({
+                title: 'Yakin Mengundurkan Diri?',
+                text: 'Anda akan kehilangan slot dan tidak bisa mendaftar lagi untuk acara ini!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Mengundurkan Diri',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading
+                    Swal.fire({
+                        title: 'Memproses...',
+                        text: 'Mohon tunggu sebentar',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    // Submit via AJAX
+                    fetch(`/acara/${pendaftaranId}/mengundurkan-diri`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'X-Requested-With': 'XMLHttpRequest',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: data.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                // Refresh halaman untuk update status
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Gagal!',
+                                text: data.message,
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Terjadi kesalahan saat memproses permintaan',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                }
+            });
+        }
     </script>
 @endpush

@@ -206,8 +206,30 @@
                                 <h5 class="mt-4">Hadiah</h5>
                                 <div style="white-space: pre-line;">{{ $acara->hadiah }}</div>
                                 
-
-                                <a href="{{ route('acara.show', $acara->id) }}" class="btn btn-primary mt-3">Lihat Detail</a>
+                                <div class="mt-3">
+                                    @auth
+                                        @php
+                                            $pendaftaranUser = \App\Models\Pendaftaran::where('id_acara', $acara->id)->where('id_pengguna', auth()->id())->first();
+                                        @endphp
+                                        
+                                        @if($pendaftaranUser)
+                                            @if($pendaftaranUser->status === 'disetujui')
+                                                <button class="btn btn-success mr-2" disabled>Sudah Terdaftar</button>
+                                            @elseif($pendaftaranUser->status === 'ditolak')
+                                                <button class="btn btn-danger mr-2" disabled>Ditolak</button>
+                                            @elseif($pendaftaranUser->status === 'pending')
+                                                <button class="btn btn-warning mr-2" disabled>Menunggu Persetujuan</button>
+                                            @elseif($pendaftaranUser->status === 'mengundurkan_diri')
+                                                <button class="btn btn-secondary mr-2" disabled>Mengundurkan Diri</button>
+                                            @else
+                                                <!-- Fallback jika ada status lain -->
+                                                <button class="btn btn-info mr-2" disabled>{{ ucfirst($pendaftaranUser->status) }}</button>
+                                            @endif
+                                        @endif
+                                    @endauth
+                                    
+                                    <a href="{{ route('acara.show', $acara->id) }}" class="btn btn-primary">Lihat Detail</a>
+                                </div>
                             </div>
                         </div>
                     </div>

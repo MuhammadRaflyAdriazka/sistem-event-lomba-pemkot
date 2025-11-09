@@ -28,14 +28,19 @@ class PendaftaranController extends Controller
                            ->with('error', 'Periode pendaftaran sudah ditutup');
         }
 
-        // Cek apakah user sudah terdaftar
-        $sudahDaftar = Pendaftaran::where('id_acara', $acara->id)
-                                 ->where('id_pengguna', auth()->id())
-                                 ->exists();
+        // Cek apakah user sudah terdaftar (termasuk yang mengundurkan diri)
+        $pendaftaranExisting = Pendaftaran::where('id_acara', $acara->id)
+                                         ->where('id_pengguna', auth()->id())
+                                         ->first();
 
-        if ($sudahDaftar) {
-            return redirect()->route('acara.show', $acara->id)
-                           ->with('info', 'Anda sudah terdaftar pada acara ini');
+        if ($pendaftaranExisting) {
+            if ($pendaftaranExisting->status === 'mengundurkan_diri') {
+                return redirect()->route('acara.show', $acara->id)
+                               ->with('error', 'Anda tidak dapat mendaftar lagi karena sebelumnya telah mengundurkan diri dari acara ini');
+            } else {
+                return redirect()->route('acara.show', $acara->id)
+                               ->with('info', 'Anda sudah terdaftar pada acara ini');
+            }
         }
 
         // Cek apakah kuota masih tersedia untuk sistem tanpa seleksi

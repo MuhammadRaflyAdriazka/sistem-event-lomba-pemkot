@@ -27,6 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/acara', [DashboardController::class, 'acaraSaya'])->name('acara');
     Route::get('/acara/{pendaftaran}/detail-pendaftaran', [DashboardController::class, 'detailPendaftaran'])->name('acara.detailPendaftaran');
+    Route::post('/acara/{pendaftaran}/mengundurkan-diri', [DashboardController::class, 'mengundurkanDiri'])->name('acara.mengundurkanDiri');
     Route::get('/acara/{pendaftaran}/pengumuman', [DashboardController::class, 'pengumuman'])->name('acara.pengumuman');
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -94,16 +94,19 @@
     <div class="card-body">
         {{-- Statistik --}}
         <div class="row">
-            <div class="col-md-3 col-6 mb-2">
+            <div class="col-md-2 col-6 mb-2">
                 <p><strong>Total Pendaftar:</strong> {{ $totalPendaftar }}</p>
             </div>
-             <div class="col-md-3 col-6 mb-2">
+             <div class="col-md-2 col-6 mb-2">
                 <p><strong>Diterima:</strong> <span class="text-success">{{ $jumlahDiterima }}</span></p>
             </div>
-             <div class="col-md-3 col-6 mb-2">
+             <div class="col-md-2 col-6 mb-2">
                 <p><strong>Ditolak/Dibatalkan:</strong> <span class="text-danger">{{ $jumlahDitolak }}</span></p>
             </div>
-             <div class="col-md-3 col-6 mb-2">
+             <div class="col-md-2 col-6 mb-2">
+                <p><strong>Mengundurkan Diri:</strong> <span class="text-secondary">{{ $jumlahMengundurkanDiri }}</span></p>
+            </div>
+             <div class="col-md-2 col-6 mb-2">
                 <p><strong>Kuota Tersisa:</strong> {{ $kuotaTersisa }}</p>
             </div>
         </div>

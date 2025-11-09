@@ -84,17 +84,20 @@
             @endif
         </p>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <p><strong>Total Pendaftar:</strong> {{ $totalPendaftar }}</p>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <p><strong>Menunggu Seleksi:</strong> {{ $peserta->count() }}</p>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <p><strong>Diterima:</strong> <span class="text-success">{{ $jumlahDiterima }}</span></p>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <p><strong>Ditolak:</strong> <span class="text-danger">{{ $jumlahDitolak }}</span></p>
+            </div>
+            <div class="col-md-2">
+                <p><strong>Mengundurkan Diri:</strong> <span class="text-secondary">{{ $jumlahMengundurkanDiri }}</span></p>
             </div>
         </div>
         <p><strong>Kuota Tersisa:</strong> {{ $acara->kuota - $jumlahDiterima }} dari {{ $acara->kuota }}</p>
