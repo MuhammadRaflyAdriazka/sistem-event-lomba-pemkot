@@ -53,9 +53,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         // Kelola Event
         Route::get('/kelola', [AdminDashboardController::class, 'kelola'])->name('kelola');
-        
-        // Daftar Event
-        Route::get('/event', [AdminAcaraController::class, 'index'])->name('event');
+        Route::get('/acara-selesai', [AdminDashboardController::class, 'acaraSelesai'])->name('acara.selesai');
         
         // Create Event
         Route::get('/create', [AdminAcaraController::class, 'create'])->name('create');

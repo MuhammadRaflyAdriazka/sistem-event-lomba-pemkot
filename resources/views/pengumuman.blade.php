@@ -25,32 +25,25 @@
             margin-bottom: 30px;
         }
 
-        /* [MODIFIKASI] CSS untuk tombol kembali di pojok kiri atas */
-        .btn-back-corner {
-            position: absolute; /* Menggunakan absolute agar relatif ke body/container */
-            top: 20px;
-            left: 20px;
-            z-index: 10; /* Pastikan di atas konten lain */
-        }
+
     </style>
 
     @include('layouts.peserta.topbar')
 </head>
 
-<body class="d-flex flex-column min-vh-100" style="position: relative;"> {{-- [MODIFIKASI] Tambahkan position: relative jika btn-back-corner menggunakan absolute --}}
-    
-    <a href="{{ route('acara') }}" class="btn btn-primary btn-back-corner">
-        <i class="fas fa-arrow-left mr-2"></i>Kembali ke Daftar Acara
-    </a>
-
+<body class="d-flex flex-column min-vh-100">
     <div class="flex-grow-1">
         <div class="container-fluid py-5">
             <div class="container">
                 
-                {{-- Tombol kembali yang lama dihapus dari sini --}}
-                {{-- <div class="mb-4"> ... </div> --}}
+                <!-- Tombol Kembali -->
+                <div class="mb-4">
+                    <a href="{{ route('acara') }}" class="btn btn-primary">
+                        <i class="fas fa-arrow-left mr-2"></i>Kembali ke Daftar Acara
+                    </a>
+                </div>
 
-                <div class="row justify-content-center" style="margin-top: 50px;"> {{-- [MODIFIKASI] Tambahkan margin-top agar tidak tertutup tombol kembali --}}
+                <div class="row justify-content-center">
                     <div class="col-lg-8">
                         @if($pengumumanList->count() > 0)
                             @foreach($pengumumanList as $pengumuman)

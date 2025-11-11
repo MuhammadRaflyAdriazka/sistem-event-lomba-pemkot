@@ -40,6 +40,39 @@ class AdminDashboardController extends Controller
 
     public function kelola()
     {
-        return view('admin.kelola');
+        $user = Auth::user();
+        
+        // Pastikan user adalah admin dan memiliki id_dinas
+        if (!$user || !$user->id_dinas) {
+            return redirect()->route('dashboard')->with('error', 'Akses ditolak');
+        }
+
+        // Ambil semua event aktif dari dinas admin dengan relasi pendaftaran
+        $events = Acara::where('id_dinas', $user->id_dinas)
+            ->where('status', 'active')
+            ->with('pendaftaran') // Load relasi pendaftaran untuk statistik
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.kelola', compact('events'));
+    }
+
+    public function acaraSelesai()
+    {
+        $user = Auth::user();
+        
+        // Pastikan user adalah admin dan memiliki id_dinas
+        if (!$user || !$user->id_dinas) {
+            return redirect()->route('dashboard')->with('error', 'Akses ditolak');
+        }
+
+        // Ambil semua event yang sudah selesai (status inactive) dari dinas admin
+        $events = Acara::where('id_dinas', $user->id_dinas)
+            ->where('status', 'inactive')
+            ->with('pendaftaran') // Load relasi pendaftaran untuk statistik
+            ->orderBy('updated_at', 'desc') // Urutkan berdasarkan yang terakhir diselesaikan
+            ->get();
+
+        return view('admin.acara-selesai', compact('events'));
     }
 }

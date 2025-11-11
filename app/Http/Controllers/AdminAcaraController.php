@@ -14,23 +14,6 @@ use Illuminate\Support\Facades\DB;
 
 class AdminAcaraController extends Controller
 {
-    public function index()
-    {
-        $user = Auth::user();
-        
-        // Pastikan user adalah admin dan memiliki id_dinas
-        if (!$user || !$user->id_dinas) {
-            return redirect()->route('dashboard')->with('error', 'Akses ditolak');
-        }
-
-        // Ambil semua event dari dinas admin
-        $events = Acara::where('id_dinas', $user->id_dinas)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('admin.acara', compact('events'));
-    }
-
     public function create()
     {
         return view('admin.create');
@@ -269,6 +252,6 @@ class AdminAcaraController extends Controller
         // Update status menjadi inactive (selesai)
         $acara->update(['status' => 'inactive']);
 
-        return redirect()->route('admin.event')->with('success', 'Event berhasil ditandai sebagai selesai!');
+        return redirect()->route('admin.kelola')->with('success', 'Event berhasil ditandai sebagai selesai!');
     }
 }
