@@ -74,15 +74,11 @@
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
-                <div class="navbar-nav mx-auto py-0">
-                    <a href="#welcome-section" class="nav-item nav-link active">Beranda</a>
-                    <a href="#event-section" class="nav-item nav-link">Event & Lomba</a>
-                    <a href="#tentang" class="nav-item nav-link">Tentang</a>
-                    <a href="#kontak" class="nav-item nav-link">Kontak</a>
+            <div class="collapse navbar-collapse justify-content-end px-lg-3" id="navbarCollapse">
+                <div class="navbar-nav py-0">
+                    <a href="{{ url('/login') }}" class="btn btn-primary py-2 px-4 d-none d-lg-block" style="margin-right: 10px;">Login</a>
+                    <a href="{{ url('/register') }}" class="btn btn-primary py-2 px-4 d-none d-lg-block">Register</a>
                 </div>
-                <a href="{{ url('/login') }}" class="btn btn-primary py-2 px-4 d-none d-lg-block" style="margin-right: 10px;">Login</a>
-                <a href="{{ url('/register') }}" class="btn btn-primary py-2 px-4 d-none d-lg-block">Register</a>
             </div>
         </nav>
     </div>
@@ -97,19 +93,19 @@
 
         <!-- Header End -->
 
-        <!-- event Start -->
+        <!-- acara Start -->
         <style>
         html {
             scroll-behavior: smooth;
         }
         </style>
 
-        <div id="event-section" class="container-fluid py-5">   
+        <div id="acara-section" class="container-fluid py-5">   
             <div class="container py-5">
                 <!-- Section Title -->
                 <div class="text-center mb-5">
-                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Event & Lomba Tersedia</h5>
-                    <h1>Daftar Event & Lomba</h1>
+                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Acara Tersedia</h5>
+                    <h1>Daftar Acara</h1>
                 </div>
 
                 <!-- Filter Section -->
@@ -117,19 +113,11 @@
                     <div class="col-12">
                         <div class="card border-0 shadow-sm">
                             <div class="card-body">
-                                <h5 class="card-title mb-3"><i class="fas fa-filter mr-2"></i>Filter Event & Lomba</h5>
+                                <h5 class="card-title mb-3"><i class="fas fa-filter mr-2"></i>Filter Acara</h5>
                                 <div class="row">
-                                    <div class="col-md-4 mb-2">
-                                        <label class="font-weight-bold">Jenis:</label>
+                                    <div class="col-md-6 mb-2">
+                                        <label class="font-weight-bold">Kategori Acara:</label>
                                         <select class="form-control" id="categoryFilter">
-                                            <option value="">Semua</option>
-                                            <option value="Event">Event</option>
-                                            <option value="Lomba">Lomba</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4 mb-2">
-                                        <label class="font-weight-bold">Kategori:</label>
-                                        <select class="form-control" id="eventCategoryFilter">
                                             <option value="">Semua Kategori</option>
                                             <option value="Olahraga">Olahraga</option>
                                             <option value="Kesenian & Budaya">Kesenian & Budaya</option>
@@ -143,7 +131,7 @@
                                             <option value="Pariwisata">Pariwisata</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-4 mb-2">
+                                    <div class="col-md-6 mb-2">
                                         <label class="font-weight-bold">Sistem Pendaftaran:</label>
                                         <select class="form-control" id="registrationSystemFilter">
                                             <option value="">Semua Sistem</option>
@@ -158,12 +146,11 @@
                 </div>
 
                 <div class="row" id="eventsContainer">
-                <!-- EVENT DARI DATABASE (yang dibuat admin) -->
+                <!-- ACARA DARI DATABASE (yang dibuat admin) -->
                 @if($semuaAcara && $semuaAcara->count() > 0)
                     @foreach($semuaAcara as $acara)
                     <div class="col-lg-6 mb-4 event-card" 
-                         data-category="{{ $acara->kategori }}" 
-                         data-event-category="{{ $acara->kategori_acara }}"
+                         data-category="{{ $acara->kategori_acara }}" 
                          data-registration-system="{{ $acara->sistem_pendaftaran }}">
                         <div class="card shadow-lg border-0 rounded-lg overflow-hidden h-100">
                             <div class="event-image-wrapper">
@@ -171,14 +158,7 @@
                                      alt="{{ $acara->judul }}" 
                                      class="event-image"
                                      onerror="this.src='{{ asset('templatepeserta/img/eror.jpeg') }}'">
-                                <!-- Badge untuk kategori -->
-                                <div class="position-absolute" style="top: 10px; left: 10px;">
-                                    @if($acara->kategori == 'Event')
-                                        <span class="badge badge-primary badge-lg">{{ $acara->kategori }}</span>
-                                    @else
-                                        <span class="badge badge-success badge-lg">{{ $acara->kategori }}</span>
-                                    @endif
-                                </div>
+                                <!-- Badge untuk kategori acara -->
                                 <div class="position-absolute" style="top: 10px; right: 10px;">
                                     <span class="badge badge-info badge-lg">{{ $acara->kategori_acara }}</span>
                                 </div>
@@ -238,8 +218,8 @@
                     <!-- Pesan jika belum ada event -->
                     <div class="col-12">
                         <div class="alert alert-info text-center">
-                            <h4><i class="fas fa-info-circle mr-2"></i>Belum Ada Event Terbaru</h4>
-                            <p>Saat ini belum ada event yang tersedia. Silakan cek kembali nanti untuk informasi event terbaru dari Pemerintah Kota Banjarmasin.</p>
+                            <h4><i class="fas fa-info-circle mr-2"></i>Belum Ada Acara Terbaru</h4>
+                            <p>Saat ini belum ada acara yang tersedia. Silakan cek kembali nanti untuk informasi acara terbaru dari Pemerintah Kota Banjarmasin.</p>
                         </div>
                     </div>
                 @endif
@@ -251,13 +231,13 @@
                     <div class="col-12">
                         <div class="alert alert-warning text-center">
                             <h4><i class="fas fa-search mr-2"></i>Tidak Ada Hasil</h4>
-                            <p>Tidak ada event yang sesuai dengan filter yang dipilih.</p>
+                            <p>Tidak ada acara yang sesuai dengan filter yang dipilih.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- event End -->
+        <!-- acara End -->
 
         <!-- CSS untuk gambar -->
         <style>
@@ -314,7 +294,6 @@
             // Filter function
             function filterEvents() {
                 const categoryFilter = $('#categoryFilter').val();
-                const eventCategoryFilter = $('#eventCategoryFilter').val();
                 const registrationSystemFilter = $('#registrationSystemFilter').val();
                 
                 let visibleCount = 0;
@@ -322,18 +301,12 @@
                 $('.event-card').each(function() {
                     const card = $(this);
                     const cardCategory = card.data('category');
-                    const cardEventCategory = card.data('event-category');
                     const cardRegistrationSystem = card.data('registration-system');
                     
                     let showCard = true;
                     
-                    // Filter by category (Event/Lomba)
+                    // Filter by category
                     if (categoryFilter && cardCategory !== categoryFilter) {
-                        showCard = false;
-                    }
-                    
-                    // Filter by event category (Olahraga, Budaya, etc.)
-                    if (eventCategoryFilter && cardEventCategory !== eventCategoryFilter) {
                         showCard = false;
                     }
                     
@@ -359,7 +332,7 @@
             }
             
             // Attach filter events
-            $('#categoryFilter, #eventCategoryFilter, #registrationSystemFilter').on('change', filterEvents);
+            $('#categoryFilter, #registrationSystemFilter').on('change', filterEvents);
         });
     </script>
 </body>

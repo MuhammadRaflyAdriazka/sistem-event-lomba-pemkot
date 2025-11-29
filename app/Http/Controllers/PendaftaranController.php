@@ -103,6 +103,13 @@ class PendaftaranController extends Controller
                 $fieldRules[] = 'numeric';
             }
             
+            // Validation khusus untuk field NO HP
+            if ($field->nama_kolom === 'no_hp') {
+                $fieldRules[] = 'numeric';
+                $fieldRules[] = 'digits_between:10,15';
+                $fieldRules[] = 'regex:/^[0-9]+$/';
+            }
+            
             $rules[$field->nama_kolom] = implode('|', $fieldRules);
         }
 
@@ -174,9 +181,9 @@ class PendaftaranController extends Controller
 
             // Pesan sukses yang berbeda berdasarkan sistem pendaftaran
             if ($acara->sistem_pendaftaran === 'Tanpa Seleksi') {
-                return redirect()->route('acara')->with('success', 'Selamat! Pendaftaran Anda berhasil dan LANGSUNG DITERIMA. Anda telah menjadi peserta ' . $acara->judul . '. Silakan cek status di halaman "Acara Saya".');
+                return redirect()->route('acara')->with('success', 'Pendaftaran berhasil!');
             } else {
-                return redirect()->route('acara')->with('success', 'Pendaftaran berhasil! Silakan tunggu hasil seleksi. Status akan diumumkan di halaman "Acara Saya".');
+                return redirect()->route('acara')->with('success', 'Pendaftaran berhasil!');
             }
 
         } catch (\Exception $e) {

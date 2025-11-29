@@ -61,7 +61,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                     <small class="form-text text-muted">
-                        Pengumuman ini akan dikirim ke semua peserta yang diterima pada event ini.
+                        Pengumuman ini akan dikirim ke semua peserta yang diterima pada acara ini.
                     </small>
                 </div>
 

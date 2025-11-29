@@ -5,11 +5,10 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class AcaraSeeder extends Seeder
+class PendaftaranDummySeeder extends Seeder
 {
     public function run(): void
     {
-        // Seeder kosong - tidak ada acara yang dibuat
-        echo "AcaraSeeder: Tidak ada acara yang dibuat.\n";
+        echo "PendaftaranDummySeeder: Tidak ada pendaftaran dummy yang dibuat.\n";
     }
 }

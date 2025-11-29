@@ -70,7 +70,7 @@
 </div>
 @endif
 
-{{-- Informasi Event --}}
+{{-- Informasi Acara --}}
 <div class="card shadow mb-4 event-info-card">
     <div class="card-body d-flex align-items-center">
         <div>

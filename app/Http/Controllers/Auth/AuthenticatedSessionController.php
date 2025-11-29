@@ -36,6 +36,11 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended(route('admin.dashboard', absolute: false));
         }
         
+        // Jika kepala dinas, redirect ke dashboard kepala dinas
+        if ($user->peran === 'kepala_dinas') {
+            return redirect()->intended(route('kepala.dashboard', absolute: false));
+        }
+        
         // Jika panitia, redirect ke dashboard panitia
         if ($user->peran === 'panitia') {
             return redirect()->intended(route('panitia.dashboard', absolute: false));

@@ -21,8 +21,8 @@ class AdminDashboardController extends Controller
             return redirect()->route('dashboard')->with('error', 'Akses ditolak');
         }
 
-        // Total Event dari dinas admin (semua status)
-        $totalEvent = Acara::where('id_dinas', $user->id_dinas)->count();
+        // Total Acara dari dinas admin (semua status)
+        $totalAcara = Acara::where('id_dinas', $user->id_dinas)->count();
         
         // Peserta Aktif - total pendaftar dari acara yang masih aktif
         $pesertaAktif = Pendaftaran::whereHas('acara', function($query) use ($user) {
@@ -30,12 +30,12 @@ class AdminDashboardController extends Controller
                   ->where('status', 'active');
         })->count();
         
-        // Event Selesai - acara dengan status inactive (ditandai selesai oleh admin)
+        // Acara Selesai - acara dengan status inactive (ditandai selesai oleh admin)
         $eventSelesai = Acara::where('id_dinas', $user->id_dinas)
             ->where('status', 'inactive')
             ->count();
 
-        return view('admin.dashboard', compact('totalEvent', 'pesertaAktif', 'eventSelesai'));
+        return view('admin.dashboard', compact('totalAcara', 'pesertaAktif', 'eventSelesai'));
     }
 
     public function kelola()
@@ -47,7 +47,7 @@ class AdminDashboardController extends Controller
             return redirect()->route('dashboard')->with('error', 'Akses ditolak');
         }
 
-        // Ambil semua event aktif dari dinas admin dengan relasi pendaftaran
+        // Ambil semua acara aktif dari dinas admin dengan relasi pendaftaran
         $events = Acara::where('id_dinas', $user->id_dinas)
             ->where('status', 'active')
             ->with('pendaftaran') // Load relasi pendaftaran untuk statistik
@@ -66,7 +66,7 @@ class AdminDashboardController extends Controller
             return redirect()->route('dashboard')->with('error', 'Akses ditolak');
         }
 
-        // Ambil semua event yang sudah selesai (status inactive) dari dinas admin
+        // Ambil semua acara yang sudah selesai (status inactive) dari dinas admin
         $events = Acara::where('id_dinas', $user->id_dinas)
             ->where('status', 'inactive')
             ->with('pendaftaran') // Load relasi pendaftaran untuk statistik

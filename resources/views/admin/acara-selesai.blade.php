@@ -178,7 +178,7 @@
                         <div class="col-md-3 event-actions">
                             <div class="text-center">
                                 <span class="badge-selesai">
-                                    <i class="fas fa-check-circle mr-2"></i>Event Selesai
+                                    <i class="fas fa-check-circle mr-2"></i>Acara Selesai
                                 </span>
                                 <div class="mt-3 text-muted" style="font-size: 0.8rem;">
                                     Diselesaikan pada:<br>
@@ -201,7 +201,5 @@
         @endif
     </div>
 </div>
-
-@endsection
 
 @endsection

@@ -26,7 +26,8 @@ class PanitiaController extends Controller
             ->first();
 
         if (!$panitiaAcara) {
-            return redirect()->route('dashboard')->with('error', 'Anda belum ditugaskan ke acara manapun');
+            // Jika tidak ada assignment, tampilkan dashboard kosong untuk sementara
+            return view('panitia.dashboard', ['acara' => null]);
         }
 
         // Ambil data acara yang ditugaskan

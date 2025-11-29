@@ -94,8 +94,14 @@
                 <!-- Password -->
                 <div class="mb-3">
                     <label for="password" class="form-label text-dark fw-semibold">Password</label>
-                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
-                           name="password" required autocomplete="current-password">
+                    <div class="position-relative">
+                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
+                               name="password" required autocomplete="current-password" style="padding-right: 50px;">
+                        <button type="button" class="btn position-absolute end-0 top-50 translate-middle-y border-0 bg-transparent" 
+                                style="z-index: 10; right: 10px;" onclick="togglePassword('password')">
+                            <i id="password-icon" class="fas fa-eye text-muted"></i>
+                        </button>
+                    </div>
                     @error('password')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -135,5 +141,20 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function togglePassword(fieldId) {
+            const passwordField = document.getElementById(fieldId);
+            const passwordIcon = document.getElementById(fieldId + '-icon');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                passwordIcon.className = 'fas fa-eye-slash text-muted';
+            } else {
+                passwordField.type = 'password';
+                passwordIcon.className = 'fas fa-eye text-muted';
+            }
+        }
+    </script>
 </body>
 </html>

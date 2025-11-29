@@ -5,7 +5,7 @@
 
 @push('styles')
 <style>
-    /* Style tambahan untuk gambar event */
+    /* Style tambahan untuk gambar acara */
     .event-info-card img {
         max-height: 80px; /* Sesuaikan tinggi gambar jika perlu */
         width: auto;
@@ -46,7 +46,7 @@
     </div>
 @endif
 
-{{-- Informasi Event --}}
+{{-- Informasi Acara --}}
 <div class="card shadow mb-4 event-info-card">
     <div class="card-body d-flex align-items-center">
         <div>
@@ -134,9 +134,9 @@
                             <a href="{{ route('panitia.peserta.detail', $item->id) }}" class="btn btn-primary btn-sm">
                                 Lihat Detail
                             </a>
-                            <form action="{{ route('panitia.peserta.batalkan', $item->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Yakin ingin membatalkan penerimaan peserta ini?')">
+                            <form id="form-batalkan-{{ $item->id }}" action="{{ route('panitia.peserta.batalkan', $item->id) }}" method="POST" style="display: inline-block;">
                                 @csrf
-                                <button type="submit" class="btn btn-warning btn-sm">
+                                <button type="button" class="btn btn-warning btn-sm" onclick="confirmBatalkan({{ $item->id }})">
                                     <i class="fas fa-undo"></i> Batalkan
                                 </button>
                             </form>
@@ -160,5 +160,28 @@
 @endsection
 
 @push('scripts')
-{{-- Script opsional jika diperlukan --}}
+<script>
+function confirmBatalkan(pesertaId) {
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            title: 'Yakin ingin membatalkan?',
+            text: 'Penerimaan peserta ini akan dibatalkan!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ffc107',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, Batalkan!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('form-batalkan-' + pesertaId).submit();
+            }
+        });
+    } else {
+        if(confirm('Yakin ingin membatalkan penerimaan peserta ini?')) {
+            document.getElementById('form-batalkan-' + pesertaId).submit();
+        }
+    }
+}
+</script>
 @endpush

@@ -1,60 +1,23 @@
-<!-- filepath: c:\laragon\www\web-event-lomba\resources\views\acara.blade.php -->
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.peserta.app')
 
-<head>
-    <meta charset="utf-8">
-    <title>Acara Saya</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Acara Saya" name="keywords">
-    <meta content="Acara Saya" name="description">
-    <link rel="icon" href="{{ asset('image/LOGO-PEMKOT-BARU.png') }}" type="image/png">
+@push('styles')
+<style>
+    .event-image-wrapper {
+        width: 100%;
+        height: 250px;
+        overflow: hidden;
+        position: relative;
+    }
+    .event-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+</style>
+@endpush
 
-
-    <!-- Favicon -->
-    <link href="{{ asset('templatepeserta/img/favicon.ico') }}" rel="icon">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> 
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link href="{{ asset('templatepeserta/lib/owlcarousel/assets/owl.carousel.min.css')}}" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="{{ asset('templatepeserta/css/style.css') }}" rel="stylesheet">
-    
-    <!-- Custom CSS untuk Event Images -->
-    <style>
-        .event-image-wrapper {
-            width: 100%;
-            height: 250px;
-            overflow: hidden;
-            position: relative;
-        }
-        .event-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-        }
-    </style>
-</head>
-
-<body class="d-flex flex-column min-vh-100">
-    <!-- Topbar Start -->
-    @include('layouts.peserta.topbar')
-    <!-- Topbar End -->
-
-    <!-- Navbar Start -->
-    @include('layouts.peserta.navbar')
-    <!-- Navbar End -->
-
-    <!-- Content wrapper -->
-    <div class="flex-grow-1">
+@section('content')
         <div class="container-fluid py-5">
             <div class="container">
                 <div class="text-center mb-5">
@@ -129,35 +92,18 @@
             </div>
         </div>
     </div>
+@endsection
 
-    <!-- Footer Start -->
-    @include('layouts.peserta.footer')
-    <!-- Footer End -->
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary rounded-0 btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('templatepeserta/lib/easing/easing.min.js')}}"></script>
-    <script src="{{ asset('templatepeserta/lib/waypoints/waypoints.min.js')}}"></script>
-    <script src="{{ asset('templatepeserta/lib/counterup/counterup.min.js')}}"></script>
-    <script src="{{ asset('templatepeserta/lib/owlcarousel/owl.carousel.min.js')}}"></script>
-
-    <!-- Template Javascript -->
-    <script src="{{ asset('templatepeserta/js/main.js')}}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    @if(session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: '{{ session('success') }}',
-                confirmButtonText: 'OK'
-            });
-        </script>
-    @endif
-</body>
-
-</html>
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
+@endpush

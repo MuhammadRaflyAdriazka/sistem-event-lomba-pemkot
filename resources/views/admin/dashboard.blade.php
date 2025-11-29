@@ -11,14 +11,14 @@
                 <h6 class="m-0 font-weight-bold text-primary">Selamat Datang</h6>
             </div>
             <div class="card-body">
-                <p>Ini adalah dashboard utama untuk mengelola event dan kompetisi lomba.</p>
+                <p>Ini adalah dashboard utama untuk mengelola acara.</p>
                 <p>Gunakan sidebar untuk navigasi ke berbagai bagian sistem.</p>
                 <div class="row mt-4">
                     <div class="col-md-4">
                         <div class="card bg-primary text-white">
                             <div class="card-body">
-                                <h5><i class="fas fa-calendar-alt"></i> Total Event</h5>
-                                <h2>{{ $totalEvent ?? 0 }}</h2>
+                                <h5><i class="fas fa-calendar-alt"></i> Total Acara</h5>
+                                <h2>{{ $totalAcara ?? 0 }}</h2>
                             </div>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                     <div class="col-md-4">
                         <div class="card bg-info text-white">
                             <div class="card-body">
-                                <h5><i class="fas fa-trophy"></i> Event Selesai</h5>
+                                <h5><i class="fas fa-trophy"></i> Acara Selesai</h5>
                                 <h2>{{ $eventSelesai ?? 0 }}</h2>
                             </div>
                         </div>

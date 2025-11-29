@@ -1,7 +1,7 @@
 @extends('layouts.admin.app')
 
 {{-- Mengatur judul halaman yang akan tampil di top bar --}}
-@section('title', 'Kelola Event & Lomba')
+@section('title', 'Kelola Acara')
 
 {{-- Menyisipkan CSS khusus untuk halaman ini ke dalam <head> --}}
 @push('styles')
@@ -103,7 +103,7 @@
 @section('content')
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Form Buat Event & Lomba</h1>
+    <h1 class="h3 mb-0 text-gray-800">Form Buat Acara</h1>
     <p class="text-muted">Data akan tampil di halaman peserta setelah disimpan</p>
 </div>
 
@@ -166,7 +166,7 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <label class="font-weight-bold text-primary">Nama Event / Lomba</label>
+                        <label class="font-weight-bold text-primary">Nama Acara</label>
                         <input type="text" name="judul" id="judul" class="form-control @error('judul') is-invalid @enderror" placeholder="Contoh: Event Pasar Wadai" value="{{ old('judul') }}" required>
                         @error('judul')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
@@ -185,15 +185,7 @@
                         <input type="text" name="biaya" id="biaya" class="form-control" value="Gratis" readonly required>
                         <small class="form-text text-muted">Biaya pendaftaran sudah ditetapkan gratis untuk semua event</small>
                     </div>
-                    <div class="form-group">
-                        <label class="font-weight-bold text-primary">Kategori Event/Lomba</label>
-                        <select name="kategori" id="kategori" class="form-control @error('kategori') is-invalid @enderror" required>
-                            <option value="">-- Pilih Kategori --</option>
-                            <option value="Event" {{ old('kategori') == 'Event' ? 'selected' : '' }}>Event</option>
-                            <option value="Lomba" {{ old('kategori') == 'Lomba' ? 'selected' : '' }}>Lomba</option>
-                        </select>
-                        @error('kategori')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
+
                     <div class="form-group">
                         <label class="font-weight-bold text-primary">Sistem Pendaftaran</label>
                         <select name="sistem_pendaftaran" id="sistem_pendaftaran" class="form-control @error('sistem_pendaftaran') is-invalid @enderror" required>
@@ -359,8 +351,8 @@
                             <input type="password" name="panitia_password" id="panitia_password" class="form-control" placeholder="Masukkan password minimal 8 karakter" required minlength="8">
                             {{-- [NEW] Ikon mata ditambahkan di sini --}}
                             <div class="input-group-append">
-                                <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
-                                    <i class="fas fa-eye"></i>
+                                <span class="input-group-text" id="togglePassword" style="cursor: pointer; user-select: none; background-color: #f8f9fa;">
+                                    <i class="fas fa-eye" style="pointer-events: none;"></i>
                                 </span>
                             </div>
                         </div>
@@ -412,7 +404,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function validateStep1() {
         let isValid = true;
-        const requiredFields = ['judul', 'tanggal_acara', 'lokasi', 'kategori', 'sistem_pendaftaran', 'kuota', 'kategori_acara', 'persyaratan', 'tanggal_mulai_daftar', 'tanggal_akhir_daftar', 'hadiah', 'tentang'];
+        const requiredFields = ['judul', 'tanggal_acara', 'lokasi', 'sistem_pendaftaran', 'kuota', 'kategori_acara', 'persyaratan', 'tanggal_mulai_daftar', 'tanggal_akhir_daftar', 'hadiah', 'tentang'];
         
         requiredFields.forEach(fieldId => {
             const input = document.getElementById(fieldId);
@@ -675,21 +667,35 @@ document.addEventListener('DOMContentLoaded', function() {
         // ... (Fungsi ini tidak diubah) ...
     }, 5000);
 
-    // [NEW] FUNGSI UNTUK TOGGLE LIHAT PASSWORD
-    const togglePassword = document.getElementById('togglePassword');
-    const passwordInput = document.getElementById('panitia_password');
-
-    if (togglePassword && passwordInput) {
-        togglePassword.addEventListener('click', function () {
-            // Mengubah tipe atribut input password
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            
-            // Mengubah ikon mata
-            this.querySelector('i').classList.toggle('fa-eye');
-            this.querySelector('i').classList.toggle('fa-eye-slash');
-        });
-    }
+    // FUNGSI UNTUK TOGGLE LIHAT PASSWORD
+    document.addEventListener('DOMContentLoaded', function() {
+        const togglePasswordBtn = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('panitia_password');
+        
+        if (togglePasswordBtn && passwordInput) {
+            togglePasswordBtn.addEventListener('click', function() {
+                console.log('Toggle clicked!'); // Debug
+                
+                const eyeIcon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    // Show password
+                    passwordInput.type = 'text';
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                    console.log('Password shown'); // Debug
+                } else {
+                    // Hide password
+                    passwordInput.type = 'password';
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                    console.log('Password hidden'); // Debug
+                }
+            });
+        } else {
+            console.log('Toggle button or password input not found'); // Debug
+        }
+    });
 });
 </script>
 @endpush

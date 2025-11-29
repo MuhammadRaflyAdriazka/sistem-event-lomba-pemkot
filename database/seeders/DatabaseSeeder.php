@@ -18,7 +18,9 @@ class DatabaseSeeder extends Seeder
          $this->call([
         DinasSeeder::class,
         UserSeeder::class,
-        AcaraSeeder::class,
+        // AcaraSeeder::class, // Dinonaktifkan
+        // KolomFormulirSeeder::class, // Dinonaktifkan
+        // PendaftaranDummySeeder::class, // Dinonaktifkan
     ]);
     }
 }

@@ -5,7 +5,7 @@
 
 @push('styles')
 <style>
-    /* Style tambahan untuk gambar event */
+    /* Style tambahan untuk gambar acara */
     .event-info-card img {
         max-height: 80px;
         width: auto;
@@ -46,7 +46,7 @@
     </div>
 @endif
 
-{{-- Informasi Event --}}
+{{-- Informasi Acara --}}
 <div class="card shadow mb-4 event-info-card">
     <div class="card-body d-flex align-items-center">
         <div>
@@ -166,10 +166,29 @@
 @push('scripts')
 <script>
 function confirmReviewUlang(pendaftaranId, namaPeserta) {
-    if (confirm(`Apakah Anda yakin ingin melakukan review ulang untuk peserta "${namaPeserta}"?\n\nPeserta akan dikembalikan ke status menunggu seleksi.`)) {
-        const form = document.getElementById('formBatalkanPenolakan');
-        form.action = `/panitia/peserta/${pendaftaranId}/batalkan-penolakan`;
-        form.submit();
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            title: 'Review Ulang Peserta?',
+            text: `Peserta "${namaPeserta}" akan dikembalikan ke status menunggu seleksi.`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, Review Ulang!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.getElementById('formBatalkanPenolakan');
+                form.action = `/panitia/peserta/${pendaftaranId}/batalkan-penolakan`;
+                form.submit();
+            }
+        });
+    } else {
+        if (confirm(`Apakah Anda yakin ingin melakukan review ulang untuk peserta "${namaPeserta}"?\n\nPeserta akan dikembalikan ke status menunggu seleksi.`)) {
+            const form = document.getElementById('formBatalkanPenolakan');
+            form.action = `/panitia/peserta/${pendaftaranId}/batalkan-penolakan`;
+            form.submit();
+        }
     }
 }
 

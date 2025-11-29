@@ -10,10 +10,8 @@
                 <div class="collapse navbar-collapse justify-content-center px-lg-3" id="navbarCollapse">
                     <div class="navbar-nav py-0">
                         <a href="{{ route('dashboard') }}" class="nav-item nav-link {{ Request::routeIs('dashboard') ? 'active' : '' }}">Dashboard</a>
-                        <a href="#event-section" class="nav-item nav-link">Event & Lomba</a>
-                        <a href="/acara" class="nav-item nav-link {{ Request::routeIs('acara') ? 'active' : '' }}">Acara Saya</a>
+                        <a href="{{ route('acara') }}" class="nav-item nav-link {{ Request::routeIs('acara*') ? 'active' : '' }}">Acara Saya</a>
                     </div>
-                    <!-- Tidak ada tombol Login/Register -->
                 </div>
             </nav>
         </div>

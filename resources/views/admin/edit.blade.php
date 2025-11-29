@@ -160,7 +160,7 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <label class="font-weight-bold text-primary">Nama Event / Lomba</label>
+                        <label class="font-weight-bold text-primary">Nama Acara</label>
                         <input type="text" name="judul" id="judul" class="form-control @error('judul') is-invalid @enderror" placeholder="Contoh: Event Pasar Wadai" value="{{ old('judul', $acara->judul) }}" required>
                         @error('judul')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
@@ -178,15 +178,7 @@
                         <label class="font-weight-bold text-primary">Biaya Pendaftaran</label>
                         <input type="text" name="biaya" id="biaya" class="form-control" value="{{ old('biaya', $acara->biaya) }}" required>
                     </div>
-                    <div class="form-group">
-                        <label class="font-weight-bold text-primary">Kategori Event/Lomba</label>
-                        <select name="kategori" id="kategori" class="form-control @error('kategori') is-invalid @enderror" required>
-                            <option value="">-- Pilih Kategori --</option>
-                            <option value="Event" {{ old('kategori', $acara->kategori) == 'Event' ? 'selected' : '' }}>Event</option>
-                            <option value="Lomba" {{ old('kategori', $acara->kategori) == 'Lomba' ? 'selected' : '' }}>Lomba</option>
-                        </select>
-                        @error('kategori')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
+
                     <div class="form-group">
                         <label class="font-weight-bold text-primary">Sistem Pendaftaran</label>
                         <select name="sistem_pendaftaran" id="sistem_pendaftaran" class="form-control @error('sistem_pendaftaran') is-invalid @enderror" required>
@@ -268,7 +260,7 @@
                     </div>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{{ route('admin.event') }}" class="btn btn-secondary btn-lg mr-3">
+                    <a href="{{ route('admin.kelola') }}" class="btn btn-secondary btn-lg mr-3">
                         <i class="fas fa-times mr-2"></i>Batal
                     </a>
                     <button type="button" class="btn btn-primary btn-lg" id="nextBtn">

@@ -108,11 +108,11 @@ class DashboardController extends Controller
             ], 403);
         }
 
-        // Pastikan status saat ini adalah disetujui
-        if ($pendaftaran->status !== 'disetujui') {
+        // Pastikan status saat ini adalah pending atau disetujui
+        if (!in_array($pendaftaran->status, ['pending', 'disetujui'])) {
             return response()->json([
                 'success' => false, 
-                'message' => 'Hanya peserta yang diterima yang dapat mengundurkan diri.'
+                'message' => 'Hanya peserta dengan status pending atau diterima yang dapat mengundurkan diri.'
             ], 400);
         }
 

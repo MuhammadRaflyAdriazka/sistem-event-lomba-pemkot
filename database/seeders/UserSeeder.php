@@ -40,5 +40,66 @@ class UserSeeder extends Seeder
             'peran' => 'admin_dinas',
             'id_dinas' => 3, // Pastikan ada dinas dengan ID 3 di DinasSeeder
         ]);
+
+        // Kepala Dinas Kominfotik (ID 1)
+        User::create([
+            'name' => 'Kepala Dinas Kominfotik',
+            'email' => 'kepala.kominfotik@gmail.com',
+            'password' => Hash::make('password123'),
+            'peran' => 'kepala_dinas',
+            'id_dinas' => 1,
+        ]);
+
+        // Kepala Dinas Budpar (ID 2)
+        User::create([
+            'name' => 'Kepala Dinas Budpar',
+            'email' => 'kepala.disbudpar@gmail.com',
+            'password' => Hash::make('password123'),
+            'peran' => 'kepala_dinas',
+            'id_dinas' => 2,
+        ]);
+
+        // Kepala Dinas Disperindag (ID 3)
+        User::create([
+            'name' => 'Kepala Dinas Disperindag',
+            'email' => 'kepala.disperindag@gmail.com',
+            'password' => Hash::make('password123'),
+            'peran' => 'kepala_dinas',
+            'id_dinas' => 3,
+        ]);
+
+        // AKUN PANITIA UNTUK LOMBA PASAR WADAI (Event ID: 1)
+        User::create([
+            'name' => 'Panitia Lomba Pasar Wadai',
+            'email' => 'panitia.wadai@gmail.com',
+            'password' => Hash::make('password123'),
+            'peran' => 'panitia',
+            'id_dinas' => 2, // Dinas Budpar
+        ]);
+
+        User::create([
+            'name' => 'Koordinator Lomba Wadai',
+            'email' => 'koordinator.wadai@gmail.com', 
+            'password' => Hash::make('password123'),
+            'peran' => 'panitia',
+            'id_dinas' => 2, // Dinas Budpar
+        ]);
+
+        // AKUN PANITIA UNTUK LOMBA LARI SEHAT (Event ID: 2)
+        User::create([
+            'name' => 'Panitia Lomba Lari Sehat',
+            'email' => 'panitia.lari@gmail.com',
+            'password' => Hash::make('password123'),
+            'peran' => 'panitia',
+            'id_dinas' => 1, // Dinas Kominfotik
+        ]);
+
+        User::create([
+            'name' => 'Koordinator Lomba Lari',
+            'email' => 'koordinator.lari@gmail.com',
+            'password' => Hash::make('password123'),
+            'peran' => 'panitia',
+            'id_dinas' => 1, // Dinas Kominfotik
+        ]);
     }
 }

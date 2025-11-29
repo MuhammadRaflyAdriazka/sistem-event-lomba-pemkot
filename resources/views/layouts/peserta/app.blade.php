@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <title>Pemkot Banjarmasin</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Event, Lomba, Banjarmasin" name="keywords">
-    <meta content="Sistem Informasi Event dan Lomba Pemerintah Kota Banjarmasin" name="description">
+    <meta content="Acara, Banjarmasin" name="keywords">
+    <meta content="Sistem Informasi Acara Pemerintah Kota Banjarmasin" name="description">
     <link rel="icon" href="{{ asset('image/LOGO-PEMKOT-BARU.png') }}" type="image/png">
 
 

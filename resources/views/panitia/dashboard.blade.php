@@ -4,14 +4,15 @@
 
 @section('content')
 
-<!-- Event Info Card -->
+<!-- Acara Info Card -->
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">
-            <i class="fas fa-calendar-alt mr-2"></i>Informasi Event yang Anda Kelola
+            <i class="fas fa-calendar-alt mr-2"></i>Informasi Acara yang Anda Kelola
         </h6>
     </div>
     <div class="card-body">
+        @if($acara)
         <div class="row">
             <div class="col-md-6">
                 <h5 class="font-weight-bold text-dark">{{ $acara->judul }}</h5>
@@ -52,6 +53,23 @@
                 </a>
             </div>
         </div>
+        @else
+        <!-- Tampilan ketika belum ada acara -->
+        <div class="text-center py-5">
+            <div class="mb-4">
+                <i class="fas fa-clipboard-list fa-4x text-muted"></i>
+            </div>
+            <h4 class="text-muted mb-3">Belum Ada Acara yang Ditugaskan</h4>
+            <p class="text-muted mb-4">
+                Saat ini belum ada acara yang Anda kelola.<br>
+                Admin akan menambahkan acara dan menugaskan Anda sebagai panitia.
+            </p>
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle mr-2"></i>
+                <strong>Info:</strong> Dashboard akan menampilkan informasi acara dan menu pengelolaan setelah Anda ditugaskan ke acara tertentu.
+            </div>
+        </div>
+        @endif
     </div>
 </div>
 

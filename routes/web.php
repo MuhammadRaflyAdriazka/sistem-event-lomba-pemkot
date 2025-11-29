@@ -8,6 +8,7 @@ use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\AdminAcaraController;
+use App\Http\Controllers\KepalaDinasController;
 use App\Http\Controllers\PanitiaController;
 use App\Http\Controllers\PanitiaProfileController;
 
@@ -51,21 +52,34 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [AdminProfileController::class, 'destroy'])->name('profile.destroy');
         
-        // Kelola Event
+        // Kelola Acara
         Route::get('/kelola', [AdminDashboardController::class, 'kelola'])->name('kelola');
         Route::get('/acara-selesai', [AdminDashboardController::class, 'acaraSelesai'])->name('acara.selesai');
         
-        // Create Event
+        // Create Acara
         Route::get('/create', [AdminAcaraController::class, 'create'])->name('create');
         Route::post('/store', [AdminAcaraController::class, 'store'])->name('store');
         
-        // Edit, Update, Delete Event
+        // Edit, Update, Delete Acara
         Route::get('/event/{id}/edit', [AdminAcaraController::class, 'edit'])->name('event.edit');
         Route::patch('/event/{id}', [AdminAcaraController::class, 'update'])->name('event.update');
         Route::delete('/event/{id}', [AdminAcaraController::class, 'destroy'])->name('event.destroy');
         
-        // Mark Event as Finished
+        // Mark Acara as Finished
         Route::patch('/event/{id}/selesai', [AdminAcaraController::class, 'markAsFinished'])->name('event.selesai');
+    });
+
+    // -- Rute Khusus Kepala Dinas --
+    Route::prefix('kepala')
+         ->name('kepala.')
+         ->group(function () {
+        
+        // Dashboard Kepala Dinas
+        Route::get('/dashboard', [App\Http\Controllers\KepalaDinasController::class, 'dashboard'])->name('dashboard');
+        
+        // Profile Kepala Dinas
+        Route::get('/profile/edit', [App\Http\Controllers\KepalaDinasController::class, 'editProfile'])->name('profile.edit');
+        Route::put('/profile/update', [App\Http\Controllers\KepalaDinasController::class, 'updateProfile'])->name('profile.update');
     });
 
     // -- Rute Khusus Panitia --

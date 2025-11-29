@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <title>Pendaftaran</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Event Lomba Banjarmasin" name="keywords">
-    <meta content="Pendaftaran Event Lomba" name="description">
+    <meta content="Acara Banjarmasin" name="keywords">
+    <meta content="Pendaftaran Acara" name="description">
     <link rel="icon" href="{{ asset('image/LOGO-PEMKOT-BARU.png') }}" type="image/png">
 
 
@@ -72,7 +72,7 @@
                                         </h5>
 
                                         @if(in_array($field->tipe_kolom, ['text', 'email', 'number']))
-                                            <input type="{{ $field->tipe_kolom === 'email' ? 'email' : ($field->nama_kolom === 'nomor_wa' || $field->tipe_kolom === 'number' ? 'tel' : 'text') }}" 
+                                            <input type="{{ $field->tipe_kolom === 'email' ? 'email' : (($field->nama_kolom === 'nomor_wa' || $field->nama_kolom === 'no_hp' || $field->tipe_kolom === 'number') ? 'tel' : 'text') }}" 
                                                    name="{{ $field->nama_kolom }}" 
                                                    class="form-control" 
                                                    style="font-size: 14px;" 
@@ -80,9 +80,12 @@
                                                    {{ $field->wajib_diisi ? 'required' : '' }}
                                                    value="{{ old($field->nama_kolom) }}"
                                                    
-                                                   @if($field->nama_kolom === 'nomor_wa' || $field->tipe_kolom === 'number')
+                                                   @if($field->nama_kolom === 'nomor_wa' || $field->nama_kolom === 'no_hp' || $field->tipe_kolom === 'number')
                                                        pattern="[0-9]*"
+                                                       inputmode="numeric"
                                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                       minlength="10"
+                                                       maxlength="15"
                                                        title="Hanya boleh diisi dengan angka."
                                                    @endif
                                                    >

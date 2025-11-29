@@ -18,7 +18,6 @@ return new class extends Migration
             $table->date('tanggal_acara');
             $table->string('lokasi');
             $table->string('biaya')->default('Gratis');
-            $table->enum('kategori', ['Event', 'Lomba']);
             $table->enum('sistem_pendaftaran', ['Seleksi', 'Tanpa Seleksi']);
             $table->integer('kuota');
             $table->string('kategori_acara');

@@ -16,6 +16,9 @@
 
     <link href="{{ asset('templateadmin/css/sb-admin-2.min.css')}}" rel="stylesheet">
 
+    <!-- SweetAlert2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
+
     {{-- Slot untuk CSS tambahan dari halaman lain --}}
     @stack('styles')
 </head>
@@ -83,6 +86,9 @@
 
     <script src="{{ asset('templateadmin/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('templateadmin/js/demo/chart-pie-demo.js') }}"></script>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 
     {{-- Slot untuk JavaScript tambahan dari halaman lain --}}
     @stack('scripts')

@@ -34,7 +34,6 @@ class AdminAcaraController extends Controller
             'tanggal_acara' => 'required|date',
             'lokasi' => 'required|string|max:255',
             'biaya' => 'nullable|string|max:255',
-            'kategori' => 'required|in:Event,Lomba',
             'sistem_pendaftaran' => 'required|in:Seleksi,Tanpa Seleksi',
             'kuota' => 'required|integer|min:1',
             'kategori_acara' => 'required|string|max:255',
@@ -61,7 +60,6 @@ class AdminAcaraController extends Controller
             'tanggal_acara' => $validated['tanggal_acara'],
             'lokasi' => $validated['lokasi'],
             'biaya' => $validated['biaya'] ?? 'Gratis',
-            'kategori' => $validated['kategori'],
             'sistem_pendaftaran' => $validated['sistem_pendaftaran'],
             'kuota' => $validated['kuota'],
             'kategori_acara' => $validated['kategori_acara'],
@@ -151,7 +149,6 @@ class AdminAcaraController extends Controller
             'tanggal_acara' => 'required|date',
             'lokasi' => 'required|string|max:255',
             'biaya' => 'nullable|string|max:255',
-            'kategori' => 'required|in:Event,Lomba',
             'sistem_pendaftaran' => 'required|in:Seleksi,Tanpa Seleksi',
             'kuota' => 'required|integer|min:1',
             'kategori_acara' => 'required|string|max:255',
@@ -204,7 +201,7 @@ class AdminAcaraController extends Controller
             }
         }
 
-        return redirect()->route('admin.event')->with('success', 'Event berhasil diperbarui!');
+        return redirect()->route('admin.kelola')->with('success', 'Acara berhasil diperbarui!');
     }
 
     public function destroy($id)
@@ -232,7 +229,7 @@ class AdminAcaraController extends Controller
         // Hapus acara
         $acara->delete();
 
-        return redirect()->route('admin.event')->with('success', 'Event berhasil dihapus!');
+        return redirect()->route('admin.kelola')->with('success', 'Acara berhasil dihapus!');
     }
 
     public function markAsFinished($id)
@@ -252,6 +249,6 @@ class AdminAcaraController extends Controller
         // Update status menjadi inactive (selesai)
         $acara->update(['status' => 'inactive']);
 
-        return redirect()->route('admin.kelola')->with('success', 'Event berhasil ditandai sebagai selesai!');
+        return redirect()->route('admin.kelola')->with('success', 'Acara berhasil ditandai sebagai selesai!');
     }
 }

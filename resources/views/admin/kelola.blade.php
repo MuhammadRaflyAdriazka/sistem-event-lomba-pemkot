@@ -1,7 +1,7 @@
 @extends('layouts.admin.app')
 
 {{-- Mengatur judul halaman yang akan tampil di top bar --}}
-@section('title', 'Kelola Event')
+@section('title', 'Kelola Acara')
 
 {{-- Menyisipkan CSS khusus untuk halaman ini --}}
 @push('styles')
@@ -76,18 +76,18 @@
 {{-- Memulai bagian konten utama --}}
 @section('content')
 
-<h1 class="h3 mb-4 text-gray-800">Kelola Event dan Lomba</h1>
+<h1 class="h3 mb-4 text-gray-800">Kelola Acara</h1>
 
 {{-- Tombol Aksi --}}
 <div class="row mb-4">
     <div class="col-md-6">
         <a href="{{ route('admin.create') }}" class="btn btn-success btn-lg">
-            <i class="fas fa-plus mr-2"></i>Buat Event/Lomba Baru
+            <i class="fas fa-plus mr-2"></i>Buat Acara Baru
         </a>
     </div>
     <div class="col-md-6 text-right">
         <a href="{{ route('admin.acara.selesai') }}" class="btn btn-info btn-lg">
-            <i class="fas fa-history mr-2"></i>Lihat Event yang Sudah Selesai
+            <i class="fas fa-history mr-2"></i>Lihat Acara yang Sudah Selesai
         </a>
     </div>
 </div>
@@ -206,7 +206,7 @@
                                         <i class="fas fa-trash mr-1"></i>Hapus
                                     </button>
                                 @elseif($event->status == 'inactive')
-                                    <span class="badge badge-success p-2 d-block">Event Selesai</span>
+                                    <span class="badge badge-success p-2 d-block">Acara Selesai</span>
                                 @endif
                             </div>
                         </div>
@@ -216,10 +216,10 @@
         @else
             <div class="text-center py-5">
                 <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
-                <h5 class="text-muted">Belum Ada Event yang Dibuat</h5>
-                <p class="text-muted">Silakan buat event baru melalui tombol di atas</p>
+                <h5 class="text-muted">Belum Ada Acara yang Dibuat</h5>
+                <p class="text-muted">Silakan buat acara baru melalui tombol di atas</p>
                 <a href="{{ route('admin.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus mr-1"></i>Buat Event Baru
+                    <i class="fas fa-plus mr-1"></i>Buat Acara Baru
                 </a>
             </div>
         @endif
@@ -243,22 +243,79 @@
 
 @push('scripts')
 <script>
-    function confirmDelete(eventId) {
-        if(confirm('Yakin ingin menghapus event ini? Tindakan ini tidak dapat dibatalkan!')) {
-            // Set action URL dengan ID event
-            document.getElementById('deleteForm').action = '/admin/event/' + eventId;
-            // Submit form
-            document.getElementById('deleteForm').submit();
-        }
-    }
+$(document).ready(function() {
+    console.log('Admin kelola scripts loaded');
+    console.log('SweetAlert2 available:', typeof Swal !== 'undefined');
+});
 
-    function confirmSelesai(eventId) {
-        if(confirm('Yakin ingin menandai event ini sebagai selesai? Event akan hilang dari halaman peserta!')) {
-            // Set action URL dengan ID event
-            document.getElementById('selesaiForm').action = '/admin/event/' + eventId + '/selesai';
-            // Submit form
-            document.getElementById('selesaiForm').submit();
+function confirmDelete(eventId) {
+    console.log('Delete clicked for event:', eventId);
+    
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            title: 'Yakin ingin menghapus acara ini?',
+            text: 'Tindakan ini tidak dapat dibatalkan!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.getElementById('deleteForm');
+                if (form) {
+                    form.action = '/admin/event/' + eventId;
+                    form.submit();
+                } else {
+                    console.error('Delete form not found');
+                }
+            }
+        });
+    } else {
+        if(confirm('Yakin ingin menghapus acara ini? Tindakan ini tidak dapat dibatalkan!')) {
+            const form = document.getElementById('deleteForm');
+            if (form) {
+                form.action = '/admin/event/' + eventId;
+                form.submit();
+            }
         }
     }
+}
+
+function confirmSelesai(eventId) {
+    console.log('Selesai clicked for event:', eventId);
+    
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            title: 'Tandai acara sebagai selesai?',
+            text: 'Acara akan hilang dari halaman peserta!',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, Selesai!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.getElementById('selesaiForm');
+                if (form) {
+                    form.action = '/admin/event/' + eventId + '/selesai';
+                    form.submit();
+                } else {
+                    console.error('Selesai form not found');
+                }
+            }
+        });
+    } else {
+        if(confirm('Yakin ingin menandai acara ini sebagai selesai? Acara akan hilang dari halaman peserta!')) {
+            const form = document.getElementById('selesaiForm');
+            if (form) {
+                form.action = '/admin/event/' + eventId + '/selesai';
+                form.submit();
+            }
+        }
+    }
+}
 </script>
 @endpush

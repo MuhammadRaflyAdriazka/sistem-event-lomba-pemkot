@@ -5,7 +5,7 @@
 
 @push('styles')
 <style>
-    /* Style tambahan untuk gambar event */
+    /* Style tambahan untuk gambar acara */
     .event-info-card img {
         max-height: 80px; /* Sesuaikan tinggi gambar jika perlu */
         width: auto;
@@ -46,7 +46,7 @@
     </div>
 @endif
 
-{{-- Informasi Event --}}
+{{-- Informasi Acara --}}
 <div class="card shadow mb-4 event-info-card">
     <div class="card-body d-flex align-items-center">
         <div>
@@ -230,21 +230,42 @@ function showTolakForm(pendaftaranId, namaPeserta) {
 
 // Tolak massal dengan alasan "Kuota sudah terpenuhi"
 function tolakMassalKuotaPenuh() {
-    if (confirm('Apakah Anda yakin ingin menolak semua peserta yang tersisa dengan alasan "Maaf, kuota sudah terpenuhi"?')) {
-        // Buat form tersembunyi untuk submit
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '{{ route("panitia.peserta.tolakMassalKuotaPenuh") }}';
-        
-        const csrfToken = document.createElement('input');
-        csrfToken.type = 'hidden';
-        csrfToken.name = '_token';
-        csrfToken.value = '{{ csrf_token() }}';
-        
-        form.appendChild(csrfToken);
-        document.body.appendChild(form);
-        form.submit();
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            title: 'Tolak Semua Peserta?',
+            text: 'Semua peserta yang tersisa akan ditolak dengan alasan "Maaf, kuota sudah terpenuhi"',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, Tolak Semua!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                prosesTolakMassal();
+            }
+        });
+    } else {
+        if (confirm('Apakah Anda yakin ingin menolak semua peserta yang tersisa dengan alasan "Maaf, kuota sudah terpenuhi"?')) {
+            prosesTolakMassal();
+        }
     }
+}
+
+function prosesTolakMassal() {
+    // Buat form tersembunyi untuk submit
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{{ route("panitia.peserta.tolakMassalKuotaPenuh") }}';
+    
+    const csrfToken = document.createElement('input');
+    csrfToken.type = 'hidden';
+    csrfToken.name = '_token';
+    csrfToken.value = '{{ csrf_token() }}';
+    
+    form.appendChild(csrfToken);
+    document.body.appendChild(form);
+    form.submit();
 }
 
 // Tolak semua sisa (fungsi lama untuk kuota penuh)

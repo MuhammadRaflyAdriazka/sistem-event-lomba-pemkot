@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <title>Detail Acara</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Event Lomba Banjarmasin" name="keywords">
+    <meta content="Acara Banjarmasin" name="keywords">
     <link rel="icon" href="{{ asset('image/LOGO-PEMKOT-BARU.png') }}" type="image/png">
 
 
@@ -76,9 +76,6 @@
                                 </h1>
 
                                 <!-- Field sesuai dengan migration -->
-                                <h5 class="mt-4 text-uppercase" style="color: #333; font-size: 14px; font-weight: bold;">JENIS ACARA</h5>
-                                <p style="font-size: 14px; color: #333; padding-left: 15px;">• {{ $acara->kategori }}</p>
-
                                 <h5 class="mt-4 text-uppercase" style="color: #333; font-size: 14px; font-weight: bold;">KATEGORI</h5>
                                 <p style="font-size: 14px; color: #333; padding-left: 15px;">• {{ $acara->kategori_acara }}</p>
 

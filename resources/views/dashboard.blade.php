@@ -18,30 +18,22 @@
 <div class="jumbotron jumbotron-fluid position-relative overlay-bottom" 
      style="margin-bottom: 90px; background: url('{{ asset('templatepeserta/img/foto-walikota.jpg') }}') center top 16% / cover no-repeat; height: 700px;">
 </div>
-<div id="event-section" class="container-fluid py-5"> 
+<div id="acara-section" class="container-fluid py-5"> 
     <div class="container py-5">
         <div class="text-center mb-5">
-            <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Event & Lomba Tersedia</h5>
-            <h1>Daftar Event & Lomba</h1>
+            <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Acara Tersedia</h5>
+            <h1>Daftar Acara</h1>
         </div>
 
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
-                        <h5 class="card-title mb-3"><i class="fas fa-filter mr-2"></i>Filter Event & Lomba</h5>
+                        <h5 class="card-title mb-3"><i class="fas fa-filter mr-2"></i>Filter Acara</h5>
                         <div class="row">
-                            <div class="col-md-4 mb-2">
-                                <label class="font-weight-bold">Jenis:</label>
+                            <div class="col-md-6 mb-2">
+                                <label class="font-weight-bold">Kategori Acara:</label>
                                 <select class="form-control" id="categoryFilter">
-                                    <option value="">Semua</option>
-                                    <option value="Event">Event</option>
-                                    <option value="Lomba">Lomba</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4 mb-2">
-                                <label class="font-weight-bold">Kategori:</label>
-                                <select class="form-control" id="eventCategoryFilter">
                                     <option value="">Semua Kategori</option>
                                     <option value="Olahraga">Olahraga</option>
                                     <option value="Kesenian & Budaya">Kesenian & Budaya</option>
@@ -55,7 +47,7 @@
                                     <option value="Pariwisata">Pariwisata</option>
                                 </select>
                             </div>
-                            <div class="col-md-4 mb-2">
+                            <div class="col-md-6 mb-2">
                                 <label class="font-weight-bold">Sistem Pendaftaran:</label>
                                 <select class="form-control" id="registrationSystemFilter">
                                     <option value="">Semua Sistem</option>
@@ -69,12 +61,11 @@
             </div>
         </div>
 
-        <div class="row" id="event-container">            
+        <div class="row" id="acara-container">            
             @if($acaraTersedia && $acaraTersedia->count() > 0)
                 @foreach($acaraTersedia as $acara)
-                <div class="col-lg-6 mb-4 event-item event-card" 
-                     data-category="{{ $acara->kategori }}" 
-                     data-event-category="{{ $acara->kategori_acara }}"
+                <div class="col-lg-6 mb-4 event-card" 
+                     data-category="{{ $acara->kategori_acara }}" 
                      data-registration-system="{{ $acara->sistem_pendaftaran }}">
                     <div class="card shadow-lg border-0 rounded-lg overflow-hidden h-100">
                         <div class="event-image-wrapper">
@@ -82,9 +73,6 @@
                                  alt="{{ $acara->judul }}" 
                                  class="event-image"
                                  onerror="this.src='{{ asset('templatepeserta/img/eror.jpeg') }}'">
-                            <div class="position-absolute" style="top: 10px; left: 10px;">
-                                <span class="badge {{ $acara->kategori == 'Event' ? 'badge-primary' : 'badge-success' }} badge-lg">{{ $acara->kategori }}</span>
-                            </div>
                             <div class="position-absolute" style="top: 10px; right: 10px;">
                                 <span class="badge badge-info badge-lg">{{ $acara->kategori_acara }}</span>
                             </div>
@@ -150,8 +138,8 @@
                     <div class="card shadow-lg border-0 rounded-lg">
                         <div class="card-body p-5">
                             <i class="fas fa-calendar-times fa-5x text-muted mb-4"></i>
-                            <h3 class="text-muted">Belum Ada Event Tersedia</h3>
-                            <p class="text-muted">Event dan lomba akan segera hadir. Pantau terus halaman ini untuk update terbaru!</p>
+                            <h3 class="text-muted">Belum Ada Acara Tersedia</h3>
+                            <p class="text-muted">Acara akan segera hadir. Pantau terus halaman ini untuk update terbaru!</p>
                             <a href="/" class="btn btn-primary mt-3">Kembali ke Beranda</a>
                         </div>
                     </div>
@@ -164,7 +152,7 @@
             <div class="col-12">
                 <div class="alert alert-warning text-center">
                     <h4><i class="fas fa-search mr-2"></i>Tidak Ada Hasil</h4>
-                    <p>Tidak ada event yang sesuai dengan filter yang dipilih.</p>
+                    <p>Tidak ada acara yang sesuai dengan filter yang dipilih.</p>
                 </div>
             </div>
         </div>
@@ -177,7 +165,6 @@
         $(document).ready(function() {
             function filterEvents() {
                 const categoryFilter = $('#categoryFilter').val();
-                const eventCategoryFilter = $('#eventCategoryFilter').val();
                 const registrationSystemFilter = $('#registrationSystemFilter').val();
                 
                 let visibleCount = 0;
@@ -186,7 +173,6 @@
                     const card = $(this);
                     const showCard = 
                         (categoryFilter === "" || card.data('category') === categoryFilter) &&
-                        (eventCategoryFilter === "" || card.data('event-category') === eventCategoryFilter) &&
                         (registrationSystemFilter === "" || card.data('registration-system') === registrationSystemFilter);
 
                     if (showCard) {
@@ -200,7 +186,7 @@
                 $('#noResultsMessage').toggle(visibleCount === 0);
             }
             
-            $('#categoryFilter, #eventCategoryFilter, #registrationSystemFilter').on('change', filterEvents);
+            $('#categoryFilter, #registrationSystemFilter').on('change', filterEvents);
         });
 
 

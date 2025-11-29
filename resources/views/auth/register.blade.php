@@ -68,7 +68,7 @@
             <div class="text-center mb-4">
                 <img src="{{ asset('image/LOGO-PEMKOT-BARU.png') }}" alt="Logo" class="logo-img mb-3">
                 <h2 class="fw-bold text-dark mb-2">Register</h2>
-                <p class="text-muted mb-0">Buat akun baru untuk mendaftar event & lomba</p>
+                <p class="text-muted mb-0">Buat akun baru untuk mendaftar acara</p>
             </div>
             
             <!-- Register Form -->
@@ -98,8 +98,14 @@
                 <!-- Password -->
                 <div class="mb-3">
                     <label for="password" class="form-label text-dark fw-semibold">Password</label>
-                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
-                           name="password" required autocomplete="new-password">
+                    <div class="position-relative">
+                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
+                               name="password" required autocomplete="new-password" style="padding-right: 50px;">
+                        <button type="button" class="btn position-absolute end-0 top-50 translate-middle-y border-0 bg-transparent" 
+                                style="z-index: 10; right: 10px;" onclick="togglePassword('password')">
+                            <i id="password-icon" class="fas fa-eye text-muted"></i>
+                        </button>
+                    </div>
                     @error('password')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -108,8 +114,14 @@
                 <!-- Confirm Password -->
                 <div class="mb-4">
                     <label for="password_confirmation" class="form-label text-dark fw-semibold">Konfirmasi Password</label>
-                    <input id="password_confirmation" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" 
-                           name="password_confirmation" required autocomplete="new-password">
+                    <div class="position-relative">
+                        <input id="password_confirmation" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" 
+                               name="password_confirmation" required autocomplete="new-password" style="padding-right: 50px;">
+                        <button type="button" class="btn position-absolute end-0 top-50 translate-middle-y border-0 bg-transparent" 
+                                style="z-index: 10; right: 10px;" onclick="togglePassword('password_confirmation')">
+                            <i id="password_confirmation-icon" class="fas fa-eye text-muted"></i>
+                        </button>
+                    </div>
                     @error('password_confirmation')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -130,5 +142,20 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function togglePassword(fieldId) {
+            const passwordField = document.getElementById(fieldId);
+            const passwordIcon = document.getElementById(fieldId + '-icon');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                passwordIcon.className = 'fas fa-eye-slash text-muted';
+            } else {
+                passwordField.type = 'password';
+                passwordIcon.className = 'fas fa-eye text-muted';
+            }
+        }
+    </script>
 </body>
 </html>
