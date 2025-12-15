@@ -261,9 +261,9 @@
                             <strong>Panduan Upload Gambar:</strong><br>
                             • <strong>Format:</strong> JPG, JPEG, PNG<br>
                             • <strong>Ukuran File:</strong> Maksimal 2MB<br>
-                            • <strong>Dimensi Direkomendasikan:</strong> 800x600 px atau rasio 4:3<br>
+                            • <strong>Dimensi Rekomendasi:</strong> <span class="text-danger font-weight-bold">1920 x 1080 pixels (16:9)</span> atau <span class="text-danger font-weight-bold">1200 x 630 pixels</span><br>
                             • <strong>Orientasi:</strong> Landscape (horizontal) untuk tampilan terbaik<br>
-                            • <em>Gambar akan otomatis disesuaikan ukurannya di halaman peserta</em>
+                            • <em>Gunakan ukuran yang disarankan agar gambar tidak terpotong di semua halaman</em>
                         </small>
                     </div>
                 </div>

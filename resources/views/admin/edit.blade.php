@@ -255,6 +255,7 @@
                             <strong>Panduan Upload Gambar:</strong><br>
                             • <strong>Format:</strong> JPG, JPEG, PNG<br>
                             • <strong>Ukuran File:</strong> Maksimal 2MB<br>
+                            • <strong>Dimensi Rekomendasi:</strong> <span class="text-danger font-weight-bold">1920 x 1080 pixels (16:9)</span> atau <span class="text-danger font-weight-bold">1200 x 630 pixels</span><br>
                             • <strong>Kosongkan jika tidak ingin mengubah gambar</strong>
                         </small>
                     </div>
@@ -340,7 +341,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function validateStep1() {
         let isValid = true;
-        const requiredFields = ['judul', 'tanggal_acara', 'lokasi', 'kategori', 'sistem_pendaftaran', 'kuota', 'kategori_acara', 'persyaratan', 'tanggal_mulai_daftar', 'tanggal_akhir_daftar', 'hadiah', 'tentang'];
+        const requiredFields = ['judul', 'tanggal_acara', 'lokasi', 'sistem_pendaftaran', 'kuota', 'kategori_acara', 'persyaratan', 'tanggal_mulai_daftar', 'tanggal_akhir_daftar', 'hadiah', 'tentang'];
         
         requiredFields.forEach(fieldId => {
             const input = document.getElementById(fieldId);

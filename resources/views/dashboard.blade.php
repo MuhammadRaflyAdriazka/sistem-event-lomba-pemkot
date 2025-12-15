@@ -5,8 +5,8 @@
     html { scroll-behavior: smooth; }
     .event-card { position: relative; transition: all 0.3s ease; }
     .event-card.hidden { display: none !important; }
-    .event-image-wrapper { width: 100%; height: 250px; overflow: hidden; position: relative; }
-    .event-image { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .event-image-wrapper { width: 100%; height: auto; position: relative; }
+    .event-image { width: 100%; height: auto; object-fit: contain; object-position: center; display: block; }
     .badge-lg { font-size: 0.8rem; padding: 0.5rem 0.75rem; }
     .border-left-primary { border-left: 4px solid #007bff !important; }
     .text-sm { font-size: 0.875rem; }

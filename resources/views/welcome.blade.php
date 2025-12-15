@@ -243,16 +243,16 @@
         <style>
             .event-image-wrapper {
                 width: 100%;
-                height: 250px; /* seragam */
-                overflow: hidden;
+                height: auto;
                 position: relative;
             }
 
             .event-image {
                 width: 100%;
-                height: 100%;
-                object-fit: cover;
+                height: auto;
+                object-fit: contain;
                 object-position: center;
+                display: block;
             }
 
             .badge-lg {

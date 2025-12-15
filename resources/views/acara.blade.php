@@ -4,15 +4,15 @@
 <style>
     .event-image-wrapper {
         width: 100%;
-        height: 250px;
-        overflow: hidden;
+        height: auto;
         position: relative;
     }
     .event-image {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: auto;
+        object-fit: contain;
         object-position: center;
+        display: block;
     }
 </style>
 @endpush

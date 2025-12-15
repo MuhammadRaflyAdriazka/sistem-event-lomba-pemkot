@@ -21,12 +21,15 @@
 
 <body class="d-flex flex-column min-vh-100">
     <div class="flex-grow-1">
-        <div class="jumbotron jumbotron-fluid position-relative" 
-             style="margin-bottom: 90px; 
-                    background: url('{{ asset('images/events/' . $acara->gambar) }}') center center / cover no-repeat; 
-                    height: 700px;">
-            <div class="container text-center my-5 py-5">
-            </div>
+        <!-- Hero Image Section -->
+        <div class="position-relative" style="margin-bottom: 90px;">
+            <a href="{{ route('acara.show', $acara->id) }}" class="btn btn-secondary px-3 py-2" style="position: absolute; top: 20px; left: 20px; font-size: 14px; z-index: 10;">
+                <i class="fas fa-arrow-left mr-2"></i>Kembali
+            </a>
+            <img src="{{ asset('images/events/' . $acara->gambar) }}" 
+                 alt="{{ $acara->judul }}" 
+                 class="w-100" 
+                 style="height: auto; display: block;">
         </div>
 
         <div class="container-fluid" style="margin-top: -50px;">

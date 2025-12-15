@@ -32,21 +32,25 @@
     <div class="flex-grow-1">
         <!-- Hero Image Section -->
         @if(isset($acara))
-        <div class="jumbotron jumbotron-fluid position-relative" 
-             style="margin-bottom: 90px; 
-                    background: url('{{ asset('images/events/' . $acara->gambar) }}') center center / cover no-repeat; 
-                    height: 700px;"
-             onerror="this.style.backgroundImage='url({{ asset('templatepeserta/img/eror.jpeg') }})'">
-            <div class="container text-center my-5 py-5">
-            </div>
+        <div class="position-relative" style="margin-bottom: 90px;">
+            <a href="{{ auth()->check() ? route('dashboard') : url('/') }}" class="btn btn-secondary px-3 py-2" style="position: absolute; top: 20px; left: 20px; font-size: 14px; z-index: 10;">
+                <i class="fas fa-arrow-left mr-2"></i>Kembali
+            </a>
+            <img src="{{ asset('images/events/' . $acara->gambar) }}" 
+                 alt="{{ $acara->judul }}" 
+                 class="w-100" 
+                 style="height: auto; display: block;"
+                 onerror="this.src='{{ asset('templatepeserta/img/eror.jpeg') }}'">
         </div>
         @else
-        <div class="jumbotron jumbotron-fluid position-relative" 
-             style="margin-bottom: 90px; 
-                    background: url('{{ asset('templatepeserta/img/eror.jpeg') }}') center center / cover no-repeat; 
-                    height: 700px;">
-            <div class="container text-center my-5 py-5">
-            </div>
+        <div class="position-relative" style="margin-bottom: 90px;">
+            <a href="{{ auth()->check() ? route('dashboard') : url('/') }}" class="btn btn-secondary px-3 py-2" style="position: absolute; top: 20px; left: 20px; font-size: 14px; z-index: 10;">
+                <i class="fas fa-arrow-left mr-2"></i>Kembali
+            </a>
+            <img src="{{ asset('templatepeserta/img/eror.jpeg') }}" 
+                 alt="Event Image" 
+                 class="w-100" 
+                 style="height: auto; display: block;">
         </div>
         @endif
 
