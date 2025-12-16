@@ -109,7 +109,7 @@
                                     {{-- Jika sudah mendaftar, hanya tampil status saja (tanpa tombol detail) --}}
                                     @if($pendaftaranAcara->status == 'pending')
                                         <span class="btn btn-warning disabled"><i class="fas fa-clock"></i> Menunggu Persetujuan</span>
-                                    @elseif($pendaftaranAcara->status == 'disetujui')
+                                    @elseif($pendaftaranAcara->status == 'diterima')
                                         <span class="btn btn-success disabled"><i class="fas fa-check"></i> Sudah Terdaftar</span>
                                     @elseif($pendaftaranAcara->status == 'ditolak')
                                         <span class="btn btn-danger disabled"><i class="fas fa-times"></i> Ditolak</span>

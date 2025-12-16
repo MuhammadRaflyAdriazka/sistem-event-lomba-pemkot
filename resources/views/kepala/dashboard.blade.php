@@ -98,8 +98,8 @@
                 @if($acaraDinas->count() > 0)
                     @foreach($acaraDinas as $acara)
                     @php
-                        // Hanya hitung peserta yang DISETUJUI untuk kuota
-                        $pesertaDiterima = App\Models\Pendaftaran::where('id_acara', $acara->id)->where('status', 'disetujui')->count();
+                        // Hanya hitung peserta yang DITERIMA untuk kuota
+                        $pesertaDiterima = App\Models\Pendaftaran::where('id_acara', $acara->id)->where('status', 'diterima')->count();
                         $persentaseTerisi = $acara->kuota > 0 ? round(($pesertaDiterima / $acara->kuota) * 100) : 0;
                     @endphp
                     <div class="d-flex justify-content-between align-items-center py-3 border-bottom">

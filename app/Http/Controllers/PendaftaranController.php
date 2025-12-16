@@ -46,7 +46,7 @@ class PendaftaranController extends Controller
         // Cek apakah kuota masih tersedia untuk sistem tanpa seleksi
         if ($acara->sistem_pendaftaran === 'Tanpa Seleksi') {
             $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)
-                                        ->where('status', 'disetujui')
+                                        ->where('status', 'diterima')
                                         ->count();
             
             if ($jumlahDiterima >= $acara->kuota) {
@@ -76,7 +76,7 @@ class PendaftaranController extends Controller
         // Cek apakah kuota masih tersedia untuk sistem tanpa seleksi
         if ($acara->sistem_pendaftaran === 'Tanpa Seleksi') {
             $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)
-                                        ->where('status', 'disetujui')
+                                        ->where('status', 'diterima')
                                         ->count();
             
             if ($jumlahDiterima >= $acara->kuota) {
@@ -123,11 +123,11 @@ class PendaftaranController extends Controller
             if ($acara->sistem_pendaftaran === 'Tanpa Seleksi') {
                 // Cek ulang kuota sebelum menerima otomatis
                 $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)
-                                            ->where('status', 'disetujui')
+                                            ->where('status', 'diterima')
                                             ->count();
                 
                 if ($jumlahDiterima < $acara->kuota) {
-                    $status = 'disetujui'; // Auto-accept jika kuota masih ada
+                    $status = 'diterima'; // Auto-accept jika kuota masih ada
                 } else {
                     return back()->with('error', 'Maaf, kuota peserta sudah penuh. Pendaftaran ditutup.');
                 }

@@ -48,8 +48,8 @@
                                             <p><i class="fa fa-clock"></i> Status Pendaftaran: 
                                                 @if($pendaftaran->status == 'pending')
                                                     <span class="badge bg-warning text-dark">Pending</span>
-                                                @elseif($pendaftaran->status == 'disetujui')
-                                                    <span class="badge bg-success text-white">Disetujui</span>
+                                                @elseif($pendaftaran->status == 'diterima')
+                                                    <span class="badge bg-success text-white">Diterima</span>
                                                 @elseif($pendaftaran->status == 'ditolak')
                                                     <span class="badge bg-danger text-white">Ditolak</span>
                                                 @elseif($pendaftaran->status == 'mengundurkan_diri')
@@ -63,7 +63,7 @@
                                                 <a href="{{ route('acara.detailPendaftaran', $pendaftaran->id) }}" class="btn btn-primary">
                                                     <i class="fas fa-eye me-1"></i>Lihat Detail
                                                 </a>
-                                                @if($pendaftaran->status == 'diterima' || $pendaftaran->status == 'disetujui')
+                                                @if($pendaftaran->status == 'diterima')
                                                     <a href="{{ route('acara.pengumuman', $pendaftaran->id) }}" class="btn btn-outline-success">
                                                         <i class="fas fa-bullhorn me-1"></i>Lihat Pengumuman
                                                     </a>

@@ -15,7 +15,7 @@ return new class extends Migration
              $table->id();
              $table->foreignId('id_acara')->constrained('acara')->onDelete('cascade');
              $table->foreignId('id_pengguna')->constrained('users')->onDelete('cascade');
-             $table->enum('status', ['disetujui', 'pending', 'ditolak', 'mengundurkan_diri'])->default('pending');
+            $table->enum('status', ['diterima', 'pending', 'ditolak', 'mengundurkan_diri'])->default('pending');
              $table->text('alasan_penolakan')->nullable();
              $table->timestamps();
         });
@@ -29,3 +29,5 @@ return new class extends Migration
         Schema::dropIfExists('pendaftaran');
     }
 };
+
+

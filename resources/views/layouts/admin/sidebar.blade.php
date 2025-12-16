@@ -25,14 +25,14 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Event Management
+        Manajemen Acara
     </div>
 
     <!-- Nav Item - Kelola Event (Langsung ke Create) -->
     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.kelola') }}">
             <i class="fas fa-fw fa-calendar"></i>
-            <span>Kelola Event</span>
+            <span>Kelola Acara</span>
         </a>
     </li>
 

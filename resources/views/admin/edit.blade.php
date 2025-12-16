@@ -103,7 +103,7 @@
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Edit Acara: {{ $acara->judul }}</h1>
-    <p class="text-muted">Perbarui informasi acara sesuai kebutuhan</p>
+    <p class="text-muted">Perbarui INFORMASI ACARA sesuai kebutuhan</p>
 </div>
 
 @if(session('success'))
@@ -133,7 +133,7 @@
     <div class="step-indicator">
         <div class="step-item active" data-step="1">
             <div class="step-number">1</div>
-            <div class="step-title">Informasi Acara</div>
+            <div class="step-title">INFORMASI ACARA</div>
         </div>
         <div class="step-item" data-step="2">
             <div class="step-number">2</div>
@@ -150,18 +150,18 @@
         @csrf
         @method('PATCH')
 
-        {{-- STEP 1: INFORMASI EVENT --}}
+        {{-- STEP 1: INFORMASI ACARA --}}
         <div class="step-content active" id="step1">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="fas fa-calendar-plus mr-2"></i>Informasi Dasar Event
+                        <i class="fas fa-calendar-plus mr-2"></i>Informasi Dasar Acara
                     </h6>
                 </div>
                 <div class="card-body">
                     <div class="form-group">
                         <label class="font-weight-bold text-primary">Nama Acara</label>
-                        <input type="text" name="judul" id="judul" class="form-control @error('judul') is-invalid @enderror" placeholder="Contoh: Event Pasar Wadai" value="{{ old('judul', $acara->judul) }}" required>
+                        <input type="text" name="judul" id="judul" class="form-control @error('judul') is-invalid @enderror" placeholder="Contoh: Acara Pasar Wadai" value="{{ old('judul', $acara->judul) }}" required>
                         @error('judul')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="form-group">
@@ -176,7 +176,8 @@
                     </div>
                     <div class="form-group">
                         <label class="font-weight-bold text-primary">Biaya Pendaftaran</label>
-                        <input type="text" name="biaya" id="biaya" class="form-control" value="{{ old('biaya', $acara->biaya) }}" required>
+                        <input type="text" name="biaya" id="biaya" class="form-control" value="Gratis" readonly required>
+                        <small class="form-text text-muted">Biaya pendaftaran sudah ditetapkan gratis untuk semua acara</small>
                     </div>
 
                     <div class="form-group">
@@ -238,11 +239,11 @@
                     </div>
                     <div class="form-group">
                         <label class="font-weight-bold text-primary">Tentang Acara</label>
-                        <textarea name="tentang" id="tentang" class="form-control @error('tentang') is-invalid @enderror" rows="3" placeholder="Contoh: Acara ini diselenggarakan oleh dinas pariwisata..." required>{{ old('tentang', $acara->tentang) }}</textarea>
+                        <textarea name="tentang" id="tentang" class="form-control @error('tentang') is-invalid @enderror" rows="3" placeholder="Contoh: acara ini diselenggarakan oleh dinas pariwisata..." required>{{ old('tentang', $acara->tentang) }}</textarea>
                         @error('tentang')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="form-group">
-                        <label class="font-weight-bold text-primary">Gambar Event</label>
+                        <label class="font-weight-bold text-primary">Gambar Acara</label>
                         @if($acara->gambar)
                             <div class="mb-2">
                                 <img src="{{ asset('images/events/' . $acara->gambar) }}" alt="Current Image" class="img-thumbnail" style="max-height: 200px;">
@@ -307,7 +308,7 @@
                     <i class="fas fa-chevron-left mr-2"></i>Sebelumnya
                 </button>
                 <button type="button" class="btn btn-success btn-lg" id="submitBtn">
-                    <i class="fas fa-save mr-2"></i>Update Event
+                    <i class="fas fa-save mr-2"></i>Update Acara
                 </button>
             </div>
         </div>
@@ -554,8 +555,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const form = document.getElementById('editEventForm');
         Swal.fire({
-            title: 'Konfirmasi Update Event',
-            text: 'Apakah anda yakin ingin memperbarui event ini?',
+            title: 'Konfirmasi Update Acara',
+            text: 'Apakah anda yakin ingin memperbarui acara ini?',
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#28a745',
@@ -565,7 +566,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({
-                    title: 'Sedang Memperbarui Event...',
+                    title: 'Sedang memperbarui acara...',
                     html: 'Mohon tunggu sebentar',
                     allowOutsideClick: false,
                     allowEscapeKey: false,
@@ -581,3 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endpush
+
+
+
+

@@ -1,36 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.peserta.app')
 
-<head>
-    <meta charset="utf-8">
-    <title>Status Pendaftaran</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Status Pendaftaran" name="keywords">
-    <meta content="Status Pendaftaran" name="description">
-    <link rel="icon" href="{{ asset('image/LOGO-PEMKOT-BARU.png') }}" type="image/png">
-
-    <!-- Favicon -->
-    <link href="{{ asset('templatepeserta/img/favicon.ico') }}" rel="icon">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> 
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link href="{{ asset('templatepeserta/lib/owlcarousel/assets/owl.carousel.min.css')}}" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="{{ asset('templatepeserta/css/style.css') }}" rel="stylesheet">
-
-    @include('layouts.peserta.topbar')
-</head>
-
-<body class="d-flex flex-column min-vh-100">
-    <!-- Content wrapper -->
-    <div class="flex-grow-1">
+@section('content')
         <!-- Back Button Section -->
         <div class="container-fluid py-3 ">
             <div class="container-fluid px-4">
@@ -61,7 +31,7 @@
                                                     Pendaftaran Anda sedang dalam proses review oleh panitia. Mohon tunggu pengumuman selanjutnya.
                                                 </p>
                                             </div>
-                                        @elseif($pendaftaran->status == 'disetujui')
+                                        @elseif($pendaftaran->status == 'diterima')
                                             <div class="alert alert-success mb-0">
                                                 <i class="fas fa-check-circle mr-2"></i>
                                                 <strong>DITERIMA</strong> - Selamat!
@@ -127,8 +97,9 @@
                                 @php
                                     $sekarang = now();
                                     $periodePendaftaranMasihBuka = $sekarang->between($acara->tanggal_mulai_daftar, $acara->tanggal_akhir_daftar);
-                                    $bisaMengundurkanDiri = $periodePendaftaranMasihBuka && 
-                                                           ($pendaftaran->status == 'pending' || $pendaftaran->status == 'disetujui');
+                                    $bisaMengundurkanDiri = $acara->status == 'active' && 
+                                                           $periodePendaftaranMasihBuka && 
+                                                           ($pendaftaran->status == 'pending' || $pendaftaran->status == 'diterima');
                                 @endphp
 
                                 @if($bisaMengundurkanDiri)
@@ -148,23 +119,10 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Footer Start -->
-    @include('layouts.peserta.footer')
-    <!-- Footer End -->
+@endsection
 
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('templatepeserta/lib/easing/easing.min.js')}}"></script>
-    <script src="{{ asset('templatepeserta/lib/waypoints/waypoints.min.js')}}"></script>
-    <script src="{{ asset('templatepeserta/lib/counterup/counterup.min.js')}}"></script>
-    <script src="{{ asset('templatepeserta/lib/owlcarousel/owl.carousel.min.js')}}"></script>
-
-    <!-- Template Javascript -->
-    <script src="{{ asset('templatepeserta/js/main.js')}}"></script>
-    
+@push('scripts')
     <!-- SweetAlert2 for confirmation -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -246,7 +204,4 @@
         }
     </script>
     @endif
-
-</body>
-
-</html>
+@endpush

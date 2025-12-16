@@ -140,7 +140,7 @@
                                     // Hitung statistik peserta untuk event ini
                                     $totalPendaftar = $event->pendaftaran->count();
                                     $menungguSeleksi = $event->pendaftaran->where('status', 'pending')->count();
-                                    $diterima = $event->pendaftaran->where('status', 'disetujui')->count();
+                                    $diterima = $event->pendaftaran->where('status', 'diterima')->count();
                                     $ditolak = $event->pendaftaran->where('status', 'ditolak')->count();
                                     $mengundurkanDiri = $event->pendaftaran->where('status', 'mengundurkan_diri')->count();
                                     $kuotaTersisa = max(0, $event->kuota - $diterima);
@@ -150,6 +150,10 @@
                                 <div class="d-flex justify-content-center text-center" style="font-size: 12px; gap: 15px;">
                                     @if($event->sistem_pendaftaran === 'Seleksi')
                                         {{-- Statistik untuk Sistem Seleksi --}}
+                                        <div class="text-center">
+                                            <div class="text-muted">Total Pendaftar:</div>
+                                            <div class="font-weight-bold text-primary">{{ $totalPendaftar }}</div>
+                                        </div>
                                         <div class="text-center">
                                             <div class="text-muted">Menunggu Seleksi:</div>
                                             <div class="font-weight-bold text-warning">{{ $menungguSeleksi }}</div>
@@ -169,6 +173,10 @@
                                     @else
                                         {{-- Statistik untuk Sistem Tanpa Seleksi - Sama seperti Panitia --}}
                                         <div class="text-center">
+                                            <div class="text-muted">Total Pendaftar:</div>
+                                            <div class="font-weight-bold text-primary">{{ $totalPendaftar }}</div>
+                                        </div>
+                                        <div class="text-center">
                                             <div class="text-muted">Diterima:</div>
                                             <div class="font-weight-bold text-success">{{ $diterima }}</div>
                                         </div>
@@ -186,13 +194,6 @@
                                         </div>
                                     @endif
                                 </div>
-                                
-                                @if($totalPendaftar == 0)
-                                    <div class="text-muted text-center">
-                                        <i class="fas fa-inbox mb-2"></i><br>
-                                        <small>Belum ada pendaftar</small>
-                                    </div>
-                                @endif
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -217,7 +218,7 @@
             <div class="text-center py-5">
                 <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
                 <h5 class="text-muted">Belum Ada Acara yang Dibuat</h5>
-                <p class="text-muted">Silakan buat acara baru melalui tombol di atas</p>
+                <p class="text-muted">Silakan Buat Acara Baru melalui tombol di atas</p>
                 <a href="{{ route('admin.create') }}" class="btn btn-primary">
                     <i class="fas fa-plus mr-1"></i>Buat Acara Baru
                 </a>
@@ -253,7 +254,7 @@ function confirmDelete(eventId) {
     
     if (typeof Swal !== 'undefined') {
         Swal.fire({
-            title: 'Yakin ingin menghapus acara ini?',
+            title: 'Yakin ingin mengHapus Acara ini?',
             text: 'Tindakan ini tidak dapat dibatalkan!',
             icon: 'warning',
             showCancelButton: true,
@@ -273,7 +274,7 @@ function confirmDelete(eventId) {
             }
         });
     } else {
-        if(confirm('Yakin ingin menghapus acara ini? Tindakan ini tidak dapat dibatalkan!')) {
+        if(confirm('Yakin ingin mengHapus Acara ini? Tindakan ini tidak dapat dibatalkan!')) {
             const form = document.getElementById('deleteForm');
             if (form) {
                 form.action = '/admin/event/' + eventId;
@@ -319,3 +320,6 @@ function confirmSelesai(eventId) {
 }
 </script>
 @endpush
+
+
+

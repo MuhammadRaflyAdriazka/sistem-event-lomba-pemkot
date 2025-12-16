@@ -79,7 +79,7 @@ class DashboardController extends Controller
         }
 
         // Hanya peserta yang diterima yang bisa melihat pengumuman
-        if ($pendaftaran->status !== 'diterima' && $pendaftaran->status !== 'disetujui') {
+        if ($pendaftaran->status !== 'diterima') {
             return redirect()->route('acara')->with('error', 'Hanya peserta yang diterima yang dapat melihat pengumuman.');
         }
 
@@ -108,8 +108,8 @@ class DashboardController extends Controller
             ], 403);
         }
 
-        // Pastikan status saat ini adalah pending atau disetujui
-        if (!in_array($pendaftaran->status, ['pending', 'disetujui'])) {
+        // Pastikan status saat ini adalah pending atau diterima
+        if (!in_array($pendaftaran->status, ['pending', 'diterima'])) {
             return response()->json([
                 'success' => false, 
                 'message' => 'Hanya peserta dengan status pending atau diterima yang dapat mengundurkan diri.'

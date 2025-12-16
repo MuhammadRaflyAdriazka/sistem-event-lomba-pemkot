@@ -115,7 +115,7 @@
         @endforeach
 
         {{-- Status dan Aksi Peserta --}}
-        @if($pendaftaran->status == 'disetujui')
+        @if($pendaftaran->status == 'diterima')
         <div class="mt-4">
             <div class="alert alert-success">
                 <i class="fas fa-check-circle mr-2"></i>

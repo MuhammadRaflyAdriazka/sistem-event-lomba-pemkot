@@ -9,6 +9,9 @@
 
     <style>
         /* CSS khusus untuk halaman ini */
+        input#kuota.form-control {
+            background-color: #ffffff ;
+        }
         .form-builder-field {
             transition: all 0.3s ease;
             border: 2px solid #e3e6f0;
@@ -135,7 +138,7 @@
     <div class="step-indicator">
         <div class="step-item active" data-step="1">
             <div class="step-number">1</div>
-            <div class="step-title">Informasi Event</div>
+            <div class="step-title">INFORMASI ACARA</div>
         </div>
         <div class="step-item" data-step="2">
             <div class="step-number">2</div>
@@ -156,18 +159,18 @@
     <form id="createEventForm" action="{{ route('admin.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
-        {{-- STEP 1: INFORMASI EVENT (Tidak ada perubahan) --}}
+        {{-- STEP 1: INFORMASI ACARA (Tidak ada perubahan) --}}
         <div class="step-content active" id="step1">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="fas fa-calendar-plus mr-2"></i>Informasi Dasar Event
+                        <i class="fas fa-calendar-plus mr-2"></i>Informasi Dasar Acara
                     </h6>
                 </div>
                 <div class="card-body">
                     <div class="form-group">
                         <label class="font-weight-bold text-primary">Nama Acara</label>
-                        <input type="text" name="judul" id="judul" class="form-control @error('judul') is-invalid @enderror" placeholder="Contoh: Event Pasar Wadai" value="{{ old('judul') }}" required>
+                        <input type="text" name="judul" id="judul" class="form-control @error('judul') is-invalid @enderror" placeholder="Contoh: Acara Pasar Wadai" value="{{ old('judul') }}" required>
                         @error('judul')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="form-group">
@@ -183,7 +186,7 @@
                     <div class="form-group">
                         <label class="font-weight-bold text-primary">Biaya Pendaftaran</label>
                         <input type="text" name="biaya" id="biaya" class="form-control" value="Gratis" readonly required>
-                        <small class="form-text text-muted">Biaya pendaftaran sudah ditetapkan gratis untuk semua event</small>
+                        <small class="form-text text-muted">Biaya pendaftaran sudah ditetapkan gratis untuk semua acara</small>
                     </div>
 
                     <div class="form-group">
@@ -250,11 +253,11 @@
                     </div>
                     <div class="form-group">
                         <label class="font-weight-bold text-primary">Tentang Acara</label>
-                        <textarea name="tentang" id="tentang" class="form-control @error('tentang') is-invalid @enderror" rows="3" placeholder="Contoh: Acara ini diselenggarakan oleh dinas pariwisata..." required>{{ old('tentang') }}</textarea>
+                        <textarea name="tentang" id="tentang" class="form-control @error('tentang') is-invalid @enderror" rows="3" placeholder="Contoh: acara ini diselenggarakan oleh dinas pariwisata..." required>{{ old('tentang') }}</textarea>
                         @error('tentang')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="form-group">
-                        <label class="font-weight-bold text-primary">Gambar Event</label>
+                        <label class="font-weight-bold text-primary">Gambar Acara</label>
                         <input type="file" name="gambar" id="gambar" class="form-control-file @error('gambar') is-invalid @enderror" accept=".jpg,.jpeg,.png" required>
                         @error('gambar')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         <small class="form-text text-muted">
@@ -291,7 +294,7 @@
                     <div class="alert alert-success">
                         <i class="fas fa-check mr-2"></i>
                         <strong>Field Wajib:</strong> Nama, No HP, Email, dan Alamat sudah ditambahkan otomatis.
-                        <br><strong>Field Tambahan:</strong> Anda bisa menambah field upload berkas sesuai kebutuhan event.
+                        <br><strong>Field Tambahan:</strong> Anda bisa menambah field upload berkas sesuai kebutuhan acara.
                     </div>
                     <div id="formFieldsContainer">
                         {{-- Field akan ditambahkan oleh JavaScript --}}
@@ -330,7 +333,7 @@
                 </div>
                 <div class="card-body col-lg-8 offset-lg-2">
                     <div class="text-center mb-4">
-                        <p class="text-muted">Akun ini akan digunakan oleh panitia untuk login dan mengelola pendaftar event ini.</p>
+                        <p class="text-muted">Akun ini akan digunakan oleh panitia untuk login dan mengelola pendaftar acara ini.</p>
                     </div>
                     <div class="form-group">
                         <label for="panitia_email" class="font-weight-bold text-primary">Email Panitia</label>
@@ -366,7 +369,7 @@
                     <i class="fas fa-chevron-left mr-2"></i>Sebelumnya
                 </button>
                 <button type="button" class="btn btn-success btn-lg" id="submitBtn">
-                    <i class="fas fa-save mr-2"></i>Buat Event Sekarang
+                    <i class="fas fa-save mr-2"></i>Buat Acara Sekarang
                 </button>
             </div>
         </div>
@@ -632,18 +635,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const form = document.getElementById('createEventForm');
         Swal.fire({
-            title: 'Konfirmasi Buat Event',
-            html: `<div class="text-center"><p>Apakah anda yakin ingin membuat event ini?</p></div>`,
+            title: 'Konfirmasi Buat Acara',
+            html: `<div class="text-center"><p>Apakah anda yakin ingin memBuat Acara ini?</p></div>`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#28a745',
             cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Ya, Buat Event!',
+            confirmButtonText: 'Ya, Buat Acara!',
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({
-                    title: 'Sedang Membuat Event...',
+                    title: 'Sedang MemBuat Acara...',
                     html: 'Mohon tunggu sebentar',
                     allowOutsideClick: false,
                     allowEscapeKey: false,
@@ -699,3 +702,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endpush
+
+
+
+

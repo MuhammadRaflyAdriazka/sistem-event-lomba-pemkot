@@ -65,7 +65,7 @@ class PanitiaController extends Controller
 
         // Hitung statistik
         $totalPendaftar = Pendaftaran::where('id_acara', $acara->id)->count();
-        $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)->where('status', 'disetujui')->count();
+        $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)->where('status', 'diterima')->count();
         $jumlahDitolak = Pendaftaran::where('id_acara', $acara->id)->where('status', 'ditolak')->count();
         $jumlahMengundurkanDiri = Pendaftaran::where('id_acara', $acara->id)->where('status', 'mengundurkan_diri')->count();
 
@@ -159,7 +159,7 @@ class PanitiaController extends Controller
         // Cek apakah masih ada kuota
         $acara = Acara::findOrFail($panitiaAcara->id_acara);
         $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)
-            ->where('status', 'disetujui')
+            ->where('status', 'diterima')
             ->count();
 
         if ($jumlahDiterima >= $acara->kuota) {
@@ -168,7 +168,7 @@ class PanitiaController extends Controller
 
         // Update status menjadi diterima
         $pendaftaran->update([
-            'status' => 'disetujui',
+            'status' => 'diterima',
             'alasan_penolakan' => null
         ]);
 
@@ -240,7 +240,7 @@ class PanitiaController extends Controller
         // Ambil data peserta yang sudah diterima
         $pesertaDiterima = Pendaftaran::with(['pengguna', 'dataPendaftaran'])
             ->where('id_acara', $acara->id)
-            ->where('status', 'disetujui')
+            ->where('status', 'diterima')
             ->orderBy('updated_at', 'desc') // Urutkan berdasarkan waktu diterima terbaru
             ->get();
 
@@ -287,7 +287,7 @@ class PanitiaController extends Controller
 
         // Hitung statistik
         $jumlahPending = Pendaftaran::where('id_acara', $acara->id)->where('status', 'pending')->count();
-        $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)->where('status', 'disetujui')->count();
+        $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)->where('status', 'diterima')->count();
         $jumlahMengundurkanDiri = Pendaftaran::where('id_acara', $acara->id)->where('status', 'mengundurkan_diri')->count();
 
         return view('panitia.ditolak-seleksi', compact('acara', 'pesertaDitolak', 'jumlahPending', 'jumlahDiterima', 'jumlahMengundurkanDiri'));
@@ -314,7 +314,7 @@ class PanitiaController extends Controller
         // Ambil data pendaftaran dengan validasi
         $pendaftaran = Pendaftaran::where('id', $pendaftaranId)
             ->where('id_acara', $panitiaAcara->id_acara)
-            ->where('status', 'disetujui') // Hanya bisa batalkan yang statusnya diterima
+            ->where('status', 'diterima') // Hanya bisa batalkan yang statusnya diterima
             ->firstOrFail();
 
         // Update status kembali ke pending
@@ -439,24 +439,24 @@ class PanitiaController extends Controller
         foreach ($pendingPeserta as $pendaftaran) {
             // Cek apakah kuota masih tersedia
             $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)
-                ->where('status', 'disetujui')
+                ->where('status', 'diterima')
                 ->count();
                 
             if ($jumlahDiterima < $acara->kuota) {
-                $pendaftaran->update(['status' => 'disetujui']);
+                $pendaftaran->update(['status' => 'diterima']);
             }
         }
 
-        // Ambil data peserta yang sudah diterima otomatis (status disetujui)
+        // Ambil data peserta yang sudah diterima otomatis (status diterima)
         $pesertaDiterima = Pendaftaran::with(['pengguna', 'dataPendaftaran'])
             ->where('id_acara', $acara->id)
-            ->where('status', 'disetujui')
+            ->where('status', 'diterima')
             ->orderBy('created_at', 'asc') // Urutkan berdasarkan waktu daftar (first come first served)
             ->get();
 
         // Hitung statistik
         $totalPendaftar = Pendaftaran::where('id_acara', $acara->id)->count();
-        $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)->where('status', 'disetujui')->count();
+        $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)->where('status', 'diterima')->count();
         $jumlahDitolak = Pendaftaran::where('id_acara', $acara->id)->where('status', 'ditolak')->count();
         $jumlahMengundurkanDiri = Pendaftaran::where('id_acara', $acara->id)->where('status', 'mengundurkan_diri')->count();
         $kuotaTersisa = $acara->kuota - $jumlahDiterima;
@@ -489,7 +489,7 @@ class PanitiaController extends Controller
         // Ambil data pendaftaran dengan validasi
         $pendaftaran = Pendaftaran::where('id', $pendaftaranId)
             ->where('id_acara', $panitiaAcara->id_acara)
-            ->where('status', 'disetujui') // Hanya bisa batalkan yang statusnya diterima
+            ->where('status', 'diterima') // Hanya bisa batalkan yang statusnya diterima
             ->firstOrFail();
 
         // Validasi alasan pembatalan wajib diisi
@@ -586,7 +586,7 @@ class PanitiaController extends Controller
 
         // Hitung statistik
         $jumlahPending = Pendaftaran::where('id_acara', $acara->id)->where('status', 'pending')->count();
-        $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)->where('status', 'disetujui')->count();
+        $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)->where('status', 'diterima')->count();
         $jumlahMengundurkanDiri = Pendaftaran::where('id_acara', $acara->id)->where('status', 'mengundurkan_diri')->count();
 
         return view('panitia.ditolak-tanpa-seleksi', compact('acara', 'pesertaDitolak', 'jumlahPending', 'jumlahDiterima', 'jumlahMengundurkanDiri'));
@@ -621,7 +621,7 @@ class PanitiaController extends Controller
         
         // Cek kuota tersedia
         $jumlahDiterima = Pendaftaran::where('id_acara', $acara->id)
-            ->where('status', 'disetujui')
+            ->where('status', 'diterima')
             ->count();
 
         if ($jumlahDiterima >= $acara->kuota) {
@@ -629,9 +629,9 @@ class PanitiaController extends Controller
                 ->with('error', 'Tidak dapat menerima peserta karena kuota sudah penuh.');
         }
 
-        // Update status langsung ke disetujui (bukan pending) dan hapus alasan penolakan
+        // Update status langsung ke diterima (bukan pending) dan hapus alasan penolakan
         $pendaftaran->update([
-            'status' => 'disetujui',
+            'status' => 'diterima',
             'alasan_penolakan' => null
         ]);
 

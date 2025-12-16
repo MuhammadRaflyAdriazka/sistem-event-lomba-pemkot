@@ -164,7 +164,7 @@
                                                         <p class="mb-0">Pendaftaran Anda sedang dalam proses review. Mohon tunggu pengumuman hasil seleksi.</p>
                                                     </div>
                                                 @else
-                                                    <!-- Status disetujui/diterima -->
+                                                    <!-- Status diterima -->
                                                     <div class="alert alert-success mb-4">
                                                         <h5><i class="fas fa-check-circle mr-2"></i>Anda Sudah Terdaftar!</h5>
                                                         <p class="mb-0">Anda sudah terdaftar pada acara ini. Terima kasih atas partisipasinya!</p>

@@ -21,12 +21,12 @@ class KepalaDinasController extends Controller
         // Total Acara dari dinas kepala (semua status)
         $totalAcara = Acara::where('id_dinas', $user->id_dinas)->count();
 
-        // Peserta Aktif - hitung dari semua pendaftaran yang statusnya 'pending' atau 'disetujui' 
+        // Peserta Aktif - hitung dari semua pendaftaran yang statusnya 'pending' atau 'diterima' 
         // dari acara yang masih aktif di dinas kepala
         $pesertaAktif = Pendaftaran::whereHas('acara', function($query) use ($user) {
             $query->where('id_dinas', $user->id_dinas)
                   ->where('status', 'active');
-        })->whereIn('status', ['pending', 'disetujui'])->count();
+        })->whereIn('status', ['pending', 'diterima'])->count();
 
         // Acara Selesai - acara dengan status inactive (ditandai selesai oleh admin)
         $eventSelesai = Acara::where('id_dinas', $user->id_dinas)
@@ -40,7 +40,7 @@ class KepalaDinasController extends Controller
 
         $pendaftarDiterima = Pendaftaran::whereHas('acara', function($query) use ($user) {
             $query->where('id_dinas', $user->id_dinas);
-        })->where('status', 'disetujui')->count();
+        })->where('status', 'diterima')->count();
 
         $pendaftarDitolak = Pendaftaran::whereHas('acara', function($query) use ($user) {
             $query->where('id_dinas', $user->id_dinas);

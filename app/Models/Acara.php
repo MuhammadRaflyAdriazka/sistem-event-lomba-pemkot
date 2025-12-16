@@ -51,7 +51,7 @@ class Acara extends Model
     // Relasi: Acara ini memiliki banyak kolom formulir
     public function kolomFormulir()
     {
-        return $this->hasMany(KolomFormulirAcara::class, 'id_acara');
+        return $this->hasMany(kolomFormulirAcara::class, 'id_acara');
     }
 
     // Relasi: Acara ini memiliki banyak Pendaftaran
@@ -68,12 +68,12 @@ class Acara extends Model
 
     /**
      * Mendapatkan jumlah peserta yang sudah diterima (untuk sistem tanpa seleksi)
-     * atau jumlah peserta yang sudah disetujui (untuk sistem seleksi)
+     * atau jumlah peserta yang sudah diterima (untuk sistem seleksi)
      */
     public function getJumlahPesertaDiterimaAttribute()
     {
         return $this->pendaftaran()
-                    ->where('status', 'disetujui')
+                    ->where('status', 'diterima')
                     ->count();
     }
 
@@ -123,3 +123,6 @@ class Acara extends Model
         return true;
     }
 }
+
+
+

@@ -115,7 +115,7 @@
                 </button>
             </form>
         </div>
-        @elseif($pendaftaran->status == 'disetujui')
+        @elseif($pendaftaran->status == 'diterima')
         <div class="mt-4 text-center">
             <div class="alert alert-success">
                 <i class="fas fa-check-circle mr-2"></i>

@@ -119,7 +119,7 @@
                                     // Hitung statistik peserta untuk event ini
                                     $totalPendaftar = $event->pendaftaran->count();
                                     $menungguSeleksi = $event->pendaftaran->where('status', 'pending')->count();
-                                    $diterima = $event->pendaftaran->where('status', 'disetujui')->count();
+                                    $diterima = $event->pendaftaran->where('status', 'diterima')->count();
                                     $ditolak = $event->pendaftaran->where('status', 'ditolak')->count();
                                     $mengundurkanDiri = $event->pendaftaran->where('status', 'mengundurkan_diri')->count();
                                     $kuotaTersisa = max(0, $event->kuota - $diterima);
@@ -129,6 +129,10 @@
                                 <div class="d-flex justify-content-center text-center" style="font-size: 12px; gap: 15px;">
                                     @if($event->sistem_pendaftaran === 'Seleksi')
                                         {{-- Statistik untuk Sistem Seleksi --}}
+                                        <div class="text-center">
+                                            <div class="text-muted">Total Pendaftar:</div>
+                                            <div class="font-weight-bold text-primary">{{ $totalPendaftar }}</div>
+                                        </div>
                                         <div class="text-center">
                                             <div class="text-muted">Menunggu Seleksi:</div>
                                             <div class="font-weight-bold text-warning">{{ $menungguSeleksi }}</div>
@@ -147,6 +151,10 @@
                                         </div>
                                     @else
                                         {{-- Statistik untuk Sistem Tanpa Seleksi - Sama seperti Panitia --}}
+                                        <div class="text-center">
+                                            <div class="text-muted">Total Pendaftar:</div>
+                                            <div class="font-weight-bold text-primary">{{ $totalPendaftar }}</div>
+                                        </div>
                                         <div class="text-center">
                                             <div class="text-muted">Diterima:</div>
                                             <div class="font-weight-bold text-success">{{ $diterima }}</div>
@@ -192,7 +200,7 @@
         @else
             <div class="text-center py-5">
                 <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
-                <h5 class="text-muted">Belum Ada Acara yang Selesai</h5>
+                <h5 class="text-muted">Belum Ada acara yang selesai</h5>
                 <p class="text-muted">Acara yang sudah ditandai selesai akan muncul di sini.</p>
                 <a href="{{ route('admin.kelola') }}" class="btn btn-primary">
                     <i class="fas fa-arrow-left mr-2"></i>Kembali ke Kelola Acara
@@ -203,3 +211,6 @@
 </div>
 
 @endsection
+
+
+

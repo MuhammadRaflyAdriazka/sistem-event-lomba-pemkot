@@ -193,7 +193,7 @@
                                         @endphp
                                         
                                         @if($pendaftaranUser)
-                                            @if($pendaftaranUser->status === 'disetujui')
+                                            @if($pendaftaranUser->status === 'diterima')
                                                 <button class="btn btn-success mr-2" disabled>Sudah Terdaftar</button>
                                             @elseif($pendaftaranUser->status === 'ditolak')
                                                 <button class="btn btn-danger mr-2" disabled>Ditolak</button>
