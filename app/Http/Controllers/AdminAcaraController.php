@@ -45,6 +45,14 @@ class AdminAcaraController extends Controller
             'gambar' => 'required|image|mimes:jpeg,jpg,png|max:2048',
             'panitia_email' => 'required|email|unique:users,email',
             'panitia_password' => 'required|string|min:8',
+        ], [
+            'tanggal_acara.required' => 'Tanggal pelaksanaan acara wajib diisi.',
+            'tanggal_acara.date' => 'Tanggal pelaksanaan acara harus berupa tanggal yang valid.',
+            'tanggal_mulai_daftar.required' => 'Tanggal mulai registrasi wajib diisi.',
+            'tanggal_mulai_daftar.date' => 'Tanggal mulai registrasi harus berupa tanggal yang valid.',
+            'tanggal_akhir_daftar.required' => 'Tanggal tutup registrasi wajib diisi.',
+            'tanggal_akhir_daftar.date' => 'Tanggal tutup registrasi harus berupa tanggal yang valid.',
+            'tanggal_akhir_daftar.after_or_equal' => 'Tanggal tutup registrasi harus sama atau setelah tanggal mulai registrasi.',
         ]);
 
         // Handle upload gambar
@@ -104,7 +112,7 @@ class AdminAcaraController extends Controller
             }
         }
 
-        return redirect()->route('admin.kelola')->with('success', 'Event dan akun panitia berhasil dibuat!');
+        return redirect()->route('admin.kelola')->with('success', 'Acara dan akun panitia berhasil dibuat!');
     }
 
     public function edit($id)
@@ -158,6 +166,14 @@ class AdminAcaraController extends Controller
             'hadiah' => 'required|string',
             'tentang' => 'required|string',
             'gambar' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+        ], [
+            'tanggal_acara.required' => 'Tanggal pelaksanaan acara wajib diisi.',
+            'tanggal_acara.date' => 'Tanggal pelaksanaan acara harus berupa tanggal yang valid.',
+            'tanggal_mulai_daftar.required' => 'Tanggal mulai registrasi wajib diisi.',
+            'tanggal_mulai_daftar.date' => 'Tanggal mulai registrasi harus berupa tanggal yang valid.',
+            'tanggal_akhir_daftar.required' => 'Tanggal tutup registrasi wajib diisi.',
+            'tanggal_akhir_daftar.date' => 'Tanggal tutup registrasi harus berupa tanggal yang valid.',
+            'tanggal_akhir_daftar.after_or_equal' => 'Tanggal tutup registrasi harus sama atau setelah tanggal mulai registrasi.',
         ]);
 
         // Handle upload gambar jika ada file baru

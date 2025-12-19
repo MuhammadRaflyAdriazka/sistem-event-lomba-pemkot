@@ -9,6 +9,44 @@
 
     <style>
         /* CSS khusus untuk halaman ini */
+        /* Pastikan semua input memiliki background putih */
+        input.form-control,
+        input[type="text"].form-control,
+        input[type="number"].form-control,
+        textarea.form-control,
+        select.form-control {
+            background-color: #ffffff !important;
+            background: #ffffff !important;
+        }
+        
+        input.form-control:focus,
+        input[type="text"].form-control:focus,
+        input[type="number"].form-control:focus,
+        textarea.form-control:focus,
+        select.form-control:focus {
+            background-color: #ffffff !important;
+            background: #ffffff !important;
+        }
+        
+        input#kuota.form-control {
+            background-color: #ffffff !important;
+        }
+        /* Ubah background input date menjadi putih - paksa dengan !important */
+        input[type="date"],
+        input[type="date"].form-control,
+        input[type="date"].form-control:focus,
+        input.flatpickr-input,
+        input.flatpickr-input.form-control,
+        input.flatpickr-input.form-control:focus,
+        .flatpickr-input[readonly] {
+            background-color: #ffffff !important;
+            background: #ffffff !important;
+            color: #495057 !important;
+        }
+        input[type="date"].form-control:disabled,
+        input[type="date"].form-control[readonly] {
+            background-color: #ffffff !important;
+        }
         .form-builder-field {
             border: 2px solid #e3e6f0;
             background: #fff;
@@ -103,7 +141,7 @@
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Edit Acara: {{ $acara->judul }}</h1>
-    <p class="text-muted">Perbarui INFORMASI ACARA sesuai kebutuhan</p>
+    <p class="text-muted">Perbarui informasi acara sesuai kebutuhan</p>
 </div>
 
 @if(session('success'))
@@ -133,7 +171,7 @@
     <div class="step-indicator">
         <div class="step-item active" data-step="1">
             <div class="step-number">1</div>
-            <div class="step-title">INFORMASI ACARA</div>
+            <div class="step-title">Informasi Acara</div>
         </div>
         <div class="step-item" data-step="2">
             <div class="step-number">2</div>
@@ -279,25 +317,25 @@
                     <h6 class="mb-0">
                         <i class="fas fa-edit mr-2"></i>Form Pendaftaran Peserta
                     </h6>
-                    <small>Kelola field form yang tersedia untuk pendaftaran peserta</small>
+                    <small>Kelola kolom form yang tersedia untuk pendaftaran peserta</small>
                 </div>
                 <div class="card-body">
                     <div class="alert alert-success">
                         <i class="fas fa-check mr-2"></i>
-                        <strong>Field Wajib:</strong> Nama, No HP, Email, dan Alamat tidak dapat dihapus.
-                        <br><strong>Field Custom:</strong> Anda bisa menghapus atau menambah field custom sesuai kebutuhan.
+                        <strong>Kolom Wajib:</strong> Nama, No HP, Email, dan Alamat tidak dapat dihapus.
+                        <br><strong>Kolom Custom:</strong> Anda bisa menghapus atau menambah kolom custom sesuai kebutuhan.
                     </div>
                     <div id="formFieldsContainer">
                         {{-- Field akan ditampilkan di sini --}}
                     </div>
                     <div class="row mb-4">
                         <div class="col-12">
-                            <h6 class="font-weight-bold text-dark"><i class="fas fa-plus mr-2"></i>Tambah Field Berkas/Dokumen:</h6>
+                            <h6 class="font-weight-bold text-dark"><i class="fas fa-plus mr-2"></i>Tambah Kolom Berkas/Dokumen:</h6>
                             <button type="button" class="btn btn-outline-success mr-2 mb-2 quick-add" data-type="file" data-name="foto_ktp" data-label="Foto KTP" data-placeholder="Format: JPG, PNG (Max: 2MB)" data-required="1">
                                 <i class="fas fa-id-card mr-1"></i> Foto KTP
                             </button>
                             <button type="button" class="btn btn-outline-dark mr-2 mb-2" id="addCustomFieldBtn">
-                                <i class="fas fa-plus mr-1"></i> Field Custom
+                                <i class="fas fa-plus mr-1"></i> Kolom Custom
                             </button>
                         </div>
                     </div>
@@ -358,7 +396,7 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 icon: 'warning',
                 title: 'Form Belum Lengkap',
-                text: 'Mohon lengkapi semua field yang wajib diisi!',
+                text: 'Mohon lengkapi semua kolom yang wajib diisi!',
                 confirmButtonText: 'OK'
             });
         }
@@ -477,11 +515,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event listener untuk add custom field
     document.getElementById('addCustomFieldBtn').addEventListener('click', function() {
         Swal.fire({
-            title: 'Tambah Field Custom',
+            title: 'Tambah Kolom Custom',
             html: `
                 <div class="text-left">
-                    <div class="form-group"><label><strong>Label Field:</strong></label><input type="text" id="customFieldLabel" class="form-control" placeholder="contoh: Usia"></div>
-                    <div class="form-group"><label><strong>Tipe Field:</strong></label><select id="customFieldType" class="form-control"><option value="text">Text</option><option value="number">Angka</option><option value="textarea">Text Panjang</option><option value="file">File Upload</option></select></div>
+                    <div class="form-group"><label><strong>Label Kolom:</strong></label><input type="text" id="customFieldLabel" class="form-control" placeholder="contoh: Usia"></div>
+                    <div class="form-group"><label><strong>Tipe Kolom:</strong></label><select id="customFieldType" class="form-control"><option value="text">Text</option><option value="number">Angka</option><option value="textarea">Text Panjang</option><option value="file">File Upload</option></select></div>
                 </div>`,
             showCancelButton: true,
             confirmButtonText: 'Tambah',
@@ -490,7 +528,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const label = document.getElementById('customFieldLabel').value;
                 const type = document.getElementById('customFieldType').value;
                 if (!label) {
-                    Swal.showValidationMessage('Label field harus diisi');
+                    Swal.showValidationMessage('Label kolom harus diisi');
                     return false;
                 }
                 const name = label.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
@@ -514,8 +552,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const fieldName = fieldContainer.dataset.fieldName;
             
             Swal.fire({
-                title: 'Hapus Field?',
-                text: `Field "${fieldLabel}" akan dihapus`,
+                title: 'Hapus Kolom?',
+                text: `Kolom "${fieldLabel}" akan dihapus`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',

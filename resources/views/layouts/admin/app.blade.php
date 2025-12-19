@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="utf-8">
@@ -18,6 +18,40 @@
 
     <!-- SweetAlert2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
+    <style>
+        /* Styling Flatpickr agar mirip native Chrome date picker */
+        .flatpickr-calendar {
+            background: white;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .flatpickr-months {
+            background: white;
+        }
+        .flatpickr-current-month {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .flatpickr-day {
+            border-radius: 50%;
+            font-size: 13px;
+        }
+        .flatpickr-day.today {
+            background: #e8f0fe;
+            border-color: #1a73e8;
+            color: #1a73e8;
+        }
+        .flatpickr-day.selected {
+            background: #1a73e8;
+            border-color: #1a73e8;
+        }
+    </style>
 
     {{-- Slot untuk CSS tambahan dari halaman lain --}}
     @stack('styles')
@@ -89,6 +123,20 @@
 
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr('input[type="date"]', {
+                locale: 'id',
+                dateFormat: 'Y-m-d',  // Format untuk server (backend)
+                altInput: true,
+                altFormat: 'd/m/Y'    // Format untuk user (tampilan)
+            });
+        });
+    </script>
 
     {{-- Slot untuk JavaScript tambahan dari halaman lain --}}
     @stack('scripts')

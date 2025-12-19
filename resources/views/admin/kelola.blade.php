@@ -30,7 +30,7 @@
     .event-meta i {
         width: 15px;
         margin-right: 8px;
-        color: #007bff;
+        color: #858796;
     }
     .btn-edit {
         background: linear-gradient(45deg, #ffd700, #ffed4e);
@@ -123,7 +123,7 @@
                         {{-- Kolom konten diperlebar menjadi col-md-9 --}}
                         <div class="col-md-6">
                             <div class="event-content">
-                                <h5 class="event-title">{{ strtoupper($event->judul) }}</h5>
+                                <h5 class="event-title">{{ $event->judul }}</h5>
                                 <div class="event-meta"><i class="fas fa-calendar"></i>Tanggal Pelaksanaan: {{ \Carbon\Carbon::parse($event->tanggal_acara)->locale('id')->isoFormat('D MMMM Y') }}</div>
                                 <div class="event-meta"><i class="fas fa-map-marker-alt"></i>Lokasi: {{ $event->lokasi }}</div>
                                 <div class="event-meta"><i class="fas fa-users"></i>Kuota: {{ $event->kuota }} peserta</div>

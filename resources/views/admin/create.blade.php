@@ -9,8 +9,43 @@
 
     <style>
         /* CSS khusus untuk halaman ini */
+        /* Pastikan semua input memiliki background putih */
+        input.form-control,
+        input[type="text"].form-control,
+        input[type="number"].form-control,
+        textarea.form-control,
+        select.form-control {
+            background-color: #ffffff !important;
+            background: #ffffff !important;
+        }
+        
+        input.form-control:focus,
+        input[type="text"].form-control:focus,
+        input[type="number"].form-control:focus,
+        textarea.form-control:focus,
+        select.form-control:focus {
+            background-color: #ffffff !important;
+            background: #ffffff !important;
+        }
+        
         input#kuota.form-control {
-            background-color: #ffffff ;
+            background-color: #ffffff !important;
+        }
+        /* Ubah background input date menjadi putih - paksa dengan !important */
+        input[type="date"],
+        input[type="date"].form-control,
+        input[type="date"].form-control:focus,
+        input.flatpickr-input,
+        input.flatpickr-input.form-control,
+        input.flatpickr-input.form-control:focus,
+        .flatpickr-input[readonly] {
+            background-color: #ffffff !important;
+            background: #ffffff !important;
+            color: #495057 !important;
+        }
+        input[type="date"].form-control:disabled,
+        input[type="date"].form-control[readonly] {
+            background-color: #ffffff !important;
         }
         .form-builder-field {
             transition: all 0.3s ease;
@@ -138,7 +173,7 @@
     <div class="step-indicator">
         <div class="step-item active" data-step="1">
             <div class="step-number">1</div>
-            <div class="step-title">INFORMASI ACARA</div>
+            <div class="step-title">Informasi Acara</div>
         </div>
         <div class="step-item" data-step="2">
             <div class="step-number">2</div>
@@ -170,12 +205,12 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label class="font-weight-bold text-primary">Nama Acara</label>
-                        <input type="text" name="judul" id="judul" class="form-control @error('judul') is-invalid @enderror" placeholder="Contoh: Acara Pasar Wadai" value="{{ old('judul') }}" required>
+                        <input type="text" name="judul" id="judul" class="form-control @error('judul') is-invalid @enderror" placeholder="Contoh: Lomba Adzan" value="{{ old('judul') }}" required>
                         @error('judul')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="form-group">
                         <label class="font-weight-bold text-primary">Tanggal Pelaksanaan</label>
-                        <input type="date" name="tanggal_acara" id="tanggal_acara" class="form-control @error('tanggal_acara') is-invalid @enderror" value="{{ old('tanggal_acara') }}" required>
+                        <input type="date" name="tanggal_acara" id="tanggal_acara" class="form-control @error('tanggal_acara') is-invalid @enderror" value="{{ old('tanggal_acara') }}" placeholder="dd/mm/yyyy" autocomplete="off" required>
                         @error('tanggal_acara')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="form-group">
@@ -234,14 +269,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="font-weight-bold text-primary">Mulai Registrasi</label>
-                                <input type="date" name="tanggal_mulai_daftar" id="tanggal_mulai_daftar" class="form-control @error('tanggal_mulai_daftar') is-invalid @enderror" value="{{ old('tanggal_mulai_daftar') }}" required>
+                                <input type="date" name="tanggal_mulai_daftar" id="tanggal_mulai_daftar" class="form-control @error('tanggal_mulai_daftar') is-invalid @enderror" value="{{ old('tanggal_mulai_daftar') }}" placeholder="dd/mm/yyyy" autocomplete="off" required>
                                 @error('tanggal_mulai_daftar')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="font-weight-bold text-primary">Tutup Registrasi</label>
-                                <input type="date" name="tanggal_akhir_daftar" id="tanggal_akhir_daftar" class="form-control @error('tanggal_akhir_daftar') is-invalid @enderror" value="{{ old('tanggal_akhir_daftar') }}" required>
+                                <input type="date" name="tanggal_akhir_daftar" id="tanggal_akhir_daftar" class="form-control @error('tanggal_akhir_daftar') is-invalid @enderror" value="{{ old('tanggal_akhir_daftar') }}" placeholder="dd/mm/yyyy" autocomplete="off" required>
                                 @error('tanggal_akhir_daftar')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                         </div>
@@ -288,25 +323,25 @@
                     <h6 class="mb-0">
                         <i class="fas fa-edit mr-2"></i>Form Pendaftaran Peserta
                     </h6>
-                    <small>Atur field yang diperlukan untuk pendaftaran peserta</small>
+                    <small>Atur kolom yang diperlukan untuk pendaftaran peserta</small>
                 </div>
                 <div class="card-body">
                     <div class="alert alert-success">
                         <i class="fas fa-check mr-2"></i>
-                        <strong>Field Wajib:</strong> Nama, No HP, Email, dan Alamat sudah ditambahkan otomatis.
-                        <br><strong>Field Tambahan:</strong> Anda bisa menambah field upload berkas sesuai kebutuhan acara.
+                        <strong>Kolom Wajib:</strong> Nama, No HP, Email, dan Alamat sudah ditambahkan otomatis.
+                        <br><strong>Kolom Tambahan:</strong> Anda bisa menambah kolom upload berkas sesuai kebutuhan acara.
                     </div>
                     <div id="formFieldsContainer">
                         {{-- Field akan ditambahkan oleh JavaScript --}}
                     </div>
                     <div class="row mb-4">
                         <div class="col-12">
-                            <h6 class="font-weight-bold text-dark"><i class="fas fa-plus mr-2"></i>Tambah Field Berkas/Dokumen:</h6>
+                            <h6 class="font-weight-bold text-dark"><i class="fas fa-plus mr-2"></i>Tambah Kolom Berkas/Dokumen:</h6>
                             <button type="button" class="btn btn-outline-success mr-2 mb-2 quick-add" data-type="file" data-name="foto_ktp" data-label="Foto KTP" data-placeholder="Format: JPG, PNG (Max: 2MB)" data-required="1">
                                 <i class="fas fa-id-card mr-1"></i> Foto KTP
                             </button>
                             <button type="button" class="btn btn-outline-dark mr-2 mb-2" id="addCustomFieldBtn">
-                                <i class="fas fa-plus mr-1"></i> Field Custom
+                                <i class="fas fa-plus mr-1"></i> Tambah Kolom
                             </button>
                         </div>
                     </div>
@@ -354,8 +389,8 @@
                             <input type="password" name="panitia_password" id="panitia_password" class="form-control" placeholder="Masukkan password minimal 8 karakter" required minlength="8">
                             {{-- [NEW] Ikon mata ditambahkan di sini --}}
                             <div class="input-group-append">
-                                <span class="input-group-text" id="togglePassword" style="cursor: pointer; user-select: none; background-color: #f8f9fa;">
-                                    <i class="fas fa-eye" style="pointer-events: none;"></i>
+                                <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+                                    <i class="fas fa-eye" id="eyeIcon"></i>
                                 </span>
                             </div>
                         </div>
@@ -385,7 +420,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     let currentStep = 1;
     let fieldIndex = 0;
-    const totalSteps = 3; // [MODIFIED] Jumlah total langkah diupdate
+    const totalSteps = 3;
 
     function showStep(step) {
         document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
@@ -400,7 +435,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if(completedStepItem) completedStepItem.classList.add('completed');
         }
         
-        // [MODIFIED] Logika progress bar disesuaikan untuk 3 langkah
         const progress = step === 1 ? 33 : (step === 2 ? 67 : 100);
         document.getElementById('progressBar').style.width = progress + '%';
     }
@@ -431,14 +465,13 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 icon: 'warning',
                 title: 'Form Belum Lengkap',
-                text: 'Mohon lengkapi semua field yang wajib diisi pada Langkah 1!',
+                text: 'Mohon lengkapi semua kolom yang wajib diisi pada Langkah 1!',
                 confirmButtonText: 'OK'
             });
         }
         return isValid;
     }
     
-    // [NEW] Fungsi validasi untuk step 3
     function validateStep3() {
         let isValid = true;
         const emailInput = document.getElementById('panitia_email');
@@ -461,14 +494,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return isValid;
     }
 
-    // [MODIFIED] Event listener digabungkan untuk menangani tombol di semua step
     document.getElementById('createEventForm').addEventListener('click', function(e) {
-        // Handle Tombol Selanjutnya
         if (e.target.matches('#nextBtn')) {
             if (currentStep === 1 && validateStep1()) {
                 currentStep++;
                 showStep(currentStep);
-                if (fieldIndex === 0) { // Hanya inisialisasi form builder sekali
+                if (fieldIndex === 0) { 
                     initializeFormBuilder();
                 }
             } else if (currentStep === 2) {
@@ -477,7 +508,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Handle Tombol Sebelumnya
         if (e.target.matches('#prevBtn')) {
             if (currentStep > 1) {
                 currentStep--;
@@ -514,11 +544,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('addCustomFieldBtn').addEventListener('click', function() {
         Swal.fire({
-            title: 'Tambah Field Custom',
+            title: 'Tambah Kolom',
             html: `
                 <div class="text-left">
-                    <div class="form-group"><label><strong>Label Field:</strong></label><input type="text" id="customFieldLabel" class="form-control" placeholder="contoh: Usia"></div>
-                    <div class="form-group"><label><strong>Tipe Field:</strong></label><select id="customFieldType" class="form-control"><option value="text">Text</option><option value="number">Angka</option><option value="textarea">Text Panjang</option><option value="file">File Upload</option></select></div>
+                    <div class="form-group"><label><strong>Label Kolom:</strong></label><input type="text" id="customFieldLabel" class="form-control" placeholder="contoh: Usia"></div>
+                    <div class="form-group"><label><strong>Tipe Kolom:</strong></label><select id="customFieldType" class="form-control"><option value="text">Text</option><option value="number">Angka</option><option value="textarea">Text Panjang</option><option value="file">File Upload</option></select></div>
                 </div>`,
             showCancelButton: true,
             confirmButtonText: 'Tambah',
@@ -527,7 +557,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const label = document.getElementById('customFieldLabel').value;
                 const type = document.getElementById('customFieldType').value;
                 if (!label) {
-                    Swal.showValidationMessage('Label field harus diisi');
+                    Swal.showValidationMessage('Label kolom harus diisi');
                     return false;
                 }
                 const name = label.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
@@ -564,8 +594,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const fieldName = fieldContainer.dataset.fieldName;
             
             Swal.fire({
-                title: 'Hapus Field?',
-                text: `Field "${fieldLabel}" akan dihapus`,
+                title: 'Hapus Kolom?',
+                text: `Kolom "${fieldLabel}" akan dihapus`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -627,7 +657,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('submitBtn').addEventListener('click', function(e) {
         e.preventDefault();
         
-        // Validasi form panitia sebelum submit
         if (!validateStep3()) {
             Swal.fire({ icon: 'warning', title: 'Form Belum Lengkap', text: 'Mohon isi email dan password panitia dengan benar!', confirmButtonText: 'OK' });
             return;
@@ -646,7 +675,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({
-                    title: 'Sedang MemBuat Acara...',
+                    title: 'Sedang Membuat Acara...',
                     html: 'Mohon tunggu sebentar',
                     allowOutsideClick: false,
                     allowEscapeKey: false,
@@ -658,51 +687,56 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    showStep(currentStep); // Initialize the first step view
+    showStep(currentStep);
 
-    // Image Preview Functionality
-    document.getElementById('image').addEventListener('change', function(e) {
-        // ... (Fungsi ini tidak diubah) ...
-    });
+    // Image Preview Functionality (Placeholder, jika ada)
+    const imageInput = document.getElementById('gambar');
+    if (imageInput) {
+        imageInput.addEventListener('change', function(e) {
+            // Logic preview image jika diperlukan
+        });
+    }
 
     // Auto hide standard alerts
     setTimeout(function() {
-        // ... (Fungsi ini tidak diubah) ...
+        const alert = document.querySelector('.alert:not(.alert-important)');
+        if(alert) {
+             // Logic hide alert standard bootstrap
+             $(alert).alert('close');
+        }
     }, 5000);
 
-    // FUNGSI UNTUK TOGGLE LIHAT PASSWORD
-    document.addEventListener('DOMContentLoaded', function() {
-        const togglePasswordBtn = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('panitia_password');
-        
-        if (togglePasswordBtn && passwordInput) {
-            togglePasswordBtn.addEventListener('click', function() {
-                console.log('Toggle clicked!'); // Debug
-                
-                const eyeIcon = this.querySelector('i');
-                
+    // ============================================
+    // PERBAIKAN FUNGSI TOGGLE PASSWORD
+    // ============================================
+    // Kita gunakan logic langsung tanpa setTimeout yang rentan bug
+    const togglePasswordBtn = document.getElementById('togglePassword');
+    
+    if (togglePasswordBtn) {
+        togglePasswordBtn.addEventListener('click', function(e) {
+            // Mencegah button submit form (karena ada di dalam form)
+            e.preventDefault();
+            e.stopPropagation(); // Menambah keamanan agar tidak bubbling ke event lain
+
+            const passwordInput = document.getElementById('panitia_password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput && eyeIcon) {
+                // Cek tipe saat ini
                 if (passwordInput.type === 'password') {
-                    // Show password
+                    // Ubah jadi text (tampilkan password)
                     passwordInput.type = 'text';
                     eyeIcon.classList.remove('fa-eye');
                     eyeIcon.classList.add('fa-eye-slash');
-                    console.log('Password shown'); // Debug
                 } else {
-                    // Hide password
+                    // Kembalikan ke password (sembunyikan)
                     passwordInput.type = 'password';
                     eyeIcon.classList.remove('fa-eye-slash');
                     eyeIcon.classList.add('fa-eye');
-                    console.log('Password hidden'); // Debug
                 }
-            });
-        } else {
-            console.log('Toggle button or password input not found'); // Debug
-        }
-    });
+            }
+        });
+    }
 });
 </script>
 @endpush
-
-
-
-

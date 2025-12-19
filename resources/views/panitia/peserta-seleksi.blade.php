@@ -75,14 +75,6 @@
         </div>
     </div>
     <div class="card-body">
-        <p><strong>Sistem Pendaftaran:</strong>
-            {{-- Badge dinamis berdasarkan sistem pendaftaran --}}
-            @if($acara->sistem_pendaftaran == 'seleksi')
-                <span class="badge badge-warning">Seleksi</span>
-            @else
-                <span class="badge badge-success">Seleksi</span>
-            @endif
-        </p>
         <div class="row">
             <div class="col-md-2">
                 <p><strong>Total Pendaftar:</strong> {{ $totalPendaftar }}</p>

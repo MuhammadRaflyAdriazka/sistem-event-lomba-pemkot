@@ -65,9 +65,6 @@
         </a>
     </div>
     <div class="card-body">
-        <p><strong>Sistem Pendaftaran:</strong>
-            <span class="badge badge-success">Tanpa Seleksi (FCFS)</span>
-        </p>
         <div class="row">
             <div class="col-md-2">
                 <p><strong>Peserta Ditolak:</strong> {{ $pesertaDitolak->count() }}</p>
