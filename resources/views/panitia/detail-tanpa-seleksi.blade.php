@@ -123,23 +123,23 @@
                 <br><small>Diterima pada: {{ $pendaftaran->created_at->format('d M Y, H:i') }}</small>
             </div>
             
-            {{-- Tombol Batalkan Penerimaan --}}
+            {{-- Tombol Tolak Peserta --}}
             <div class="text-center">
                 <form id="cancelForm" action="{{ route('panitia.peserta.batalkanTanpaSeleksi', $pendaftaran->id) }}" method="POST" style="display: inline-block;">
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="alasan_pembatalan" id="cancelReasonInput">
-                    <button type="button" class="btn btn-warning btn-lg" onclick="confirmCancel()">
-                        <i class="fas fa-undo mr-1"></i> Batalkan Penerimaan
+                    <button type="button" class="btn btn-danger btn-lg" onclick="confirmCancel()">
+                        <i class="fas fa-times mr-1"></i> Tolak
                     </button>
                 </form>
             </div>
         </div>
         @elseif($pendaftaran->status == 'ditolak')
-        <div class="mt-4">
+        <div class="mt-4 text-center">
             <div class="alert alert-danger">
                 <i class="fas fa-times-circle mr-2"></i>
-                <strong>Penerimaan peserta ini sudah dibatalkan</strong>
+                <strong>Peserta ini sudah ditolak</strong>
                 @if($pendaftaran->alasan_penolakan)
                 <br><small>Alasan: {{ $pendaftaran->alasan_penolakan }}</small>
                 @endif
@@ -158,22 +158,22 @@
 <script>
 function confirmCancel() {
     Swal.fire({
-        title: 'Batalkan Penerimaan Peserta?',
+        title: 'Tolak Peserta Ini?',
         input: 'textarea',
-        inputLabel: 'Alasan Pembatalan (Wajib Diisi)',
-        inputPlaceholder: 'Masukkan alasan mengapa penerimaan peserta ini dibatalkan...',
+        inputLabel: 'Alasan Penolakan (Wajib Diisi)',
+        inputPlaceholder: 'Masukkan alasan mengapa peserta ini ditolak...',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#dc3545',
         cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Ya, Batalkan!',
-        cancelButtonText: 'Tidak',
+        confirmButtonText: 'Ya, Tolak!',
+        cancelButtonText: 'Batal',
         inputValidator: (value) => {
             if (!value) {
-                return 'Anda harus memasukkan alasan pembatalan!'
+                return 'Anda harus memasukkan alasan penolakan!'
             }
             if (value.length < 10) {
-                return 'Alasan pembatalan minimal 10 karakter!'
+                return 'Alasan penolakan minimal 10 karakter!'
             }
         },
          customClass: {

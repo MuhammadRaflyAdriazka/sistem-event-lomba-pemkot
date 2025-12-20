@@ -91,8 +91,10 @@
             <div class="col-md-2">
                 <p><strong>Mengundurkan Diri:</strong> <span class="text-secondary">{{ $jumlahMengundurkanDiri }}</span></p>
             </div>
+            <div class="col-md-2">
+                <p><strong>Kuota Tersisa:</strong> {{ $acara->kuota - $jumlahDiterima }}</p>
+            </div>
         </div>
-        <p><strong>Kuota Tersisa:</strong> {{ $acara->kuota - $jumlahDiterima }} dari {{ $acara->kuota }}</p>
 
         {{-- Tombol Tolak Semua Sisa jika kuota penuh --}}
         @if($jumlahDiterima >= $acara->kuota && $peserta->count() > 0)
@@ -116,7 +118,7 @@
                         <th>Email</th>
                         <th>No.HP</th>
                         <th>Alamat</th>
-                        <th>Aksi</th>
+                        <th width="120">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

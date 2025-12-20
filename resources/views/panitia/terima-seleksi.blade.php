@@ -65,25 +65,6 @@
         </a>
     </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-md-2">
-                <p><strong>Peserta Diterima:</strong> {{ $pesertaDiterima->count() }}</p>
-            </div>
-            <div class="col-md-2">
-                <p><strong>Menunggu Seleksi:</strong> {{ $jumlahPending }}</p>
-            </div>
-            <div class="col-md-2">
-                <p><strong>Ditolak:</strong> <span class="text-danger">{{ $jumlahDitolak }}</span></p>
-            </div>
-            <div class="col-md-2">
-                <p><strong>Mengundurkan Diri:</strong> <span class="text-secondary">{{ $jumlahMengundurkanDiri }}</span></p>
-            </div>
-            <div class="col-md-2">
-                <p><strong>Kuota Tersisa:</strong> {{ $acara->kuota - $pesertaDiterima->count() }}</p>
-            </div>
-        </div>
-
-        @if($pesertaDiterima->count() > 0)
         <div class="table-responsive">
             <table class="table table-bordered table-striped" id="dataTablePeserta" width="100%" cellspacing="0">
                 <thead>
@@ -94,11 +75,11 @@
                         <th>No.HP</th>
                         <th>Alamat</th>
                         <th>Tanggal Diterima</th>
-                        <th>Aksi</th>
+                        <th width="200">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($pesertaDiterima as $index => $item)
+                    @forelse($pesertaDiterima as $index => $item)
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $item->pengguna->name }}</td>
@@ -122,8 +103,8 @@
                             {{ $alamat ? $alamat->nilai_kolom : '-' }}
                         </td>
                         <td>{{ \Carbon\Carbon::parse($item->updated_at)->timezone('Asia/Makassar')->format('d/m/Y H:i') }} WITA</td>
-                        <td>
-                            <a href="{{ route('panitia.peserta.detail', $item->id) }}" class="btn btn-primary btn-sm">
+                        <td style="white-space: nowrap;">
+                            <a href="{{ route('panitia.peserta.detail', $item->id) }}" class="btn btn-primary btn-sm" style="display: inline-block;">
                                 Lihat Detail
                             </a>
                             <form id="form-batalkan-{{ $item->id }}" action="{{ route('panitia.peserta.batalkan', $item->id) }}" method="POST" style="display: inline-block;">
@@ -134,46 +115,50 @@
                             </form>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="7" class="text-center">Belum ada peserta yang diterima.</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
-        @else
-        <div class="text-center py-4">
-            <p class="text-muted">Belum ada peserta yang diterima.</p>
-            <a href="{{ route('panitia.peserta') }}" class="btn btn-primary">
-                <i class="fas fa-search"></i> Mulai Seleksi
-            </a>
-        </div>
-        @endif
     </div>
 </div>
 
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 function confirmBatalkan(pesertaId) {
-    if (typeof Swal !== 'undefined') {
-        Swal.fire({
-            title: 'Yakin ingin membatalkan?',
-            text: 'Penerimaan peserta ini akan dibatalkan!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#ffc107',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Ya, Batalkan!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('form-batalkan-' + pesertaId).submit();
-            }
-        });
-    } else {
-        if(confirm('Yakin ingin membatalkan penerimaan peserta ini?')) {
+    Swal.fire({
+        title: 'Batalkan Penerimaan Peserta?',
+        html: '<p>Apakah Anda yakin ingin membatalkan penerimaan peserta ini?</p><p class="text-muted">Peserta akan kembali ke daftar menunggu seleksi.</p>',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#ffc107',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Ya, Batalkan!',
+        cancelButtonText: 'Batal',
+        customClass: {
+            confirmButton: 'btn btn-warning btn-lg mx-2',
+            cancelButton: 'btn btn-secondary btn-lg mx-2'
+        },
+        buttonsStyling: false,
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Memproses...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            });
             document.getElementById('form-batalkan-' + pesertaId).submit();
         }
-    }
+    });
 }
 </script>
 @endpush

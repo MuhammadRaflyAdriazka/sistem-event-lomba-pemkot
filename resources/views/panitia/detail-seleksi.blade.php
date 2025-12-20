@@ -155,7 +155,7 @@ function confirmTolak() {
         confirmButtonColor: '#dc3545',
         cancelButtonColor: '#6c757d',
         confirmButtonText: 'Ya, Tolak!',
-        cancelButtonText: 'Tidak',
+        cancelButtonText: 'Batal',
         inputValidator: (value) => {
             if (!value) {
                 return 'Anda harus memasukkan alasan penolakan!'

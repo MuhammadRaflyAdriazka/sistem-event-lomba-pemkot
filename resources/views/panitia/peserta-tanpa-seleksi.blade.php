@@ -110,7 +110,6 @@
                 <p><strong>Kuota Tersisa:</strong> {{ $kuotaTersisa }}</p>
             </div>
         </div>
-        <p><strong>Kuota Acara:</strong> {{ $acara->kuota }} peserta</p>
 
         <div class="table-responsive">
             <table class="table table-bordered table-striped" id="dataTablePeserta" width="100%" cellspacing="0">
@@ -122,7 +121,7 @@
                         <th>No.HP</th>
                         <th>Alamat</th>
                         <th>Tanggal Diterima</th> {{-- Kolom Tanggal --}}
-                        <th>Aksi</th>
+                        <th width="120">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -146,18 +145,9 @@
                         <td>{{ $pendaftaran->updated_at->format('d M Y, H:i') }}</td>
                         <td>
                             {{-- Link ke halaman detail --}}
-                            <a href="{{ route('panitia.peserta.detailTanpaSeleksi', $pendaftaran->id) }}" class="btn btn-primary btn-sm mb-1">
+                            <a href="{{ route('panitia.peserta.detailTanpaSeleksi', $pendaftaran->id) }}" class="btn btn-primary btn-sm">
                                 Lihat Detail
                             </a>
-                             {{-- Form Batalkan Penerimaan --}}
-                            <form id="cancelForm_{{ $pendaftaran->id }}" action="{{ route('panitia.peserta.batalkanTanpaSeleksi', $pendaftaran->id) }}" method="POST" style="display: inline-block;">
-                                @csrf
-                                @method('PATCH')
-                                <input type="hidden" name="alasan_pembatalan" id="cancelReasonInput_{{ $pendaftaran->id }}">
-                                <button type="button" class="btn btn-warning btn-sm" onclick="confirmCancel({{ $pendaftaran->id }})">
-                                    <i class="fas fa-undo"></i> Batalkan
-                                </button>
-                            </form>
                         </td>
                     </tr>
                     @empty
@@ -177,22 +167,22 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-// Fungsi konfirmasi untuk Batalkan Penerimaan
+// Fungsi konfirmasi untuk Tolak Peserta
 function confirmCancel(pendaftaranId) {
     Swal.fire({
-        title: 'Batalkan Penerimaan Peserta?',
+        title: 'Tolak Peserta Ini?',
         input: 'textarea',
-        inputLabel: 'Alasan Pembatalan (Wajib Diisi)',
-        inputPlaceholder: 'Masukkan alasan mengapa penerimaan peserta ini dibatalkan...',
+        inputLabel: 'Alasan Penolakan (Wajib Diisi)',
+        inputPlaceholder: 'Masukkan alasan mengapa peserta ini ditolak...',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#dc3545', // Merah
         cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Ya, Batalkan!',
-        cancelButtonText: 'Tidak',
+        confirmButtonText: 'Ya, Tolak!',
+        cancelButtonText: 'Batal',
         inputValidator: (value) => {
             if (!value) {
-                return 'Anda harus memasukkan alasan pembatalan!'
+                return 'Anda harus memasukkan alasan penolakan!'
             }
         },
          customClass: {

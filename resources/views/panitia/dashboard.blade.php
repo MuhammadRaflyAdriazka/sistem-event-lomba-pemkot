@@ -39,8 +39,8 @@
             </div>
             <div class="col-md-5 text-center text-md-right">
                 @if($acara->sistem_pendaftaran === 'Seleksi')
-                    <a href="{{ route('panitia.peserta') }}" class="btn btn-lg btn-primary shadow-sm mt-3 mt-5">
-                        <i class="fas fa-list-ul fa-sm mr-1"></i> Kelola Peserta
+                    <a href="{{ route('panitia.peserta') }}" class="btn btn-lg btn-success shadow-sm mt-3 mt-md-0">
+                        <i class="fas fa-users fa-sm mr-1"></i> Kelola Peserta
                     </a>
                 @else
                     <a href="{{ route('panitia.peserta.tanpaSeleksi') }}" class="btn btn-lg btn-success shadow-sm mt-3 mt-md-0">

@@ -65,25 +65,6 @@
         </a>
     </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-md-2">
-                <p><strong>Peserta Ditolak:</strong> {{ $pesertaDitolak->count() }}</p>
-            </div>
-            <div class="col-md-2">
-                <p><strong>Menunggu:</strong> {{ $jumlahPending }}</p>
-            </div>
-            <div class="col-md-2">
-                <p><strong>Diterima:</strong> <span class="text-success">{{ $jumlahDiterima }}</span></p>
-            </div>
-            <div class="col-md-2">
-                <p><strong>Mengundurkan Diri:</strong> <span class="text-secondary">{{ $jumlahMengundurkanDiri }}</span></p>
-            </div>
-            <div class="col-md-2">
-                <p><strong>Kuota Tersisa:</strong> {{ $acara->kuota - $jumlahDiterima }}</p>
-            </div>
-        </div>
-
-        @if($pesertaDitolak->count() > 0)
         <div class="table-responsive">
             <table class="table table-bordered table-striped" id="dataTablePeserta" width="100%" cellspacing="0">
                 <thead>
@@ -99,7 +80,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($pesertaDitolak as $index => $pendaftaran)
+                    @forelse($pesertaDitolak as $index => $pendaftaran)
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $pendaftaran->pengguna->name }}</td>
@@ -126,25 +107,23 @@
                         <td>
                             <span class="badge badge-danger">{{ $pendaftaran->alasan_penolakan }}</span>
                         </td>
-                        <td>
-                            <a href="{{ route('panitia.peserta.detailTanpaSeleksi', $pendaftaran->id) }}" class="btn btn-info btn-sm" title="Lihat Detail">
-                                <i class="fas fa-eye"></i>
+                        <td style="white-space: nowrap;">
+                            <a href="{{ route('panitia.peserta.detailTanpaSeleksi', $pendaftaran->id) }}" class="btn btn-primary btn-sm" style="display: inline-block;">
+                                Lihat Detail
                             </a>
-                            <button type="button" class="btn btn-warning btn-sm" title="Review Ulang" onclick="confirmReviewUlang({{ $pendaftaran->id }}, '{{ $pendaftaran->pengguna->name }}')">
-                                <i class="fas fa-redo"></i>
+                            <button type="button" class="btn btn-warning btn-sm" onclick="confirmReviewUlang({{ $pendaftaran->id }}, '{{ $pendaftaran->pengguna->name }}')">
+                                <i class="fas fa-redo"></i> Batalkan
                             </button>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="8" class="text-center">Belum ada peserta yang ditolak.</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
-
-        @else
-        <div class="text-center">
-            <p class="text-muted">Belum ada peserta yang ditolak.</p>
-        </div>
-        @endif
     </div>
 </div>
 
@@ -156,13 +135,38 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 function confirmReviewUlang(pendaftaranId, namaPeserta) {
-    if (confirm(`Apakah Anda yakin ingin menerima kembali peserta "${namaPeserta}"?\n\nPeserta akan langsung diterima (tidak ada status menunggu di sistem tanpa seleksi).`)) {
-        const form = document.getElementById('formBatalkanPenolakan');
-        form.action = `/panitia/peserta/${pendaftaranId}/batalkan-penolakan-tanpa-seleksi`;
-        form.submit();
-    }
+    Swal.fire({
+        title: 'Terima Kembali Peserta?',
+        html: '<p>Apakah Anda yakin ingin menerima kembali peserta ini?</p><p class="text-muted">Peserta akan langsung diterima (tidak ada status menunggu di sistem tanpa seleksi).</p>',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Ya, Terima!',
+        cancelButtonText: 'Batal',
+        customClass: {
+            confirmButton: 'btn btn-success btn-lg mx-2',
+            cancelButton: 'btn btn-secondary btn-lg mx-2'
+        },
+        buttonsStyling: false,
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Memproses...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            const form = document.getElementById('formBatalkanPenolakan');
+            form.action = `/panitia/peserta/${pendaftaranId}/batalkan-penolakan-tanpa-seleksi`;
+            form.submit();
+        }
+    });
 }
 
 // DataTable initialization

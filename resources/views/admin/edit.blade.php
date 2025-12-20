@@ -322,8 +322,8 @@
                 <div class="card-body">
                     <div class="alert alert-success">
                         <i class="fas fa-check mr-2"></i>
-                        <strong>Kolom Wajib:</strong> Nama, No HP, Email, dan Alamat tidak dapat dihapus.
-                        <br><strong>Kolom Custom:</strong> Anda bisa menghapus atau menambah kolom custom sesuai kebutuhan.
+                        <strong>Kolom Wajib:</strong> Nama, No HP, Email, dan Alamat sudah ditambahkan otomatis.
+                        <br><strong>Kolom Tambahan:</strong> Anda bisa menambah kolom upload berkas sesuai kebutuhan acara.
                     </div>
                     <div id="formFieldsContainer">
                         {{-- Field akan ditampilkan di sini --}}
@@ -335,7 +335,7 @@
                                 <i class="fas fa-id-card mr-1"></i> Foto KTP
                             </button>
                             <button type="button" class="btn btn-outline-dark mr-2 mb-2" id="addCustomFieldBtn">
-                                <i class="fas fa-plus mr-1"></i> Kolom Custom
+                                <i class="fas fa-plus mr-1"></i> Tambah Kolom
                             </button>
                         </div>
                     </div>
@@ -515,7 +515,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event listener untuk add custom field
     document.getElementById('addCustomFieldBtn').addEventListener('click', function() {
         Swal.fire({
-            title: 'Tambah Kolom Custom',
+            title: 'Tambah Kolom',
             html: `
                 <div class="text-left">
                     <div class="form-group"><label><strong>Label Kolom:</strong></label><input type="text" id="customFieldLabel" class="form-control" placeholder="contoh: Usia"></div>
