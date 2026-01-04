@@ -46,13 +46,24 @@ class KepalaDinasController extends Controller
             $query->where('id_dinas', $user->id_dinas);
         })->where('status', 'ditolak')->count();
 
+        $pendaftarMengundurkanDiri = Pendaftaran::whereHas('acara', function($query) use ($user) {
+            $query->where('id_dinas', $user->id_dinas);
+        })->where('status', 'mengundurkan_diri')->count();
+
+        // Total pendaftar dari semua acara dinas ini
+        $totalPendaftar = Pendaftaran::whereHas('acara', function($query) use ($user) {
+            $query->where('id_dinas', $user->id_dinas);
+        })->count();
+
         return view('kepala.dashboard', compact(
             'totalAcara', 
             'pesertaAktif', 
             'eventSelesai',
             'pendaftarMenunggu',
             'pendaftarDiterima', 
-            'pendaftarDitolak'
+            'pendaftarDitolak',
+            'pendaftarMengundurkanDiri',
+            'totalPendaftar'
         ));
     }
 

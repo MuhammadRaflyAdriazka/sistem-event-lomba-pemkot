@@ -59,6 +59,9 @@
                 </div>
                 <div class="mt-4 text-center small">
                     <span class="mr-2">
+                        <i class="fas fa-circle text-dark"></i> Total Pendaftar ({{ $totalPendaftar ?? 0 }})
+                    </span>
+                    <span class="mr-2">
                         <i class="fas fa-circle text-primary"></i> Menunggu ({{ $pendaftarMenunggu }})
                     </span>
                     <span class="mr-2">
@@ -66,6 +69,9 @@
                     </span>
                     <span class="mr-2">
                         <i class="fas fa-circle text-info"></i> Ditolak ({{ $pendaftarDitolak }})
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-secondary"></i> Mengundurkan Diri ({{ $pendaftarMengundurkanDiri ?? 0 }})
                     </span>
                 </div>
                 @else
@@ -157,7 +163,7 @@
 @push('scripts')
 <script>
 // Destroy existing chart if exists to prevent conflicts
-@if(($pendaftarMenunggu + $pendaftarDiterima + $pendaftarDitolak) > 0)
+@if(($pendaftarMenunggu + $pendaftarDiterima + $pendaftarDitolak + $pendaftarMengundurkanDiri) > 0)
 if (window.myPieChart) {
     window.myPieChart.destroy();
 }
@@ -167,11 +173,11 @@ var ctx = document.getElementById("myPieChart");
 window.myPieChart = new Chart(ctx, {
   type: 'doughnut',
   data: {
-    labels: ["Menunggu", "Diterima", "Ditolak"],
+    labels: ["Menunggu", "Diterima", "Ditolak", "Mengundurkan Diri"],
     datasets: [{
-      data: [{{ $pendaftarMenunggu ?? 0 }}, {{ $pendaftarDiterima ?? 0 }}, {{ $pendaftarDitolak ?? 0 }}],
-      backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
-      hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+      data: [{{ $pendaftarMenunggu ?? 0 }}, {{ $pendaftarDiterima ?? 0 }}, {{ $pendaftarDitolak ?? 0 }}, {{ $pendaftarMengundurkanDiri ?? 0 }}],
+      backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#858796'],
+      hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#6c757d'],
       borderWidth: 2,
       borderColor: '#ffffff'
     }]
