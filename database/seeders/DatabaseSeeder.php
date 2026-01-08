@@ -18,6 +18,11 @@ class DatabaseSeeder extends Seeder
          $this->call([
         DinasSeeder::class,
         UserSeeder::class,
+        LombaFotografiSeeder::class,
+        LombaMemasakSeeder::class,
+        LombaSasiranganSeeder::class,
+        LombaMadihinSeeder::class,
+        LombaPantunSeeder::class,
         // AcaraSeeder::class, // Dinonaktifkan
         // KolomFormulirSeeder::class, // Dinonaktifkan
         // PendaftaranDummySeeder::class, // Dinonaktifkan

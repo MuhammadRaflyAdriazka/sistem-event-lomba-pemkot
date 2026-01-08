@@ -254,7 +254,7 @@ function confirmDelete(eventId) {
     
     if (typeof Swal !== 'undefined') {
         Swal.fire({
-            title: 'Yakin ingin mengHapus Acara ini?',
+            title: 'Yakin ingin Hapus Acara ini?',
             text: 'Tindakan ini tidak dapat dibatalkan!',
             icon: 'warning',
             showCancelButton: true,
@@ -274,7 +274,7 @@ function confirmDelete(eventId) {
             }
         });
     } else {
-        if(confirm('Yakin ingin mengHapus Acara ini? Tindakan ini tidak dapat dibatalkan!')) {
+        if(confirm('Yakin ingin Hapus Acara ini? Tindakan ini tidak dapat dibatalkan!')) {
             const form = document.getElementById('deleteForm');
             if (form) {
                 form.action = '/admin/event/' + eventId;

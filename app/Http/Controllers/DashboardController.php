@@ -16,12 +16,11 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $sekarang = Carbon::now();
 
-        // Ambil acara yang masih aktif dan pendaftarannya masih buka
+        // Ambil semua acara yang masih aktif (walaupun sudah tutup pendaftaran)
+        // Tombol akan otomatis disabled jika sudah lewat tenggat
         $acaraTersedia = Acara::where('status', 'active')
-                             ->where('tanggal_akhir_daftar', '>=', $sekarang)
-                             ->orderBy('tanggal_mulai_daftar', 'asc')
+                             ->orderBy('tanggal_mulai_daftar', 'desc')
                              ->get();
 
         // Ambil pendaftaran user yang sedang login

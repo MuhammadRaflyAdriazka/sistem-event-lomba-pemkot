@@ -13,19 +13,22 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $sekarang = Carbon::now();
-
-        // Ambil acara yang:
-        // 1. Statusnya 'active'
-        // 2. Tanggal akhir pendaftarannya belum lewat
+        // Ambil semua acara yang statusnya 'active'
+        // Acara tetap muncul walaupun sudah lewat tenggat pendaftaran
+        // Untuk menghilangkan acara, admin/dinas harus ubah status jadi 'selesai'
         $acara = Acara::where('status', 'active')
-                      ->where('tanggal_akhir_daftar', '>=', $sekarang)
-                      ->orderBy('tanggal_mulai_daftar', 'asc') // Urutkan berdasarkan yang paling cepat buka
+                      ->orderBy('tanggal_mulai_daftar', 'desc')
                       ->get();
+
+        // Dapatkan tanggal sekarang untuk pengecekan di view
+        $sekarang = Carbon::now()->format('Y-m-d');
 
         // Tampilkan view 'welcome' dan kirimkan data acara ke dalamnya
         // dengan nama variabel 'semuaAcara'
-        return view('welcome', ['semuaAcara' => $acara]);
+        return view('welcome', [
+            'semuaAcara' => $acara,
+            'sekarang' => $sekarang
+        ]);
     }
 
     /**

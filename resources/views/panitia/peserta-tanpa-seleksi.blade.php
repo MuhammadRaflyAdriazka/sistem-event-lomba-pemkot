@@ -132,7 +132,7 @@
                         <td>{{ $pendaftaran->pengguna->email }}</td>
                         <td>
                             @php
-                                $noHp = $pendaftaran->dataPendaftaran->where('nama_kolom', 'no_hp')->first();
+                                $noHp = $pendaftaran->dataPendaftaran->whereIn('nama_kolom', ['nomor_telepon', 'no_hp', 'nomor_hp', 'telepon'])->first();
                             @endphp
                             {{ $noHp ? $noHp->nilai_kolom : '-' }}
                         </td>
