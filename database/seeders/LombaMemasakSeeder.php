@@ -101,20 +101,12 @@ class LombaMemasakSeeder extends Seeder
                 'urutan_kolom' => 3,
             ],
             [
-                'nama_kolom' => 'tanggal_lahir',
-                'label_kolom' => 'Tanggal Lahir',
-                'tipe_kolom' => 'text',
-                'wajib_diisi' => true,
-                'placeholder' => 'DD/MM/YYYY',
-                'urutan_kolom' => 4,
-            ],
-            [
                 'nama_kolom' => 'jenis_kelamin',
                 'label_kolom' => 'Jenis Kelamin',
                 'tipe_kolom' => 'text',
                 'wajib_diisi' => true,
                 'placeholder' => 'Laki-laki / Perempuan',
-                'urutan_kolom' => 5,
+                'urutan_kolom' => 4,
             ],
             [
                 'nama_kolom' => 'sertifikat_memasak',
@@ -122,7 +114,7 @@ class LombaMemasakSeeder extends Seeder
                 'tipe_kolom' => 'file',
                 'wajib_diisi' => true,
                 'placeholder' => 'Upload sertifikat (PDF/JPG)',
-                'urutan_kolom' => 6,
+                'urutan_kolom' => 5,
             ],
             [
                 'nama_kolom' => 'pengalaman_memasak',
@@ -130,7 +122,7 @@ class LombaMemasakSeeder extends Seeder
                 'tipe_kolom' => 'textarea',
                 'wajib_diisi' => true,
                 'placeholder' => 'Ceritakan pengalaman memasak Anda',
-                'urutan_kolom' => 7,
+                'urutan_kolom' => 6,
             ],
             [
                 'nama_kolom' => 'menu_masakan',
@@ -138,7 +130,7 @@ class LombaMemasakSeeder extends Seeder
                 'tipe_kolom' => 'text',
                 'wajib_diisi' => true,
                 'placeholder' => 'Contoh: Rendang Daging Sapi',
-                'urutan_kolom' => 8,
+                'urutan_kolom' => 7,
             ],
         ];
 
@@ -219,7 +211,6 @@ class LombaMemasakSeeder extends Seeder
 
             // Isi data pendaftaran sesuai kolom formulir
             $jenisKelamin = ['Laki-laki', 'Perempuan'][rand(0, 1)];
-            $tanggalLahir = rand(1, 28) . '/' . rand(1, 12) . '/' . rand(1978, 2005);
             $nomorTelepon = '08' . str_pad(rand(1000000000, 9999999999), 10, '0', STR_PAD_LEFT);
             
             // Buat file dummy sertifikat PDF
@@ -239,7 +230,6 @@ class LombaMemasakSeeder extends Seeder
                 'nama_lengkap' => $nama,
                 'nomor_telepon' => $nomorTelepon,
                 'alamat_lengkap' => 'Jl. ' . $jalan[rand(0, count($jalan) - 1)] . ' No. ' . rand(1, 200) . ', Kota ' . $kota[rand(0, count($kota) - 1)],
-                'tanggal_lahir' => $tanggalLahir,
                 'jenis_kelamin' => $jenisKelamin,
                 'sertifikat_memasak' => $namaFileSertifikat,
                 'pengalaman_memasak' => $pengalamanMemasak[rand(0, count($pengalamanMemasak) - 1)],
@@ -260,7 +250,7 @@ class LombaMemasakSeeder extends Seeder
         $this->command->info('🏢 Dinas: ' . $dinas->name);
         $this->command->info('👥 Peserta: 99 orang (bisa login dengan password: password123)');
         $this->command->info('👨‍💼 Panitia: ' . $panitiaUser->name . ' (' . $panitiaUser->email . ')');
-        $this->command->info('📝 Form: 8 kolom termasuk upload Sertifikat Memasak');
+        $this->command->info('📝 Form: 7 kolom termasuk upload Sertifikat Memasak');
         $this->command->info('📊 Kuota: 100 peserta');
         $this->command->info('');
         $this->command->info('🔐 Semua akun peserta bisa login dengan email dan password: password123');

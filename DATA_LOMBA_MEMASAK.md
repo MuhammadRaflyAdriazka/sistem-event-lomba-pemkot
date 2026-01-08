@@ -13,15 +13,14 @@
 - **Password**: password123
 - **Nama**: Siti Nurhaliza
 
-## Formulir Pendaftaran (8 Kolom)
+## Formulir Pendaftaran (7 Kolom)
 1. Nama Lengkap (text)
 2. Nomor Telepon (text)
 3. Alamat Lengkap (textarea)
-4. Tanggal Lahir (text)
-5. Jenis Kelamin (text)
-6. **Sertifikat Memasak** (file) - WAJIB
-7. Pengalaman Memasak (textarea)
-8. Menu yang Akan Dimasak (text)
+4. Jenis Kelamin (text)
+5. **Sertifikat Memasak** (file) - WAJIB
+6. Pengalaman Memasak (textarea)
+7. Menu yang Akan Dimasak (text)
 
 ## Data Peserta (99 Orang)
 Semua peserta bisa login dengan **password: password123**
